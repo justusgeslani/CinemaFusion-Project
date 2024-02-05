@@ -9,11 +9,13 @@ import { NgForm } from '@angular/forms';
 })
 export class AppComponent {
   title = 'Movie Site';
-
+  allMovies: MovieTest[] = []
   constructor(private http: HttpClient) {
 
   }
-
+  ngOnInit() {
+    this.getMovies()
+  }
   addMovie(f: NgForm) {
 
     let title = f.value.title
@@ -57,8 +59,16 @@ export class AppComponent {
 
   getMovies() {
 
-    var allMovies = this.http.get('http://localhost:8080/movies/get')
-    console.log(allMovies)
+    // Gets All Movies In Database, stores them in allMovies variable
+    this.http.get('http://localhost:8080/movies/get').subscribe((data: any) =>{
+
+    for (let i = 0; i < data.length; i++) {
+        let m = new MovieTest(data[i].Title, data[i].Year, data[i].Genre, data[i].Producer)
+        this.allMovies.push(m)
+
+      }
+    }
+    )
   }
 }
 

@@ -1,4 +1,28 @@
-input {
+input, button {
     display: block;
     width: 200px
+}
+
+button {
+    padding: 5px;
+}
+button:hover {
+    background-color: aqua;
+}
+table {
+    border: 2px solid black;
+    width: 700px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    padding: 10px;
+}
+
+thead {
+    text-align: center;
+}
+td {
+    text-align: center;
+}
+h1, h2 {
+    
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }

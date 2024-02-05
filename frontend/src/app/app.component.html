@@ -1,7 +1,7 @@
-<h1>Welcome To Cinema Fusion Movie Site
-
+<h1>Welcome To Cinema Fusion Movie Site, ADMIN
 
 </h1>
+<h2>ADD MOVIES BELOW</h2>
 <form method="post" #f="ngForm" (ngSubmit)="addMovie(f)" novalidate>
   <input type="text" placeholder="Movie Title Here" name="title" ngModel>
   <input type="number" placeholder="Movie Release Year" name="year" min="2000"  max="2024" ngModel>
@@ -12,4 +12,19 @@
   </button>
 </form>
 
-<button (click)="getMovies()">GET ALL MOVIES</button>
+  <h2>VIEW ALL MOVIES IN DATABASE BELOW</h2>
+<table>
+  <thead>
+    <th>MOVIE TITLE</th>
+    <th>RELEASE YEAR</th>
+    <th>GENRE</th>
+    <th>PRODUCER</th>
+  </thead>
+
+  <tr *ngFor="let movie of allMovies">
+    <td>{{movie.Title}}</td>
+    <td>{{movie.Year}}</td>
+    <td>{{movie.Genre}}</td>
+    <td>{{movie.Producer}}</td>
+  </tr>
+</table>

@@ -87,7 +87,7 @@ func GetMoviesTest(c *gin.Context) {
 
 	for queryResult.Next() {
 		var movie MoviesTest
-		err := queryResult.Scan(&movie.Title, movie.Year, movie.Genre, movie.Producer)
+		err := queryResult.Scan(&movie.Title, &movie.Year, &movie.Genre, &movie.Producer)
 
 		if err != nil {
 

@@ -9,5 +9,5 @@ func main() {
 
 	movies.CreateMovieTable()
 	// Creates Movies DB
-	router.Router.Run()
+	router.PrepareRouter(true).Run()
 }

@@ -39,22 +39,23 @@ func AddMovieTest(c *gin.Context) {
 	// User's passed in movie to add that gets bound to JSON
 	var movieToAdd AddMoviesTest
 	err := c.ShouldBindJSON(&movieToAdd)
-
+	fmt.Println(movieToAdd)
 	// If passed in variable doesn't bind, server or frontend  schema has issues
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
 		return
 	}
 
 	// Store user passed in variables in object variable
 	mTitle := movieToAdd.Title
-	mGenre := movieToAdd.Genre
 	mYear := movieToAdd.Year
+	mGenre := movieToAdd.Genre
 	mProd := movieToAdd.Producer
 
 	// Insert Movie into Database
 	query, err := connection.Db.Exec(
-		"INSERT INTO MOVIESTEST VALUES (?, ?, ?, ?)", mTitle, mGenre, mYear, mProd)
+		"INSERT INTO MOVIESTEST VALUES (?, ?, ?, ?)", mTitle, mYear, mGenre, mProd)
 
 	// Return if unable to add movie to database
 	if err != nil {
@@ -67,7 +68,7 @@ func AddMovieTest(c *gin.Context) {
 	fmt.Println(query)
 
 	// Return Http Status Code to frontEnd
-	c.JSON(http.StatusCreated, movieToAdd)
+	c.JSON(http.StatusCreated, &movieToAdd)
 }
 
 func GetMoviesTest(c *gin.Context) {

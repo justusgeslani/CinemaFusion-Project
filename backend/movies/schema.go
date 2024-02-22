@@ -29,3 +29,12 @@ type EditMoviesTest struct {
 	Genre    string
 	Producer string
 }
+
+type AddMovie struct {
+	TitleType     string
+	Title         string
+	OriginalTitle string
+	Year          uint64
+	Runtime       uint64
+	Genre         string
+}

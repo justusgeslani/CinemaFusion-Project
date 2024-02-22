@@ -11,7 +11,6 @@ import (
 )
 
 func CreateMovieTable() {
-	connection.OpenConn()
 
 	// Create Test Table for Movie Database
 	query, err := connection.Db.Exec(
@@ -71,6 +70,67 @@ func AddMovieTest(c *gin.Context) {
 	c.JSON(http.StatusCreated, &movieToAdd)
 }
 
+func AddMovieTable() {
+	// Create Test Table for Movie Database
+	query, err := connection.Db.Exec(
+		`CREATE TABLE IF NOT EXISTS MOVIES
+			(
+				titletype	VARCHAR(60) NOT NULL,
+				title	VARCHAR(85) NOT NULL,
+				originaltitle	VARCHAR(85) NOT NULL,
+				year	BIGINT NOT NULL,
+				runtime	BIGINT NOT NULL,
+				genre	VARCHAR(65) NOT NULL
+				PRIMARY KEY(title, year, genre);
+			);
+		`,
+	)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	// This line is just for testing query output, remove later
+	fmt.Println(query)
+}
+
+func AddDBMovie(c *gin.Context) {
+	var movieToAdd AddMovie
+	err := c.ShouldBindJSON(&movieToAdd)
+	//fmt.Println(movieToAdd)
+	// If passed in variable doesn't bind, server or frontend  schema has issues
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	// Store user passed in variables in object variable
+	mTType := movieToAdd.TitleType
+	mTitle := movieToAdd.Title
+	mOTitle := movieToAdd.OriginalTitle
+	mYear := movieToAdd.Year
+	mRuntime := movieToAdd.Runtime
+	mGenre := movieToAdd.Genre
+
+	// Insert Movie into Database
+	_, err = connection.Db.Exec(
+		"INSERT INTO MOVIESTEST VALUES (?, ?, ?, ?, ?, ?)", mTType, mTitle, mOTitle, mYear, mRuntime, mGenre)
+
+	// Return if unable to add movie to database
+	if err != nil {
+		//fmt.Print("ERROR UNABLE TO ADD MOVIE TO DATABASE!!!\n")
+		log.Fatal(err)
+		return
+	}
+
+	// This line is just for testing query output, remove lator
+	//fmt.Println(query)
+
+	// Return Http Status Code to frontEnd
+	c.JSON(http.StatusCreated, &movieToAdd)
+
+}
 func GetMoviesTest(c *gin.Context) {
 
 	// Get all movies from database

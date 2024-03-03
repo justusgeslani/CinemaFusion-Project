@@ -21,6 +21,8 @@ export class HeaderComponent {
 
     this._modalService.show<User>(LoginAccountComponent, {
       title: 'Login / Create Account',
+      mode: 'fullScreen',
+      type: 'warning',
     })
 
   }

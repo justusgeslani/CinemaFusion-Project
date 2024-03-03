@@ -6,11 +6,14 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
+import { LoginAccountComponent } from './login-account/login-account.component';
+import { ModalModule } from '@developer-partners/ngx-modal-dialog';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoginAccountComponent
   ],
   imports: [
     BrowserModule,	  
@@ -18,6 +21,7 @@ import { HeaderComponent } from './header/header.component';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    ModalModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

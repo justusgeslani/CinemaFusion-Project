@@ -8,12 +8,14 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
 import { LoginAccountComponent } from './login-account/login-account.component';
 import { ModalModule } from '@developer-partners/ngx-modal-dialog';
+import { CreateAccountComponent } from './create-account/create-account.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    LoginAccountComponent
+    LoginAccountComponent,
+    CreateAccountComponent
   ],
   imports: [
     BrowserModule,	  

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ModalReference } from '@developer-partners/ngx-modal-dialog';
+import { ModalService } from '@developer-partners/ngx-modal-dialog';
+import { CreateAccountComponent } from '../create-account/create-account.component';
 
 export interface User {
   username: string,
@@ -17,12 +19,15 @@ export class LoginAccountComponent {
     password: '',
   };
 
-  constructor(private readonly _modalReference: ModalReference<User>) {
+  constructor(private readonly _modalReference: ModalReference<User>, private readonly _modalService: ModalService) {
     
   }
 
   public createAccount(): void {
     
+    this._modalService.show<User>(CreateAccountComponent, {
+      title: 'Become a CinemaFusion Member',
+    })
   }
 
   public cancel(): void {

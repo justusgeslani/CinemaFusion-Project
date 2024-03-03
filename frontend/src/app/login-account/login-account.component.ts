@@ -27,6 +27,8 @@ export class LoginAccountComponent {
     
     this._modalService.show<User>(CreateAccountComponent, {
       title: 'Become a CinemaFusion Member',
+      mode: 'disableFullScreen',
+      type: 'warning',
     })
   }
 

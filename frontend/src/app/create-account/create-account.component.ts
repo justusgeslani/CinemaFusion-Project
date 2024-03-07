@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ModalReference } from '@developer-partners/ngx-modal-dialog';
+import { HttpClient, HttpHandler, HttpRequest } from '@angular/common/http';
+import { NgForm } from '@angular/forms';
 
 export interface newUser {
 
@@ -15,13 +17,40 @@ export interface newUser {
 })
 export class CreateAccountComponent {
 
+  title="New User Site";
+  allNewUsers: NewUserTest[] = []
+
+  constructor(private http: HttpClient, private readonly _modalReference: ModalReference<newUser>) {}
+
+  ngOnInit(){
+    this.getNewUsers();
+  }
+
+  createUser(f: NgForm){
+
+    let newFullName = f.value.newFullName
+    let newUsername = f.value.newUsername
+    let newPassword = f.value.newPassword
+
+    console.log(this.title)
+
+    let newUserTest = {
+      "NewFullName": newFullName,
+      "NewUsername": newUsername,
+      "NewPassword": newPassword,
+    }
+
+  };
+
+  getNewUsers() {
+
+  }
+
   public newuser: newUser = {
     fullName: '',
     username: '',
     password: '',
   };
-
-  constructor(private readonly _modalReference: ModalReference<newUser>) {}
 
   public cancel(): void {
 
@@ -31,6 +60,19 @@ export class CreateAccountComponent {
   public saveData(): void {
 
     this._modalReference.closeSuccess(this.newuser);
+  }
+
+}
+
+class NewUserTest {
+  NewFullName: string;
+  NewUsername: string;
+  NewPassword: string;
+
+  constructor(newFullName: string, newUsername:string, newPassword:string) {
+    this.NewFullName=newFullName;
+    this.NewUsername=newUsername;
+    this.NewPassword=newPassword;
   }
 
 }

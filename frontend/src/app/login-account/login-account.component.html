@@ -1,3 +1,29 @@
+<form method ="post" #f="ngForm" (ngSubmit)="loginUser(f)" novalidate>
+
+    <label>Username</label>
+    <input type ="text" placeholder="Enter username" name="username" ngModel>
+    <p></p>
+    <p></p>
+    <label>Password</label>
+    <input type ="text" placeholder="Enter password" name="password" ngModel>
+
+    <div id="accountOptions">
+
+        <button type="button" (click)="cancel()">
+            Cancel
+        </button>
+        <button type="submit" (click)="saveData()">
+            Sign In
+        </button>
+        <p>-------- OR --------</p>
+        <button type="button" (click)="createAccount()">
+            Create Account
+        </button>
+    
+    </div>
+</form>
+
+<!--
 <form (ngSubmit)="saveData()">
 
     <div class = "mb-4">
@@ -38,3 +64,4 @@
     </div>
 
 </form>
+-->

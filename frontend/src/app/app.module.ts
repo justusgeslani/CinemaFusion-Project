@@ -5,10 +5,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HeaderComponent } from './header/header.component';
+import { LoginAccountComponent } from './login-account/login-account.component';
+import { ModalModule } from '@developer-partners/ngx-modal-dialog';
+import { CreateAccountComponent } from './create-account/create-account.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent,
+    LoginAccountComponent,
+    CreateAccountComponent
   ],
   imports: [
     BrowserModule,	  
@@ -16,6 +23,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    ModalModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

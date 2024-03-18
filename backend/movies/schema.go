@@ -29,3 +29,8 @@ type EditMoviesTest struct {
 	Genre    string
 	Producer string
 }
+
+type UserScore struct {
+	movieID    uint64
+	movieScore uint64
+}

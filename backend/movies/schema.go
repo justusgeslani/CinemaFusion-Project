@@ -30,11 +30,26 @@ type EditMoviesTest struct {
 	Producer string
 }
 
-type AddMovie struct {
-	TitleType     string
-	Title         string
-	OriginalTitle string
-	Year          uint64
-	Runtime       uint64
-	Genre         string
+type Movie struct {
+	ID               uint64
+	Title            string
+	OriginalLanguage string
+	Overview         string
+	PosterPath       string
+	ReleaseDate      string
+	RuntimeMinutes   uint64
+	UserScore        uint64
+	Accuracy         float64
+}
+
+type Genre struct {
+	GenreID   uint64
+	GenreName string
+	MovieID   uint64
+}
+
+type ProductionCompany struct {
+	CompanyID   uint64
+	CompanyName string
+	MovieID     uint64
 }

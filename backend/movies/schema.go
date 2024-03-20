@@ -34,6 +34,7 @@ type UserScore struct {
 	movieID    uint64
 	movieScore uint64
 }
+
 type Movie struct {
 	ID               uint64
 	Title            string
@@ -44,6 +45,7 @@ type Movie struct {
 	RuntimeMinutes   uint64
 	UserScore        uint64
 	Accuracy         float64
+	UserEntries      uint64
 }
 
 type Genre struct {

@@ -8,9 +8,11 @@ export class Movie {
     RuntimeMinutes:  number;
     UserScore: number;
     Accuracy:  number;
+    UserEntries: number;
   
     constructor(id: number, title: string, language: string, overview: string, 
-      posterpath: string, releasedate: string, runtime: number, userscore: number, accuracy: number) {
+      posterpath: string, releasedate: string, runtime: number, userscore: number, accuracy: number,
+      entries: number) {
       this.ID = id;
       this.Title = title;
       this.OriginalLanguage = language;
@@ -20,6 +22,7 @@ export class Movie {
       this.RuntimeMinutes = runtime;
       this.UserScore = userscore;
       this.Accuracy = accuracy;
+      this.UserEntries = entries;
     }
 }
 

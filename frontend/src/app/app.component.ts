@@ -63,12 +63,12 @@ export class AppComponent {
     // Gets All Movies In Database, stores them in allMovies variable
     this.http.get('http://localhost:8080/movies/get').subscribe((data: any) =>{
 
-    for (let i = 0; i < data.length; i++) {
-        let m = new MovieTest(data[i].Title, data[i].Year, data[i].Genre, data[i].Producer)
-        this.allMovies.push(m)
+      for (let i = 0; i < data.length; i++) {
+          let m = new MovieTest(data[i].Title, data[i].Year, data[i].Genre, data[i].Producer)
+          this.allMovies.push(m)
 
+        }
       }
-    }
     )
   }
 
@@ -163,7 +163,7 @@ export class AppComponent {
     
     let dateString = new Date(releasedate).toISOString()
    let m = new Movie(id, title, language, overview,
-    posterpath, dateString, runtime, 0, 0.00)
+    posterpath, dateString, runtime, 0, 0.00, 0)
 
     //console.log("DATE: " + dateString)
     JSONgenres = JSONgenres.replaceAll(/"/g, '')

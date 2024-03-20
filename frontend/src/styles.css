@@ -3,4 +3,6 @@ body{
     background: linear-gradient(
         to right, #243FFF,#814DFF,#FF83B6,#FF9022 
       );
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }

@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { HeaderComponent } from './header/header.component';
 import { LoginAccountComponent } from './login-account/login-account.component';
 import { ModalModule } from '@developer-partners/ngx-modal-dialog';
@@ -24,6 +25,7 @@ import { UserRecommendationsComponent } from './user-recommendations/user-recomm
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    NgSelectModule,
     FormsModule,
     ModalModule,
   ],

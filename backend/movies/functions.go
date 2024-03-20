@@ -145,6 +145,57 @@ func GetMoviesCount() int64 {
 	return returnCount
 }
 
+func GetHundredMovies(c *gin.Context) {
+
+	var allMovies []Movie
+	var randomMovie Movie
+	moviesReturned, err := connection.Db.Query(
+		"SELECT * FROM MOVIEDATA ORDER BY ID LIMIT 100")
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for moviesReturned.Next() {
+		if err := moviesReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+			&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+			&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+			&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+			fmt.Println(err)
+			return
+		}
+		allMovies = append(allMovies, randomMovie)
+	}
+
+	c.JSON(http.StatusAccepted, &allMovies)
+}
+
+func GetAllMovies(c *gin.Context) {
+	var allMovies []Movie
+	var randomMovie Movie
+	moviesReturned, err := connection.Db.Query(
+		"SELECT * FROM MOVIEDATA ORDER BY ID")
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for moviesReturned.Next() {
+		if err := moviesReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+			&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+			&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+			&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+			fmt.Println(err)
+			return
+		}
+		allMovies = append(allMovies, randomMovie)
+	}
+
+	c.JSON(http.StatusAccepted, &allMovies)
+}
+
 func GetRandomMovie(c *gin.Context) {
 
 	var randomMovie Movie

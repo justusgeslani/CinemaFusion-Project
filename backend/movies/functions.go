@@ -1,17 +1,16 @@
 package movies
 
 import (
+	"backend/connection"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
-
-	"backend/connection"
 
 	"github.com/gin-gonic/gin"
 )
 
 func CreateMovieTable() {
-	connection.OpenConn()
 
 	// Create Test Table for Movie Database
 	query, err := connection.Db.Exec(
@@ -27,7 +26,7 @@ func CreateMovieTable() {
 	)
 	if err != nil {
 		log.Fatal(err)
-		return
+		//return
 	}
 
 	// This line is just for testing query output, remove later
@@ -71,6 +70,170 @@ func AddMovieTest(c *gin.Context) {
 	c.JSON(http.StatusCreated, &movieToAdd)
 }
 
+func AddMovieTable() {
+	// Create Test Table for Movie Database
+	query, err := connection.Db.Exec(
+		`CREATE TABLE IF NOT EXISTS MOVIES
+			(
+				titletype	VARCHAR(60) NOT NULL,
+				title	VARCHAR(85) NOT NULL,
+				originaltitle	VARCHAR(85) NOT NULL,
+				year	BIGINT NOT NULL,
+				runtime	BIGINT NOT NULL,
+				genre	VARCHAR(65) NOT NULL,
+				PRIMARY KEY(title, year, genre)
+			);
+		`,
+	)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	// This line is just for testing query output, remove later
+	fmt.Println(query)
+}
+
+func GetMoviesCount() int64 {
+	count, err := connection.Db.Query("SELECT COUNT(*) FROM MOVIEDATA")
+	if err != nil {
+		fmt.Println(err)
+		return -1
+	}
+	var returnCount int64
+	for count.Next() {
+		if err := count.Scan(&returnCount); err != nil {
+			fmt.Println(err)
+			return -1
+		}
+	}
+	fmt.Printf("COUNT VARIABLE FOR CHARLENE: %d", returnCount)
+	return returnCount
+}
+
+func GetRandomMovie(c *gin.Context) {
+
+	var randomMovie Movie
+	randMovieIndex := rand.Int63n(GetMoviesCount())
+	movieReturned, err := connection.Db.Query(
+		"SELECT * FROM MOVIEDATA ORDER BY ID LIMIT ?, 1", randMovieIndex-1)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for movieReturned.Next() {
+		if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+			&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+			&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+			&randomMovie.UserScore, &randomMovie.Accuracy); err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
+	c.JSON(http.StatusAccepted, &randomMovie)
+}
+
+func AddDBGenre(c *gin.Context) {
+	c.Set("logDisabled", true)
+	var genreToAdd Genre
+	err := c.ShouldBindJSON(&genreToAdd)
+	//fmt.Println(genreToAdd)
+	// If passed in variable doesn't bind, server or frontend  schema has issues
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		//fmt.Println(err)
+		//return
+	}
+	gID := genreToAdd.GenreID
+	gName := genreToAdd.GenreName
+	mID := genreToAdd.MovieID // Insert Movie into Database
+	_, err = connection.Db.Exec(
+		"INSERT INTO GENRES VALUES (?, ?, ?)", gID, gName, mID)
+	// Return if unable to add movie to database
+	if err != nil {
+		////fmt.Println(err)
+		//return
+	}
+
+	// This line is just for testing query output, remove lator
+	//fmt.Println(query)
+
+	// Return Http Status Code to frontEnd
+	c.JSON(http.StatusCreated, &genreToAdd)
+}
+
+func AddDBCompany(c *gin.Context) {
+	c.Set("logDisabled", true)
+	var companyToAdd ProductionCompany
+	err := c.ShouldBindJSON(&companyToAdd)
+	//fmt.Println(companyToAdd)
+	// If passed in variable doesn't bind, server or frontend  schema has issues
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		//fmt.Println(err)
+		//return
+	}
+	pcID := companyToAdd.CompanyID
+	pcName := companyToAdd.CompanyName
+	mID := companyToAdd.MovieID // Insert Company into Database
+	_, err = connection.Db.Exec(
+		"INSERT INTO ProductionCompanies VALUES (?, ?, ?)", pcID, pcName, mID)
+	// Return if unable to add movie to database
+	if err != nil {
+		//fmt.Println(err)
+		//return
+	}
+
+	// This line is just for testing query output, remove lator
+	//fmt.Println(query)
+
+	// Return Http Status Code to frontEnd
+	c.Set("logDisabled", true)
+	c.JSON(http.StatusCreated, &companyToAdd)
+
+}
+func AddDBMovie(c *gin.Context) {
+	c.Set("logDisabled", true)
+	var movieToAdd Movie
+	err := c.ShouldBindJSON(&movieToAdd)
+	//fmt.Println(movieToAdd)
+	// If passed in variable doesn't bind, server or frontend  schema has issues
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		//fmt.Println(err)
+		//return
+	}
+
+	// Store user passed in variables in object variable
+	mID := movieToAdd.ID
+	mTitle := movieToAdd.Title
+	mLanguage := movieToAdd.OriginalLanguage
+	mOverview := movieToAdd.Overview
+	mPosterPath := movieToAdd.PosterPath
+	mReleaseDate := movieToAdd.ReleaseDate
+	mRuntimeMinutes := movieToAdd.RuntimeMinutes
+	mUserScore := movieToAdd.UserScore
+	mAccuracy := movieToAdd.Accuracy
+
+	// Insert Movie into Database
+	_, err = connection.Db.Exec(
+		"INSERT INTO MOVIEDATA VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", mID, mTitle, mLanguage, mOverview, mPosterPath, mReleaseDate, mRuntimeMinutes, mUserScore, mAccuracy)
+
+	// Return if unable to add movie to database
+	if err != nil {
+		//fmt.Println(err)
+		//return
+	}
+
+	// This line is just for testing query output, remove lator
+	//fmt.Println(query)
+
+	// Return Http Status Code to frontEnd
+	c.JSON(http.StatusCreated, &movieToAdd)
+
+}
 func GetMoviesTest(c *gin.Context) {
 
 	// Get all movies from database

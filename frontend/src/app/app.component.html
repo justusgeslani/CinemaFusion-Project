@@ -1,31 +1,17 @@
 <app-header></app-header>
 <h1>Welcome To Cinema Fusion Movie Site, ADMIN
-
+<br>Click below to add and parse movies
 </h1>
+<input (change)="addAllMovies()" type="file" id="fileInput">
+<button (click)="addAllMovies()"> ADD 1 Movie from file</button>
+<button (click)="getRandomMovie()">GET RANDOM MOVIE (check console)</button>
 <h2>ADD MOVIES BELOW</h2>
 <form method="post" #f="ngForm" (ngSubmit)="addMovie(f)" novalidate>
-  <input type="text" placeholder="Movie Title Here" name="title" ngModel>
-  <input type="number" placeholder="Movie Release Year" name="year" min="2000"  max="2024" ngModel>
-  <input type="text" placeholder="Movie Genre Here" name="genre" ngModel>
-    <input type="text" placeholder="Movie Producer Here" name="producer" ngModel>
+  <input type="text" placeholder="Movie File Here" name="moviefile" ngModel>
+  
   <button type="submit">
     ADD MOVIE
   </button>
 </form>
 
-  <h2>VIEW ALL MOVIES IN DATABASE BELOW</h2>
-<table>
-  <thead>
-    <th>MOVIE TITLE</th>
-    <th>RELEASE YEAR</th>
-    <th>GENRE</th>
-    <th>PRODUCER</th>
-  </thead>
-
-  <tr *ngFor="let movie of allMovies">
-    <td>{{movie.Title}}</td>
-    <td>{{movie.Year}}</td>
-    <td>{{movie.Genre}}</td>
-    <td>{{movie.Producer}}</td>
-  </tr>
-</table>
+ 

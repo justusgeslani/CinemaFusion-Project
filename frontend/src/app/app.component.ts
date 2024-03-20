@@ -15,7 +15,7 @@ export class AppComponent {
     
   }
   ngOnInit() {
-    this.addAllMovies()
+    //this.addAllMovies()
   }
   addMovie(f: NgForm) {
 

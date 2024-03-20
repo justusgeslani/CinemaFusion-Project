@@ -30,6 +30,10 @@ type EditMoviesTest struct {
 	Producer string
 }
 
+type UserScore struct {
+	movieID    uint64
+	movieScore uint64
+}
 type Movie struct {
 	ID               uint64
 	Title            string

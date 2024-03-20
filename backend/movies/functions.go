@@ -33,6 +33,40 @@ func CreateMovieTable() {
 	fmt.Println(query)
 
 }
+
+func UserScoresMovie(c *gin.Context) {
+	var userScore UserScore
+	err := c.ShouldBindJSON(&userScore)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+	mID := userScore.movieID
+	mScore := userScore.movieScore
+
+	// Updated User Score and Participation Values
+	_, err = connection.Db.Exec(
+		"UPDATE MOVIEDATA SET user_score = user_score + ?, user_entries = user_entries + 1 WHERE id = ?", mScore, mID)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	_, err = connection.Db.Exec(
+		"UPDATE MOVIEDATA SET ACCURACY = user_score / user_entries WHERE id = ?", mID)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
+		return
+	}
+
+	c.JSON(http.StatusAccepted, &userScore)
+
+}
 func AddMovieTest(c *gin.Context) {
 
 	// User's passed in movie to add that gets bound to JSON

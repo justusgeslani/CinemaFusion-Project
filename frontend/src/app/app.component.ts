@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHandler, HttpRequest } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { Movie } from '../schema/movie'
-import { Genre } from '../schema/movie'
+import { Genre, Movie } from '../schema/movie'
 import { ProductionCompany } from '../schema/movie'
 @Component({
   selector: 'app-root',
@@ -13,7 +12,7 @@ export class AppComponent {
   title = 'Movie Site';
   allMovies: MovieTest[] = []
   constructor(private http: HttpClient) {
-
+    
   }
   ngOnInit() {
     this.addAllMovies()

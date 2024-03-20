@@ -29,5 +29,6 @@ func PrepareRouter(test bool) *gin.Engine {
 	//Router.POST("/users/get", repos.GetUser)
 
 	Router.POST("/user/score", movies.UserScoresMovie)
+	//Router.POST("/movies/search")
 	return Router
 }

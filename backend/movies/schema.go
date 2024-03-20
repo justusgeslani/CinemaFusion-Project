@@ -45,6 +45,7 @@ type Movie struct {
 	RuntimeMinutes   uint64
 	UserScore        uint64
 	Accuracy         float64
+	UserEntries      uint64
 }
 
 type Genre struct {

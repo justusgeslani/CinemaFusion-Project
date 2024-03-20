@@ -160,7 +160,7 @@ func GetRandomMovie(c *gin.Context) {
 		if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
 			&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
 			&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
-			&randomMovie.UserScore, &randomMovie.Accuracy); err != nil {
+			&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
 			fmt.Println(err)
 			return
 		}

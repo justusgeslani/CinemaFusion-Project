@@ -59,3 +59,11 @@ type ProductionCompany struct {
 	CompanyName string
 	MovieID     uint64
 }
+
+type UserGenres struct {
+	genre1 string
+	genre2 string
+	genre3 string
+	genre4 string
+	genre5 string
+}

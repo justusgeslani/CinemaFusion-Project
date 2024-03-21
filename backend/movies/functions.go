@@ -220,6 +220,30 @@ func GetRandomMovie(c *gin.Context) {
 	c.JSON(http.StatusAccepted, &randomMovie)
 }
 
+func GetMoviesByGenre(c *gin.Context) {
+
+	var randomMovie Movie
+	randMovieIndex := rand.Int63n(GetMoviesCount())
+	movieReturned, err := connection.Db.Query(
+		"SELECT * FROM MOVIEDATA ORDER BY ID LIMIT ?, 1", randMovieIndex-1)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for movieReturned.Next() {
+		if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+			&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+			&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+			&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
+	c.JSON(http.StatusAccepted, &randomMovie)
+}
+
 func AddDBGenre(c *gin.Context) {
 	c.Set("logDisabled", true)
 	var genreToAdd Genre

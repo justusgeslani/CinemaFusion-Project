@@ -29,7 +29,7 @@ func PrepareRouter(test bool) *gin.Engine {
 	//Router.POST("/movie/add", movies.AddDBMovie)
 	//Router.POST("/genre/add", movies.AddDBGenre)
 	//Router.POST("/company/add", movies.AddDBCompany)
-	Router.POST("/random/movie/get", movies.GetRandomMovie)
+	Router.GET("/random/movie/get", movies.GetRandomMovie)
 
 	Router.POST("/user/score", movies.UserScoresMovie)
 	Router.GET("/movies/get/all", movies.GetAllMovies)

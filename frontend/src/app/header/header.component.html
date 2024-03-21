@@ -3,10 +3,16 @@
     <button id="userAccountButton" (click)="openUserAccount()">
         Login/Create Account <img src="../../assets/icons8-user-32.png" style="width:30px;">
     </button>
-    <ng-select placeholder="Search Movies Here">
-        <ng-option *ngFor="let movie of allMovies">{{movie.Title}}</ng-option>
-    </ng-select>
+    <div class="selectDiv" style="width: 50%;">
+        
+        <ng-select placeholder="Search Movies Here">
+            <ng-option class="ng-opt" *ngFor="let movie of allMovies">{{movie.Title}}</ng-option>
+        </ng-select>
+        <img style="float: right;" src="../../assets/icons8-search-50.png" style="width:30px;">
+    
+
+    </div>
     <button id="searchMovieButton" (click)="openSearch()">
-        Search a Movie <img src="../../assets/icons8-search-50.png" style="width:30px;">
     </button> 
+
 </div>

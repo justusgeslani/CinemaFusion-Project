@@ -1,0 +1,12 @@
+<div>
+    <h5>CINEMAFUSION</h5>
+    <button id="userAccountButton" (click)="openUserAccount()">
+        Login/Create Account <img src="../../assets/icons8-user-32.png" style="width:30px;">
+    </button>
+    <ng-select placeholder="Search Movies Here">
+        <ng-option *ngFor="let movie of allMovies">{{movie.Title}}</ng-option>
+    </ng-select>
+    <button id="searchMovieButton" (click)="openSearch()">
+        Search a Movie <img src="../../assets/icons8-search-50.png" style="width:30px;">
+    </button> 
+</div>

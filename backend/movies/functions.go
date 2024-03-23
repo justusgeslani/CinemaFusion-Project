@@ -6,9 +6,18 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/crypto/bcrypt"
 )
+
+type Claims struct {
+	UserName string
+	jwt.RegisteredClaims
+}
 
 func CreateMovieTable() {
 
@@ -220,8 +229,302 @@ func GetRandomMovie(c *gin.Context) {
 	c.JSON(http.StatusAccepted, &randomMovie)
 }
 
+func AddUsersFavorites(c *gin.Context) {
+
+	var usersFavorites []Favorites
+	err := c.ShouldBindJSON(&usersFavorites)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	if len(usersFavorites) == 0 {
+		c.JSON(http.StatusAccepted, "No favorites to add")
+	}
+	var returnFavorites []Favorites
+
+	// Delete all users' favorites
+	_, err = connection.Db.Exec("DELETE FROM UserFavorites WHERE username = ?", usersFavorites[0].UserName)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	// Reinsert users' favorites
+	for _, value := range usersFavorites {
+		_, err := connection.Db.Exec("INSERT INTO UserFavorites VALUES (?, ?)", value.MovieID, value.UserName)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
+	// Get user's favorites to return
+	favoritesReturned, err := connection.Db.Query("SELECT * FROM UserFavorites WHERE username = ?", usersFavorites[0].UserName)
+	for favoritesReturned.Next() {
+		var currentFavorite Favorites
+		if err := favoritesReturned.Scan(&currentFavorite.MovieID, &currentFavorite.UserName); err != nil {
+			fmt.Println(err)
+			return
+		}
+		returnFavorites = append(returnFavorites, currentFavorite)
+	}
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	c.JSON(http.StatusAccepted, &returnFavorites)
+}
+
+func GetUsersFavorites(c *gin.Context) {
+
+	var user GetFavorites
+	err := c.ShouldBindJSON(&user)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var userMovies []Movie
+	// Get user's favorites to return
+	favoritesReturned, err := connection.Db.Query("SELECT * FROM UserFavorites WHERE username = ?", user.UserName)
+	for favoritesReturned.Next() {
+		var currentFavorite Favorites
+		if err := favoritesReturned.Scan(&currentFavorite.MovieID, &currentFavorite.UserName); err != nil {
+			fmt.Println(err)
+			return
+		}
+		moviesReturned, err := connection.Db.Query("SELECT * FROM MOVIEDATA WHERE ID = ?", currentFavorite.MovieID)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		var randomMovie Movie
+
+		for moviesReturned.Next() {
+			if err := moviesReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+				&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+				&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+				&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+				fmt.Println(err)
+				return
+			}
+			userMovies = append(userMovies, randomMovie)
+		}
+	}
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	c.JSON(http.StatusAccepted, &userMovies)
+}
+
+// User Functions
+func SignUpUser(c *gin.Context) {
+
+	var userToCreate SignUp
+
+	// Bind JSON Data to Object
+	err := c.BindJSON(&userToCreate)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "")
+	}
+	uName := userToCreate.UserName
+	// hash the password
+	hashPass, err := HashPassword(userToCreate.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "")
+	}
+	fName := userToCreate.FirstName
+	lName := userToCreate.LastName
+	_, err = connection.Db.Exec(
+		"INSERT INTO USERS VALUES (?, ?, ?, ?)", uName, hashPass, fName, lName)
+
+	// create jwt to login
+	expirationTime := time.Now().Add(30000 * time.Minute)
+	// Create the JWT claims, which includes the username and expiry time
+	claims := &Claims{
+		UserName: userToCreate.UserName,
+		RegisteredClaims: jwt.RegisteredClaims{
+			// In JWT, the expiry time is expressed as unix milliseconds
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// Create the JWT string
+	tokenString, err := token.SignedString(connection.JwtKey)
+
+	var userToSend GetUser
+	userToSend.FirstName = userToCreate.FirstName
+	userToSend.LastName = userToCreate.LastName
+	userToSend.UserName = userToCreate.UserName
+	userToSend.Token = tokenString
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "")
+	}
+
+	c.JSON(http.StatusOK, &userToSend)
+}
+
+func LoginUser(c *gin.Context) {
+	var loginData Login
+	var user SignUp
+	// Bind JSON Data to Object
+	err := c.BindJSON(&loginData)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "")
+	}
+
+	userReturned, err := connection.Db.Query(
+		"SELECT * FROM USERS WHERE username = ?", loginData.UserName)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for userReturned.Next() {
+		if err := userReturned.Scan(&user.UserName, &user.Password, &user.FirstName,
+			&user.LastName); err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+	checkHash := CheckPasswordHash(loginData.Password, user.Password)
+	if checkHash == true {
+
+		expirationTime := time.Now().Add(5 * time.Minute)
+		// Create the JWT claims, which includes the username and expiry time
+		claims := &Claims{
+			UserName: loginData.UserName,
+			RegisteredClaims: jwt.RegisteredClaims{
+				// In JWT, the expiry time is expressed as unix milliseconds
+				ExpiresAt: jwt.NewNumericDate(expirationTime),
+			},
+		}
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		// Create the JWT string
+		tokenString, err := token.SignedString(connection.JwtKey)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, "")
+		}
+		var tokenUser UserByToken
+		tokenUser.Token = tokenString
+		tokenUser.FirstName = user.FirstName
+		tokenUser.LastName = user.LastName
+		tokenUser.UserName = user.UserName
+		c.JSON(http.StatusOK, &tokenUser)
+	} else {
+		c.JSON(http.StatusInternalServerError, "SOMETHINGS WRONG")
+	}
+}
+
+func GetCurrentUser(c *gin.Context) {
+	var loginData Login
+	var user SignUp
+	// Bind JSON Data to Object
+	err := c.BindJSON(&loginData)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "")
+	}
+
+	userReturned, err := connection.Db.Query(
+		"SELECT username, password, FirstName, LastName FROM USERS WHERE username = ?", loginData.UserName)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for userReturned.Next() {
+		if err := userReturned.Scan(&user.UserName, &user.Password, &user.FirstName,
+			&user.LastName); err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+	checkHash := CheckPasswordHash(loginData.Password, user.Password)
+	if checkHash == true {
+
+		expirationTime := time.Now().Add(5 * time.Minute)
+		// Create the JWT claims, which includes the username and expiry time
+		claims := &Claims{
+			UserName: loginData.UserName,
+			RegisteredClaims: jwt.RegisteredClaims{
+				// In JWT, the expiry time is expressed as unix milliseconds
+				ExpiresAt: jwt.NewNumericDate(expirationTime),
+			},
+		}
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		// Create the JWT string
+		tokenString, err := token.SignedString(connection.JwtKey)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, "")
+		}
+		var tokenUser UserByToken
+		tokenUser.Token = tokenString
+		tokenUser.FirstName = user.FirstName
+		tokenUser.LastName = user.LastName
+		tokenUser.UserName = user.UserName
+		c.JSON(http.StatusOK, &tokenUser)
+	}
+}
+
+func auth() gin.HandlerFunc {
+
+	return func(c *gin.Context) {
+		var authHeader = c.Request.Header.Get("Authorization")
+		substrings := strings.Split(authHeader, " ")
+		tokenFromHeader := substrings[1]
+		claims := jwt.MapClaims{}
+		_, err := jwt.ParseWithClaims(tokenFromHeader, claims, func(token *jwt.Token) (interface{}, error) {
+			return []byte(connection.JwtKey), nil
+		})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, "")
+
+		} else {
+			c.Next()
+		}
+
+	}
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+func CheckPasswordHash(password, hash string) bool {
+
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
+
+func GetMoviesByGenre(c *gin.Context) {
+
+	var randomMovie Movie
+	randMovieIndex := rand.Int63n(GetMoviesCount())
+	movieReturned, err := connection.Db.Query(
+		"SELECT * FROM MOVIEDATA ORDER BY ID LIMIT ?, 1", randMovieIndex-1)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for movieReturned.Next() {
+		if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+			&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+			&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+			&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
+	c.JSON(http.StatusAccepted, &randomMovie)
+}
+
 func AddDBGenre(c *gin.Context) {
-	c.Set("logDisabled", true)
 	var genreToAdd Genre
 	err := c.ShouldBindJSON(&genreToAdd)
 	//fmt.Println(genreToAdd)
@@ -250,7 +553,6 @@ func AddDBGenre(c *gin.Context) {
 }
 
 func AddDBCompany(c *gin.Context) {
-	c.Set("logDisabled", true)
 	var companyToAdd ProductionCompany
 	err := c.ShouldBindJSON(&companyToAdd)
 	//fmt.Println(companyToAdd)
@@ -280,7 +582,6 @@ func AddDBCompany(c *gin.Context) {
 
 }
 func AddDBMovie(c *gin.Context) {
-	c.Set("logDisabled", true)
 	var movieToAdd Movie
 	err := c.ShouldBindJSON(&movieToAdd)
 	//fmt.Println(movieToAdd)

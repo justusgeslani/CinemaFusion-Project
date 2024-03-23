@@ -14,6 +14,8 @@ import (
 var Db *sql.DB
 var Ctx context.Context
 
+var JwtKey = []byte("secret_key_yall")
+
 func OpenConn() {
 	// Must have ENV file with connection properties
 	godotenv.Load()

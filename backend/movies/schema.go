@@ -67,3 +67,28 @@ type UserGenres struct {
 	genre4 string
 	genre5 string
 }
+
+type SignUp struct {
+	FirstName string
+	LastName  string
+	UserName  string
+	Password  string
+}
+
+type GetUser struct {
+	FirstName string
+	LastName  string
+	UserName  string
+	Token     string
+}
+type Login struct {
+	UserName string
+	Password string
+}
+
+type UserByToken struct {
+	Token     string
+	FirstName string
+	LastName  string
+	UserName  string
+}

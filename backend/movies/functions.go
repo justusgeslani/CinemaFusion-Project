@@ -6,9 +6,18 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/crypto/bcrypt"
 )
+
+type Claims struct {
+	UserName string
+	jwt.RegisteredClaims
+}
 
 func CreateMovieTable() {
 
@@ -218,6 +227,132 @@ func GetRandomMovie(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusAccepted, &randomMovie)
+}
+
+// User Functions
+func SignUpUser(c *gin.Context) {
+
+	var userToCreate SignUp
+
+	// Bind JSON Data to Object
+	err := c.BindJSON(&userToCreate)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "")
+	}
+	uName := userToCreate.UserName
+	// hash the password
+	hashPass, err := HashPassword(userToCreate.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "")
+	}
+	fName := userToCreate.FirstName
+	lName := userToCreate.LastName
+	_, err = connection.Db.Exec(
+		"INSERT INTO USERS VALUES (?, ?, ?, ?)", uName, hashPass, fName, lName)
+
+	// create jwt to login
+	expirationTime := time.Now().Add(30000 * time.Minute)
+	// Create the JWT claims, which includes the username and expiry time
+	claims := &Claims{
+		UserName: userToCreate.UserName,
+		RegisteredClaims: jwt.RegisteredClaims{
+			// In JWT, the expiry time is expressed as unix milliseconds
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// Create the JWT string
+	tokenString, err := token.SignedString(connection.JwtKey)
+
+	var userToSend GetUser
+	userToSend.FirstName = userToCreate.FirstName
+	userToSend.LastName = userToCreate.LastName
+	userToSend.UserName = userToCreate.UserName
+	userToSend.Token = tokenString
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "")
+	}
+
+	c.JSON(http.StatusOK, &userToSend)
+}
+
+func LoginUser(c *gin.Context) {
+	var loginData Login
+	var user SignUp
+	// Bind JSON Data to Object
+	err := c.BindJSON(&loginData)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "")
+	}
+
+	userReturned, err := connection.Db.Query(
+		"SELECT username, password, FirstName, LastName FROM USERS WHERE username = ?", loginData.UserName)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for userReturned.Next() {
+		if err := userReturned.Scan(&user.UserName, &user.Password, &user.FirstName,
+			&user.LastName); err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+	checkHash := CheckPasswordHash(loginData.Password, user.Password)
+	if checkHash == true {
+
+		expirationTime := time.Now().Add(5 * time.Minute)
+		// Create the JWT claims, which includes the username and expiry time
+		claims := &Claims{
+			UserName: loginData.UserName,
+			RegisteredClaims: jwt.RegisteredClaims{
+				// In JWT, the expiry time is expressed as unix milliseconds
+				ExpiresAt: jwt.NewNumericDate(expirationTime),
+			},
+		}
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		// Create the JWT string
+		tokenString, err := token.SignedString(connection.JwtKey)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, "")
+		}
+		var tokenUser UserByToken
+		tokenUser.Token = tokenString
+		tokenUser.FirstName = user.FirstName
+		tokenUser.LastName = user.LastName
+		tokenUser.UserName = user.UserName
+		c.JSON(http.StatusOK, tokenUser)
+	}
+}
+
+func auth() gin.HandlerFunc {
+
+	return func(c *gin.Context) {
+		var authHeader = c.Request.Header.Get("Authorization")
+		substrings := strings.Split(authHeader, " ")
+		tokenFromHeader := substrings[1]
+		claims := jwt.MapClaims{}
+		_, err := jwt.ParseWithClaims(tokenFromHeader, claims, func(token *jwt.Token) (interface{}, error) {
+			return []byte(connection.JwtKey), nil
+		})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, "")
+
+		} else {
+			c.Next()
+		}
+
+	}
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
 
 func GetMoviesByGenre(c *gin.Context) {

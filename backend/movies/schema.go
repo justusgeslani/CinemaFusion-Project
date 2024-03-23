@@ -85,7 +85,13 @@ type Login struct {
 	UserName string
 	Password string
 }
-
+type Favorites struct {
+	MovieID  uint
+	UserName string
+}
+type GetFavorites struct {
+	UserName string
+}
 type UserByToken struct {
 	Token     string
 	FirstName string

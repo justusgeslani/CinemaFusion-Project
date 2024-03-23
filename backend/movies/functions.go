@@ -229,6 +229,78 @@ func GetRandomMovie(c *gin.Context) {
 	c.JSON(http.StatusAccepted, &randomMovie)
 }
 
+func AddUsersFavorites(c *gin.Context) {
+
+	var usersFavorites []Favorites
+	err := c.ShouldBindJSON(usersFavorites)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	if len(usersFavorites) == 0 {
+		c.JSON(http.StatusAccepted, "No favorites to add")
+	}
+	var returnFavorites []Favorites
+
+	// Delete all users' favorites
+	_, err = connection.Db.Exec("DELETE FROM UserFavorites WHERE username = ?", usersFavorites[0].UserName)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	// Reinsert users' favorites
+	for _, value := range usersFavorites {
+		_, err := connection.Db.Exec("INSERT INTO UserFavorites (?, ?)", value.MovieID, value.UserName)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
+	// Get user's favorites to return
+	favoritesReturned, err := connection.Db.Query("SELECT * FROM UserFavorites WHERE username = ?", usersFavorites[0].UserName)
+	for favoritesReturned.Next() {
+		var currentFavorite Favorites
+		if err := favoritesReturned.Scan(&currentFavorite.MovieID, &currentFavorite.UserName); err != nil {
+			fmt.Println(err)
+			return
+		}
+		returnFavorites = append(returnFavorites, currentFavorite)
+	}
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	c.JSON(http.StatusAccepted, &returnFavorites)
+}
+
+func GetUsersFavorites(c *gin.Context) {
+
+	var user GetFavorites
+	err := c.ShouldBindJSON(&user)
+	var returnFavorites []Favorites
+	// Get user's favorites to return
+	favoritesReturned, err := connection.Db.Query("SELECT * FROM UserFavorites WHERE username = ?", user.UserName)
+	for favoritesReturned.Next() {
+		var currentFavorite Favorites
+		if err := favoritesReturned.Scan(&currentFavorite.MovieID, &currentFavorite.UserName); err != nil {
+			fmt.Println(err)
+			return
+		}
+		returnFavorites = append(returnFavorites, currentFavorite)
+	}
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	c.JSON(http.StatusAccepted, &returnFavorites)
+}
+
 // User Functions
 func SignUpUser(c *gin.Context) {
 

@@ -1,28 +1,41 @@
+<div class="LoginDiv">
 <form method ="post" #f="ngForm" (ngSubmit)="createUser(f)" novalidate>
     
-    <label>Full Name</label>
-    <input type ="text" placeholder="Enter full name" name="fullname" ngModel>
-    <p></p>
-    <p></p>
-    <label>Create Username</label>
-    <input type ="text" placeholder="Enter new username" name="username" ngModel>
-    <p></p>
-    <p></p>
-    <label>Create Password</label>
-    <input type ="text" placeholder="Enter new password" name="password" ngModel>
+    <div class="labelHolder">
+        <label>First Name</label>
+        <input type ="text" placeholder="Enter First name" name="firstname" ngModel>
+    </div>
 
+    <div class="labelHolder">
+        <label>Last Name</label>    
+        <input type ="text" placeholder="Enter Last name" name="lastname" ngModel>
+    </div>
+    
+    <div class="labelHolder">
+        <label>Username</label>
+        <input type ="text" placeholder="Enter new username" name="username" ngModel>
+    </div>
+
+    <div class="labelHolder">
+        <label>Password</label>    
+        <input type ="password" placeholder="Enter new password" name="password" ngModel>
+    </div>
     <div id="accountOptions">
 
-        <button type="button" (click)="cancel()">
+        <button class="firstRow" type="button" (click)="cancel()">
             Cancel
         </button>
-        <button type="submit" (click)="saveData()">
+        <button class="firstRow" type="submit" (click)="signUpUser()">
             Sign Up
+        </button>
+        <p>-------- OR --------</p>
+        <button type="button" (click)="LoginComp()">
+            Login
         </button>
 
     </div>
 </form>
-
+</div>
 <!--
 <form (ngSubmit)="saveData()">
 

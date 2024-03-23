@@ -1,7 +1,29 @@
-<app-header></app-header>
-<div>
+<nav class="mainMenu">
+  
+  <h5 routerLink="/">CINEMA FUSION</h5>
+
+  <a *ngIf="isSignedIn()">Profile</a>
+  <a *ngIf="isSignedIn()" (click)="openUserFavorites()">Favorites</a>
+  <a>Recommended</a>
+  <ng-select 
+    class="mainMenuSelect"
+    [items]="allMovies"
+    bindLabel="Title"
+    [(ngModel)]="selectedMovie" 
+    (ngModelChange)="movieSelected()"
+    placeholder="Search Movies Here" 
+   >
+  </ng-select>
+  <a class="endItem" *ngIf="isSignedIn()" (click)="SignOut()">Sign Out</a>
+  <h6 *ngIf="isSignedIn()">Welcome, {{name}}</h6>
+  <a class="endItem" *ngIf="!isSignedIn()" id="userAccountButton" (click)="openUserAccount()">
+       
+    <img src="../../assets/icons8-user-32.png">Login/Create Account 
+  </a>
+
+</nav>
+  <h3>Hello there! Today is {{ currentDate }}, Welcome to CinemaFusion. </h3>
   <router-outlet></router-outlet>
-</div>
 <!--
 <h1>Welcome To Cinema Fusion Movie Site, ADMIN
 <br>Click below to add and parse movies

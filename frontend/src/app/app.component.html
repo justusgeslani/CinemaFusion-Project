@@ -4,6 +4,8 @@
   <a *ngIf="isSignedIn()">Profile</a>
   <a *ngIf="isSignedIn()" (click)="openUserFavorites()">Favorites</a>
   <a>Recommended</a>
+  <a id="searchMovieButton" (click)="openSearch()">Search</a>
+<!-- 
   <ng-select 
     class="mainMenuSelect"
     [items]="allMovies"
@@ -13,6 +15,7 @@
     placeholder="Search Movies Here" 
    >
   </ng-select>
+--> 
   <a class="endItem" *ngIf="isSignedIn()" (click)="SignOut()">Sign Out</a>
   <h6 *ngIf="isSignedIn()">Welcome, {{name}}</h6>
   <a class="endItem" *ngIf="!isSignedIn()" id="userAccountButton" (click)="openUserAccount()">

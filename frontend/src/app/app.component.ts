@@ -7,6 +7,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { LoginAccountComponent } from './login-account/login-account.component';
 import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
+import { MovieOverviewComponent } from './movie-overview/movie-overview.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -144,6 +145,16 @@ export class AppComponent {
     this._modalService.show<User>(LoginAccountComponent, {
       title: 'Login / Create Account',
       type: 'default',
+    })
+
+  }
+
+  public openSearch(): void {
+
+    this._modalService.show<Movie>(MovieOverviewComponent, {
+      title: 'CinemaFusion Search',
+      type: 'default',
+      mode: 'fullScreen',
     })
 
   }

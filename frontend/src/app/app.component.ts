@@ -7,6 +7,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { LoginAccountComponent } from './login-account/login-account.component';
 import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,14 +16,17 @@ import { UserFavoritesComponent } from './user-favorites/user-favorites.componen
 export class AppComponent {
   title = 'Movie Site';
   name: string = ""
+  currentDate: string = '';
   //allMovies: MovieTest[] = []
   selectedMovie: Movie | null = null;
   @Input() allMovies: Movie[] = []
-  constructor(private readonly _modalService: ModalService, private http: HttpClient) {
+  constructor(private readonly _modalService: ModalService, private http: HttpClient, private router: Router) {
     
   }
   ngOnInit() {
+    this.setCurrentDate();
     this.getHundredMovies()
+
   }
   isSignedIn() {
     if (localStorage.getItem('UserName') != null) {
@@ -40,6 +44,7 @@ export class AppComponent {
 
   SignOut() {
     localStorage.clear()
+    this.router.navigateByUrl("/")
   }
   ngOnChanges(simpleChange: SimpleChanges) {
     if (simpleChange['allMovies']) {
@@ -148,6 +153,10 @@ export class AppComponent {
 
   }
 
+  setCurrentDate(): void {
+    const today = new Date();
+    this.currentDate = today.toDateString();
+  }
   /*
   addMovie(f: NgForm) {
 

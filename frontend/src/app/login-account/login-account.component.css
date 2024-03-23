@@ -20,6 +20,11 @@ button:hover {
 
 }
 
+::ng-deep .dp-modal-body {
+    margin: auto;
+    width: 800px;
+    height: 600px;
+  }
 /*
 .mb-4 {
 

@@ -4,6 +4,7 @@ import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { CreateAccountComponent } from '../create-account/create-account.component';
 import { HttpClient, HttpHandler, HttpRequest } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
+import { NewUser } from 'src/schema/movie';
 
 export interface User {
   username: string,
@@ -12,7 +13,7 @@ export interface User {
 @Component({
   selector: 'app-login-account',
   templateUrl: './login-account.component.html',
-  styleUrls: ['./login-account.component.css']
+  styleUrls: ['./login-account.component.scss']
 })
 export class LoginAccountComponent {
 
@@ -24,20 +25,54 @@ export class LoginAccountComponent {
   }
 
   ngOnInit(){
-    this.getLogins();
   }
 
+  isSignedIn() {
+    
+  }
   loginUser(f: NgForm){
 
-    let loginUsername = f.value.loginUsername
-    let loginPassword = f.value.loginPassword
+    let loginUsername = f.value.username
+    let loginPassword = f.value.password
 
-    console.log(this.title)
-
-    let loginTest = {
-      "Username": loginUsername,
+    let loginUser = {
+      "UserName": loginUsername,
       "Password": loginPassword,
     }
+
+    
+    const options = { headers: { 'Content-Type': 'application/json' } };
+    this.http.post('http://localhost:8080/user/login', JSON.stringify(loginUser),options).subscribe((res: any)=> {
+      if (200) {
+        localStorage.setItem('Token', res.Token)
+        localStorage.setItem('UserName', res.UserName)
+        localStorage.setItem('FirstName', res.FirstName)
+        localStorage.setItem('LastName', res.LastName)
+        /*
+        this.http.get('http://localhost:8080/user/get').subscribe((currentUser: any)=> {
+          if (200) {
+            localStorage.setItem('user_token', currentUser.j)
+          }
+        })*/
+      }
+      }, (error) => {
+        if (error.status === 404) {
+          alert('Resource not found.');
+        }
+        else if (error.status === 403) {
+          alert('Forbidden Access to Resource');
+        }
+        else if (error.status === 409) {
+          alert('Username already exists. Please try another one.');
+        }
+        else if (error.status === 500) {
+          alert('Server down.');
+        }
+        else if (error.status === 502) {
+          alert('Bad gateway.');
+        }
+      }
+    );
 
   };
 
@@ -54,7 +89,7 @@ export class LoginAccountComponent {
 
   public createAccount(): void {
     
-    this._modalService.show<User>(CreateAccountComponent, {
+    this._modalService.show<NewUser>(CreateAccountComponent, {
       title: 'Become a CinemaFusion Member',
       mode: 'disableFullScreen',
       type: 'default',

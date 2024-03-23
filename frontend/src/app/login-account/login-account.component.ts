@@ -5,6 +5,7 @@ import { CreateAccountComponent } from '../create-account/create-account.compone
 import { HttpClient, HttpHandler, HttpRequest } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { NewUser } from 'src/schema/movie';
+import { Router } from '@angular/router';
 
 export interface User {
   username: string,
@@ -20,7 +21,8 @@ export class LoginAccountComponent {
   title="Login Site";
   allLogins: LoginTest[] = []
 
-  constructor(private http: HttpClient, private readonly _modalReference: ModalReference<User>, private readonly _modalService: ModalService) {
+  constructor(private http: HttpClient, private readonly _modalReference: ModalReference<User>, private readonly _modalService: ModalService,
+    private router: Router) {
     
   }
 
@@ -48,6 +50,7 @@ export class LoginAccountComponent {
         localStorage.setItem('UserName', res.UserName)
         localStorage.setItem('FirstName', res.FirstName)
         localStorage.setItem('LastName', res.LastName)
+        this.router.navigateByUrl("/frontPage")
         /*
         this.http.get('http://localhost:8080/user/get').subscribe((currentUser: any)=> {
           if (200) {
@@ -73,6 +76,7 @@ export class LoginAccountComponent {
         }
       }
     );
+
 
   };
 

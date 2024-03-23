@@ -11,6 +11,7 @@ import { LoginAccountComponent } from './login-account/login-account.component';
 import { ModalModule } from '@developer-partners/ngx-modal-dialog';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component';
+import { MovieOverviewComponent } from './movie-overview/movie-overview.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { UserRecommendationsComponent } from './user-recommendations/user-recomm
     HeaderComponent,
     LoginAccountComponent,
     CreateAccountComponent,
-    UserRecommendationsComponent
+    UserRecommendationsComponent,
+    MovieOverviewComponent
   ],
   imports: [
     BrowserModule,	  

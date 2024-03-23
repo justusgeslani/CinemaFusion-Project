@@ -8,6 +8,7 @@ import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { LoginAccountComponent } from './login-account/login-account.component';
 import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
 import { Router } from '@angular/router';
+import { MovieOverviewComponent } from './movie-overview/movie-overview.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -140,7 +141,7 @@ export class AppComponent {
 
   public openUserFavorites(): void {
     this._modalService.show<UserFavorites>(UserFavoritesComponent, {
-      title: 'User\'s Favorite Movies',
+      title: localStorage.getItem('FirstName') + '\'s Favorite Movies',
       type: 'default',
     })
   }
@@ -148,6 +149,15 @@ export class AppComponent {
 
     this._modalService.show<User>(LoginAccountComponent, {
       title: 'Login / Create Account',
+      type: 'default',
+    })
+
+  }
+
+  public openSearch(): void {
+
+    this._modalService.show<Movie>(MovieOverviewComponent, {
+      title: 'CinemaFusion Search',
       type: 'default',
     })
 

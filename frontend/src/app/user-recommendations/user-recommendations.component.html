@@ -1,1 +1,43 @@
-<p>user-recommendations works!</p>
+<h5>
+    Select (or search) from the dropdown the genre you are interested in
+</h5>
+            <ng-select 
+                class="col1Select"
+                [items]="genresList"
+                bindLabel="Title"
+                [(ngModel)]="currentGenre" 
+                (ngModelChange)="fillGenres()"
+                [multiple]="false"
+                placeholder="Choose genre here"
+                [closeOnSelect]="false"
+            >
+            </ng-select>
+            <h1>
+                Your Random Movies By Genre
+            </h1>
+            <div *ngFor="let movie of genreMovies; let i = index">
+                <div class="infoHolder">
+                    <h2>
+                        Movie Title #{{i+1}}:<br> {{movie.Title}}
+                    </h2>
+                    <h3>
+                    Description:<br> {{movie.Overview}}
+            
+                    </h3>
+                    <h3>
+                        Language:<br> {{movie.OriginalLanguage}}
+            
+                    </h3>
+                    <h3>
+                    Release Date:<br> {{movie.ReleaseDate}}
+            
+                    </h3>
+                    <h3>
+                    Runtime Minutes:<br> {{movie.RuntimeMinutes}}
+            
+                    </h3>
+            
+                </div>
+            
+            </div>
+

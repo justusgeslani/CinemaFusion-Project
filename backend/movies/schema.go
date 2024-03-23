@@ -98,3 +98,7 @@ type UserByToken struct {
 	LastName  string
 	UserName  string
 }
+
+type MoviesByGenre struct {
+	UserGenre string
+}

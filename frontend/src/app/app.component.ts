@@ -135,7 +135,7 @@ export class AppComponent {
 
   public openUserFavorites(): void {
     this._modalService.show<UserFavorites>(UserFavoritesComponent, {
-      title: 'User\'s Favorite Movies',
+      title: localStorage.getItem('FirstName') + '\'s Favorite Movies',
       type: 'default',
     })
   }

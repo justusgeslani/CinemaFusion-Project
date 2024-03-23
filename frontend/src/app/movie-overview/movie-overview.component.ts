@@ -15,7 +15,7 @@ export class MovieOverviewComponent {
 
   }
 
-  selectedMovies = []
+  selectedMovies: Movie[] = []
 
   ngOnInit() {
     this.getHundredMovies()

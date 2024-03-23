@@ -154,7 +154,6 @@ export class AppComponent {
     this._modalService.show<Movie>(MovieOverviewComponent, {
       title: 'CinemaFusion Search',
       type: 'default',
-      mode: 'fullScreen',
     })
 
   }

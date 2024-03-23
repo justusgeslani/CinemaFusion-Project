@@ -31,6 +31,12 @@ export interface User{
     username: string,
     password: string,
 }
+
+export interface UserFavorites {
+    UserID: number
+    MovieID: number
+
+}
 export class Genre {
 
     GenreID: number;

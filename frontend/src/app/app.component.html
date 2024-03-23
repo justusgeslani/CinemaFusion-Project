@@ -2,20 +2,21 @@
   <h5 routerLink="/">CINEMA FUSION</h5>
 
   <a>Profile</a>
-  <a>Favorites</a>
+  <a (click)="openUserFavorites()">Favorites</a>
   <a>Recommended</a>
-  <ng-select class="mainMenuSelect"
-  [items]="allMovies"
-   bindLabel="Title"
-   [(ngModel)]="selectedMovie" 
-   (ngModelChange)="movieSelected()"
-   placeholder="Search Movies Here" 
+  <ng-select 
+    class="mainMenuSelect"
+    [items]="allMovies"
+    bindLabel="Title"
+    [(ngModel)]="selectedMovie" 
+    (ngModelChange)="movieSelected()"
+    placeholder="Search Movies Here" 
    >
-</ng-select>
-   <button id="userAccountButton" (click)="openUserAccount()">
+  </ng-select>
+  <button id="userAccountButton" (click)="openUserAccount()">
        
-<img src="../../assets/icons8-user-32.png">Login/Create Account 
-   </button>
+    <img src="../../assets/icons8-user-32.png">Login/Create Account 
+  </button>
 
 </nav>
 <app-header></app-header>

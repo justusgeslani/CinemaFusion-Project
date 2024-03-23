@@ -1,11 +1,12 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { HttpClient, HttpHandler, HttpRequest } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { Genre, Movie, User } from '../schema/movie'
+import { Genre, Movie, User, UserFavorites } from '../schema/movie'
 import { ProductionCompany } from '../schema/movie'
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { LoginAccountComponent } from './login-account/login-account.component';
+import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -115,12 +116,16 @@ export class AppComponent {
     );
   }
 
-  
+  public openUserFavorites(): void {
+    this._modalService.show<UserFavorites>(UserFavoritesComponent, {
+      title: 'User\'s Favorite Movies',
+      type: 'default',
+    })
+  }
   public openUserAccount(): void {
 
     this._modalService.show<User>(LoginAccountComponent, {
       title: 'Login / Create Account',
-      mode: 'fullScreen',
       type: 'default',
     })
 

@@ -17,8 +17,6 @@ export class FrontPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.setCurrentDate();
-    if (this.isSignedIn() === false)
-      this.router.navigateByUrl("/")
   }
   
   isSignedIn() {

@@ -237,7 +237,7 @@ func GetRandomMovies(c *gin.Context) {
 	for i := 0; i < 3; i++ {
 		randMovieIndex := rand.Int63n(GetMoviesCount())
 		movieReturned, err := connection.Db.Query(
-			"SELECT TOP FROM MOVIEDATA ORDER BY ID LIMIT ?, 1", randMovieIndex-1)
+			"SELECT * FROM MOVIEDATA ORDER BY ID LIMIT ?, 1", randMovieIndex-1)
 
 		if err != nil {
 			fmt.Println(err)
@@ -537,16 +537,21 @@ func GetMoviesByGenre(c *gin.Context) {
 	var genres []Genre
 	var randGenre Genre
 	var userGenreMovies []Movie
-
+	err := c.ShouldBindJSON(&userGenre)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(userGenre.UserGenre)
 	genreReturned, err := connection.Db.Query(
-		"SELECT TOP (3) FROM GENRES WHERE genre_name LIKE %?%", userGenre.UserGenre)
+		"SELECT * FROM GENRES WHERE genre_name = ? LIMIT 3", userGenre.UserGenre)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	for genreReturned.Next() {
-		if err := genreReturned.Scan(&randGenre.GenreID, randGenre.GenreName, randGenre.MovieID); err != nil {
+		if err := genreReturned.Scan(&randGenre.GenreID, &randGenre.GenreName, &randGenre.MovieID); err != nil {
 			fmt.Println(err)
 			return
 		}

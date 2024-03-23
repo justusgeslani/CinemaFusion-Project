@@ -1,7 +1,7 @@
 
 <div class="container mt-4 background">
   <div class="row justify-content-center">
-    <div class="col-sm-3 d-flex flex-column survey">
+    <div (click)="openRandomRecommendations()" class="col-sm-3 d-flex flex-column survey">
       <p>Here, you will receive recommendations for three random movies released in the last 10 years.</p><br>
       <img src="../../assets/dice.jpg" alt="random dice" class="rounded" height="150"><br>
       <a routerLink="/other_page" class="btn btn-info" style="font-size: 20px;">Take a chance</a>
@@ -11,7 +11,7 @@
       <img src="../../assets/search.jpg" alt="search icon" class="rounded" height="150"><br>
       <a routerLink="/quiz" class="btn btn-info" style="font-size: 20px;">Find your fate</a>
     </div>
-    <div class="col-sm-3 d-flex flex-column survey">
+    <div (click)="openGenreRecommendations()" class="col-sm-3 d-flex flex-column survey">
       <p>Here, select your favorite genres and get personalized recommendations for a cinematic journey.</p><br>
       <img src="../../assets/genre.jpg" alt="genre" class="rounded" height="150"><br>
       <a routerLink="/genre" class="btn btn-info" style="font-size: 20px;">Choose by genre</a>

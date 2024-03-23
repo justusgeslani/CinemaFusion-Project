@@ -232,7 +232,7 @@ func GetRandomMovie(c *gin.Context) {
 func AddUsersFavorites(c *gin.Context) {
 
 	var usersFavorites []Favorites
-	err := c.ShouldBindJSON(usersFavorites)
+	err := c.ShouldBindJSON(&usersFavorites)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -251,7 +251,7 @@ func AddUsersFavorites(c *gin.Context) {
 	}
 	// Reinsert users' favorites
 	for _, value := range usersFavorites {
-		_, err := connection.Db.Exec("INSERT INTO UserFavorites (?, ?)", value.MovieID, value.UserName)
+		_, err := connection.Db.Exec("INSERT INTO UserFavorites VALUES (?, ?)", value.MovieID, value.UserName)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -281,7 +281,11 @@ func GetUsersFavorites(c *gin.Context) {
 
 	var user GetFavorites
 	err := c.ShouldBindJSON(&user)
-	var returnFavorites []Favorites
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var userMovies []Movie
 	// Get user's favorites to return
 	favoritesReturned, err := connection.Db.Query("SELECT * FROM UserFavorites WHERE username = ?", user.UserName)
 	for favoritesReturned.Next() {
@@ -290,7 +294,23 @@ func GetUsersFavorites(c *gin.Context) {
 			fmt.Println(err)
 			return
 		}
-		returnFavorites = append(returnFavorites, currentFavorite)
+		moviesReturned, err := connection.Db.Query("SELECT * FROM MOVIEDATA WHERE ID = ?", currentFavorite.MovieID)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		var randomMovie Movie
+
+		for moviesReturned.Next() {
+			if err := moviesReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+				&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+				&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+				&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+				fmt.Println(err)
+				return
+			}
+			userMovies = append(userMovies, randomMovie)
+		}
 	}
 
 	if err != nil {
@@ -298,7 +318,7 @@ func GetUsersFavorites(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusAccepted, &returnFavorites)
+	c.JSON(http.StatusAccepted, &userMovies)
 }
 
 // User Functions

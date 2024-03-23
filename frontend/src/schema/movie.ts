@@ -53,7 +53,7 @@ export interface User{
 
 
 export interface UserFavorites {
-    UserID: number
+    UserName: string
     MovieID: number
 
 }

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ModalService } from '@developer-partners/ngx-modal-dialog';
+import { UserRecommendationsComponent } from '../user-recommendations/user-recommendations.component';
+import { Genre, Movie } from 'src/schema/movie';
+import { RandomUserMovieComponent } from '../random-user-movie/random-user-movie.component';
 
 @Component({
   selector: 'app-front-page',
@@ -9,7 +13,7 @@ import { Router } from '@angular/router';
 export class FrontPageComponent implements OnInit {
   currentDate: string = '';
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,private readonly _modalService: ModalService) { }
 
   ngOnInit(): void {
     this.setCurrentDate();
@@ -28,6 +32,22 @@ export class FrontPageComponent implements OnInit {
   setCurrentDate(): void {
     const today = new Date();
     this.currentDate = today.toDateString();
+  }
+
+  public openRandomRecommendations(): void {
+    this._modalService.show<Movie>(RandomUserMovieComponent, {
+      title: 'Random Movie Recommendations',
+      type: 'default',
+    })
+  }
+
+  public openGenreRecommendations(): void {
+    
+    this._modalService.show<Genre, Movie>(UserRecommendationsComponent, {
+      title: 'Movie Recommendations by Genre',
+      type: 'default',
+
+    })
   }
 }
 

@@ -74,6 +74,8 @@ h1, h2 {
 
 }
 .mainMenu a, .mainMenu button  {
+    text-decoration: none;
+    color: black;
     border: none;
     display: inline-block;
     margin: 0 auto;

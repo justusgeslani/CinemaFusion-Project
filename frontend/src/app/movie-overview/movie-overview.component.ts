@@ -1,0 +1,63 @@
+import { Component } from '@angular/core';
+import { Movie } from '../../schema/movie'
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-movie-overview',
+  templateUrl: './movie-overview.component.html',
+  styleUrl: './movie-overview.component.css'
+})
+export class MovieOverviewComponent {
+
+  allMovies: Movie[] = []
+
+  constructor(private http: HttpClient){
+
+  }
+
+  selectedMovies: Movie[] = []
+
+  ngOnInit() {
+    this.getHundredMovies()
+  }
+
+  getHundredMovies() {
+    
+    this.http.get('http://localhost:8080/movies/get/hundred').subscribe((moviesList: any)=> {
+      if (200) {
+        console.log(moviesList)
+        for (let i = 0; i < moviesList.length; i++) {
+          
+          let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,
+            moviesList[i].Overview, moviesList[i].PosterPath, moviesList[i].ReleaseDate,
+            moviesList[i].RuntimeMinutes, moviesList[i].UserScore, moviesList[i].Accuracy,
+            moviesList[i].UserEntries)
+
+          this.allMovies.push(movie)
+        }
+        //alert("Successful Movie Addition to database");
+        
+      }
+      }, (error) => {
+        if (error.status === 404) {
+          alert('Resource not found.');
+        }
+        else if (error.status === 403) {
+          alert('Forbidden Access to Resource');
+        }
+        else if (error.status === 409) {
+          alert('Movie already exists. Please try another one.');
+        }
+        else if (error.status === 500) {
+          alert('Server down.');
+        }
+        else if (error.status === 502) {
+          alert('Bad gateway.');
+        }
+      }
+      
+    );
+
+  }
+
+}

@@ -1,2 +1,28 @@
+<h1>
+    Your Random Movies
+</h1>
+<div *ngFor="let movie of randomMovies; let i = index">
+    <div class="infoHolder">
+        <h2>
+            Movie Title #{{i+1}}:<br> {{movie.Title}}
+        </h2>
+        <h3>
+        Description:<br> {{movie.Overview}}
 
-<button (click)="getRandomMovie()">GET RANDOM MOVIE</button>
+        </h3>
+        <h3>
+            Language:<br> {{movie.OriginalLanguage}}
+
+        </h3>
+        <h3>
+        Release Date:<br> {{movie.ReleaseDate}}
+
+        </h3>
+        <h3>
+        Runtime Minutes:<br> {{movie.RuntimeMinutes}}
+
+        </h3>
+
+    </div>
+
+</div>

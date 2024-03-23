@@ -229,6 +229,36 @@ func GetRandomMovie(c *gin.Context) {
 	c.JSON(http.StatusAccepted, &randomMovie)
 }
 
+func GetRandomMovies(c *gin.Context) {
+
+	var randomMovies []Movie
+	var randomMovie Movie
+
+	for i := 0; i < 3; i++ {
+		randMovieIndex := rand.Int63n(GetMoviesCount())
+		movieReturned, err := connection.Db.Query(
+			"SELECT * FROM MOVIEDATA ORDER BY ID LIMIT ?, 1", randMovieIndex-1)
+
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		for movieReturned.Next() {
+			if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+				&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+				&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+				&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+				fmt.Println(err)
+				return
+			}
+		}
+		randomMovies = append(randomMovies, randomMovie)
+
+	}
+
+	c.JSON(http.StatusAccepted, &randomMovies)
+}
+
 func AddUsersFavorites(c *gin.Context) {
 
 	var usersFavorites []Favorites
@@ -502,26 +532,53 @@ func CheckPasswordHash(password, hash string) bool {
 
 func GetMoviesByGenre(c *gin.Context) {
 
+	var userGenre MoviesByGenre
 	var randomMovie Movie
-	randMovieIndex := rand.Int63n(GetMoviesCount())
-	movieReturned, err := connection.Db.Query(
-		"SELECT * FROM MOVIEDATA ORDER BY ID LIMIT ?, 1", randMovieIndex-1)
-
+	var genres []Genre
+	var randGenre Genre
+	var userGenreMovies []Movie
+	err := c.ShouldBindJSON(&userGenre)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	for movieReturned.Next() {
-		if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
-			&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
-			&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
-			&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+	fmt.Println(userGenre.UserGenre)
+	genreReturned, err := connection.Db.Query(
+		"SELECT * FROM GENRES WHERE genre_name = ? LIMIT 3", userGenre.UserGenre)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for genreReturned.Next() {
+		if err := genreReturned.Scan(&randGenre.GenreID, &randGenre.GenreName, &randGenre.MovieID); err != nil {
 			fmt.Println(err)
 			return
 		}
+		genres = append(genres, randGenre)
 	}
 
-	c.JSON(http.StatusAccepted, &randomMovie)
+	for _, value := range genres {
+		movieReturned, err := connection.Db.Query(
+			"SELECT * FROM MOVIEDATA WHERE ID = ?", value.MovieID)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		for movieReturned.Next() {
+			if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+				&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+				&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+				&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+				fmt.Println(err)
+				return
+			}
+			userGenreMovies = append(userGenreMovies, randomMovie)
+		}
+
+	}
+
+	c.JSON(http.StatusAccepted, &userGenreMovies)
 }
 
 func AddDBGenre(c *gin.Context) {

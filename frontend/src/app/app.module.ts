@@ -16,6 +16,7 @@ import { ModalModule } from '@developer-partners/ngx-modal-dialog';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component';
 import { QuizComponent } from './quiz/quiz.component'; // Import QuizComponent
+import { MovieOverviewComponent } from './movie-overview/movie-overview.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { QuizComponent } from './quiz/quiz.component'; // Import QuizComponent
     LoginAccountComponent,
     CreateAccountComponent,
     QuizComponent, 
-    UserRecommendationsComponent
+    UserRecommendationsComponent,
+    MovieOverviewComponent
   ],
   imports: [
     BrowserModule,	  

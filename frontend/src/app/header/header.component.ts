@@ -93,7 +93,12 @@ export class HeaderComponent {
   //new
   navigateToQuiz() {
     console.log('Navigating to quiz page...');
-    this.router.navigate(['/quiz']); // Assuming 'quiz' is the path of your quiz page
+    this.router.navigate(['/quiz']);
+  }
+
+  navigateToGenre() {
+    console.log('Navigating to genre page...');
+    this.router.navigate(['/genre-page']);
   }
 
 }

@@ -1,1 +1,84 @@
-<p>genre-page works!</p>
+<div class="container mt-4">
+    <form>
+        <label for="genre">Select your favorite genres:</label><br><br>
+        <div class="genre-container">
+            <div class="genre">
+                <input type="checkbox" id="action" name="genres[]" value="action">
+                <label for="action">
+                    <img src="../../assets/action_image.jpg" alt="Action">
+                    <!-- <p>Action</p> -->
+                </label>
+            </div>
+            <div class="genre">
+                <input type="checkbox" id="adventure" name="genres[]" value="adventure">
+                <label for="adventure">
+                    <img src="../../assets/adventure_image.jpg" alt="Adventure">
+                    <!-- <p>Action</p> -->
+                </label>
+            </div>
+            <div class="genre">
+                <input type="checkbox" id="comedy" name="genres[]" value="comedy">
+                <label for="comedy">
+                    <img src="../../assets/comedy_image.jpg" alt="Comedy">
+                    <!-- <p>Comedy</p> -->
+                </label>
+            </div>
+            <div class="genre">
+              <input type="checkbox" id="drama" name="genres[]" value="drama">
+              <label for="drama">
+                  <img src="../../assets/drama_image.jpg" alt="Drama">
+                  <!-- <p>Drama</p> -->
+              </label>
+            </div>
+            <div class="genre">
+              <input type="checkbox" id="horror" name="genres[]" value="horror">
+              <label for="horror">
+                  <img src="../../assets/horror_image.jpg" alt="Horror">
+                  <!-- <p>Horror</p> -->
+              </label>
+            </div>
+            <div class="genre">
+              <input type="checkbox" id="SciFi" name="genres[]" value="SciFi">
+              <label for="SciFi">
+                  <img src="../../assets/SciFi_image.jpg" alt="Science Fiction">
+                  <!-- <p>Science Fiction</p> -->
+              </label>
+            </div>
+            <div class="genre">
+              <input type="checkbox" id="romance" name="genres[]" value="romance">
+              <label for="romance">
+                  <img src="../../assets/romance_image.jpg" alt="Romance">
+                  <!-- <p>Romance</p> -->
+              </label>
+            </div>
+            <div class="genre">
+              <input type="checkbox" id="animation" name="genres[]" value="animation">
+              <label for="animation">
+                  <img src="../../assets/animation_image.jpg" alt="Animation">
+                  <!-- <p>Animation</p> -->
+              </label>
+            </div>
+            <div class="genre">
+              <input type="checkbox" id="documentary" name="genres[]" value="documentary">
+              <label for="documentary">
+                  <img src="../../assets/documentary_image.jpg" alt="Documentary">
+                  <!-- <p>Documentary</p> -->
+              </label>
+            </div>
+            <!-- <div class="genre">
+              <input type="checkbox" id="noGenre" name="genres[]" value="noGenre">
+              <label for="noGenre">
+                 
+                  <p>I do not have a preferred genre.</p>
+              </label>
+            </div> -->
+        </div><br>
+    </form>
+    <button (click)="getRecommendationByGenre()">Get Recommendation</button>
+      <div id="result"></div>
+      <div>
+        <br>
+        <h3>Here put maybe three recommendations. </h3>
+        <h3>And "get another three recommendations" button.</h3>
+      </div>
+  </div>

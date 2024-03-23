@@ -1,0 +1,46 @@
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #ffffff9f;
+    padding: 50px;
+    border-radius: 10px;
+    font-family: 'Comic Sans MS', sans-serif;
+    font-size: 20px;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+}
+
+button {
+    font-family: 'Comic Sans MS', sans-serif;
+    font-size: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.genre-container {
+    width: 75%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
+.genre {
+    text-align: center;
+    margin: 10px;
+    flex-basis: calc(33% - 20px); /* Set the width of each genre, considering margins */
+    box-sizing: border-box;
+}
+
+.genre img {
+    width: 150px; /* Set the width of the genre image */
+    height: auto; /* Maintain aspect ratio */
+    cursor: pointer;
+}
+
+.genre input {
+    display: none; /* Hide the radio button */
+}
+
+.genre input:checked + label {
+    border: 2px solid #007bff; /* Highlight the selected genre */
+}

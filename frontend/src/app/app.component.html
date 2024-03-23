@@ -1,4 +1,5 @@
 <nav class="mainMenu">
+  
   <h5 routerLink="/">CINEMA FUSION</h5>
 
   <a *ngIf="isSignedIn()">Profile</a>
@@ -21,7 +22,8 @@
   </a>
 
 </nav>
-<app-header></app-header>
+  <h3>Hello there! Today is {{ currentDate }}, Welcome to CinemaFusion. </h3>
+  <router-outlet></router-outlet>
 <!--
 <h1>Welcome To Cinema Fusion Movie Site, ADMIN
 <br>Click below to add and parse movies

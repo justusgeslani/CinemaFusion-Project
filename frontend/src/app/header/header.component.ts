@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router'; //new
 import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { LoginAccountComponent } from '../login-account/login-account.component';
+import { QuizComponent } from '../quiz/quiz.component'; //new
 import { Movie } from '../../schema/movie'
 import { HttpClient } from '@angular/common/http';
 
@@ -16,14 +18,15 @@ export interface User{
 export class HeaderComponent {
 
   allMovies: Movie[] = []
-  constructor(private readonly _modalService: ModalService, private http: HttpClient) {
+  // constructor(private readonly _modalService: ModalService, private http: HttpClient) {
 
-  }
+  // }
+  constructor(private readonly _modalService: ModalService, private http: HttpClient, private router: Router) {}
+
 
   ngOnInit() {
     this.getHundredMovies()
   }
-
 
   openSearch(){
 
@@ -65,6 +68,5 @@ export class HeaderComponent {
       
     );
   }
-  
 
 }

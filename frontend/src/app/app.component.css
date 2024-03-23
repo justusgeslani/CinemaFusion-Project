@@ -39,6 +39,19 @@ h1, h2 {
     display: inline-block;
 }
 
+.mainMenu h6 {
+    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 1));
+    font-family: Impact;
+    font-size: 27px;
+    color: white;
+    vertical-align: middle;
+    padding: 5px;
+    padding-top: 10px;
+    display: inline-block;
+    float: right;
+    margin: 0 auto;
+    margin-right: 12px;
+}
 .mainMenu {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     padding-top: 10px;
@@ -47,24 +60,18 @@ h1, h2 {
     display: inline-block;
     background-image: linear-gradient(to left, #243FFF,#814DFF,#FF83B6,#FF9022 );
 }
-.mainMenu a, .mainMenuSelect {
-
-
-}
 .mainMenuSelect {
     display: inline-block;
     margin-top: 10px;
-    margin-right: 145px;
+    margin-right: 5px;
     width: 300px;
+    white-space: normal;
 }
-.mainMenu button {
-    padding: 0;
-    width: fit-content;
-    text-align: center;
-    text-wrap: nowrap;
-    padding-top: 6px;
-    padding-bottom: 6px;
+.endItem {
+    text-decoration: none;
     float: right;
+    color: black;
+
 }
 .mainMenu a, .mainMenu button  {
     border: none;
@@ -89,9 +96,8 @@ h1, h2 {
     background-color: rgba(255, 255, 255, .8);
 } 
 
-
-.loginDiv {
-    float: right;
-    display: inline;
-    padding: 0;
+ ::placeholder {
 }
+.mainMenu ::ng-deep .ng-select .ng-placeholder {
+    white-space: normal; /* Wraps text */
+  }

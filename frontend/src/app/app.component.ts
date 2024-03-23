@@ -14,6 +14,7 @@ import { UserFavoritesComponent } from './user-favorites/user-favorites.componen
 })
 export class AppComponent {
   title = 'Movie Site';
+  name: string = ""
   //allMovies: MovieTest[] = []
   selectedMovie: Movie | null = null;
   @Input() allMovies: Movie[] = []
@@ -23,7 +24,23 @@ export class AppComponent {
   ngOnInit() {
     this.getHundredMovies()
   }
+  isSignedIn() {
+    if (localStorage.getItem('UserName') != null) {
 
+      if (localStorage.getItem('FirstName'))
+        this.name = (localStorage.getItem('FirstName')!)
+
+      return true;
+
+    }
+
+    else
+      return false;
+  }
+
+  SignOut() {
+    localStorage.clear()
+  }
   ngOnChanges(simpleChange: SimpleChanges) {
     if (simpleChange['allMovies']) {
       this.allMovies = simpleChange['allMovies'].currentValue

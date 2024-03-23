@@ -33,7 +33,6 @@ export class HeaderComponent {
     
     this.http.get('http://localhost:8080/movies/get/hundred').subscribe((moviesList: any)=> {
       if (200) {
-        console.log(moviesList)
         for (let i = 0; i < moviesList.length; i++) {
           
           let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,

@@ -286,6 +286,58 @@ func LoginUser(c *gin.Context) {
 	}
 
 	userReturned, err := connection.Db.Query(
+		"SELECT * FROM USERS WHERE username = ?", loginData.UserName)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for userReturned.Next() {
+		if err := userReturned.Scan(&user.UserName, &user.Password, &user.FirstName,
+			&user.LastName); err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+	checkHash := CheckPasswordHash(loginData.Password, user.Password)
+	if checkHash == true {
+
+		expirationTime := time.Now().Add(5 * time.Minute)
+		// Create the JWT claims, which includes the username and expiry time
+		claims := &Claims{
+			UserName: loginData.UserName,
+			RegisteredClaims: jwt.RegisteredClaims{
+				// In JWT, the expiry time is expressed as unix milliseconds
+				ExpiresAt: jwt.NewNumericDate(expirationTime),
+			},
+		}
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		// Create the JWT string
+		tokenString, err := token.SignedString(connection.JwtKey)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, "")
+		}
+		var tokenUser UserByToken
+		tokenUser.Token = tokenString
+		tokenUser.FirstName = user.FirstName
+		tokenUser.LastName = user.LastName
+		tokenUser.UserName = user.UserName
+		c.JSON(http.StatusOK, &tokenUser)
+	} else {
+		c.JSON(http.StatusInternalServerError, "SOMETHINGS WRONG")
+	}
+}
+
+func GetCurrentUser(c *gin.Context) {
+	var loginData Login
+	var user SignUp
+	// Bind JSON Data to Object
+	err := c.BindJSON(&loginData)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, "")
+	}
+
+	userReturned, err := connection.Db.Query(
 		"SELECT username, password, FirstName, LastName FROM USERS WHERE username = ?", loginData.UserName)
 
 	if err != nil {
@@ -322,7 +374,7 @@ func LoginUser(c *gin.Context) {
 		tokenUser.FirstName = user.FirstName
 		tokenUser.LastName = user.LastName
 		tokenUser.UserName = user.UserName
-		c.JSON(http.StatusOK, tokenUser)
+		c.JSON(http.StatusOK, &tokenUser)
 	}
 }
 
@@ -351,6 +403,7 @@ func HashPassword(password string) (string, error) {
 	return string(bytes), err
 }
 func CheckPasswordHash(password, hash string) bool {
+
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
@@ -380,7 +433,6 @@ func GetMoviesByGenre(c *gin.Context) {
 }
 
 func AddDBGenre(c *gin.Context) {
-	c.Set("logDisabled", true)
 	var genreToAdd Genre
 	err := c.ShouldBindJSON(&genreToAdd)
 	//fmt.Println(genreToAdd)
@@ -409,7 +461,6 @@ func AddDBGenre(c *gin.Context) {
 }
 
 func AddDBCompany(c *gin.Context) {
-	c.Set("logDisabled", true)
 	var companyToAdd ProductionCompany
 	err := c.ShouldBindJSON(&companyToAdd)
 	//fmt.Println(companyToAdd)
@@ -439,7 +490,6 @@ func AddDBCompany(c *gin.Context) {
 
 }
 func AddDBMovie(c *gin.Context) {
-	c.Set("logDisabled", true)
 	var movieToAdd Movie
 	err := c.ShouldBindJSON(&movieToAdd)
 	//fmt.Println(movieToAdd)

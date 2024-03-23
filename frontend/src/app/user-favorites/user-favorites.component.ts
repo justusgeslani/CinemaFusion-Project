@@ -19,6 +19,7 @@ import { BrowserModule } from '@angular/platform-browser';
 })
 export class UserFavoritesComponent {
   @Input() allMovies: Movie[] = []
+  @Input() favorites: Movie[] = []
   @Input() column1Movies: Movie[] = []
   @Input() column2Movies: Movie[] = []
   @Input() column3Movies: Movie[] = []
@@ -33,8 +34,12 @@ export class UserFavoritesComponent {
 
   ngOnInit() {
     this.getHundredMovies()
+    this.getFavorites()
   }
 
+  getFavorites() {
+
+  }
   ngOnChanges(simpleChange: SimpleChanges) {
     if (simpleChange['allMovies']) {
       this.allMovies = simpleChange['allMovies'].currentValue

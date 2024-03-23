@@ -28,9 +28,29 @@ export class Movie {
 
 export interface User{
     
+    FirstName: string;
+    LastName: string;
+    Username: string,
+}
+
+export interface NewUser{
+    FirstName: string;
+    LastName: string;
+    UserName: string,
+    Password: string,
+}
+export interface LoginUser{
+    
+    UserName: string,
+    Password: string,
+}
+export interface User{
+    
     username: string,
     password: string,
 }
+
+
 
 export interface UserFavorites {
     UserID: number

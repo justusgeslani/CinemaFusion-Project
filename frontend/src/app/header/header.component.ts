@@ -24,15 +24,6 @@ export class HeaderComponent {
     this.getHundredMovies()
   }
 
-  public openUserAccount(): void {
-
-    this._modalService.show<User>(LoginAccountComponent, {
-      title: 'Login / Create Account',
-      mode: 'fullScreen',
-      type: 'default',
-    })
-
-  }
 
   openSearch(){
 
@@ -75,6 +66,6 @@ export class HeaderComponent {
       
     );
   }
-
+  
 
 }

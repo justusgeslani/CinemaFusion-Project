@@ -26,6 +26,11 @@ export class Movie {
     }
 }
 
+export interface User{
+    
+    username: string,
+    password: string,
+}
 export class Genre {
 
     GenreID: number;

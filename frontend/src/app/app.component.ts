@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { HttpClient, HttpHandler, HttpRequest } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { Genre, Movie } from '../schema/movie'
+import { Genre, Movie, User } from '../schema/movie'
 import { ProductionCompany } from '../schema/movie'
+import { NgSelectComponent } from '@ng-select/ng-select';
+import { ModalService } from '@developer-partners/ngx-modal-dialog';
+import { LoginAccountComponent } from './login-account/login-account.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,13 +13,120 @@ import { ProductionCompany } from '../schema/movie'
 })
 export class AppComponent {
   title = 'Movie Site';
-  allMovies: MovieTest[] = []
-  constructor(private http: HttpClient) {
+  //allMovies: MovieTest[] = []
+  selectedMovie: Movie | null = null;
+  @Input() allMovies: Movie[] = []
+  constructor(private readonly _modalService: ModalService, private http: HttpClient) {
     
   }
   ngOnInit() {
-    //this.addAllMovies()
+    this.getHundredMovies()
   }
+
+  ngOnChanges(simpleChange: SimpleChanges) {
+    if (simpleChange['allMovies']) {
+      this.allMovies = simpleChange['allMovies'].currentValue
+    }
+  }
+  movieSelected() {
+    //this.selectedMovie = movie
+    this.allMovies = [...this.allMovies]
+    console.log("Selected")
+    console.log(this.selectedMovie?.Title)
+  }
+  getHundredMovies() {
+    
+    this.http.get('http://localhost:8080/movies/get/hundred').subscribe((moviesList: any)=> {
+      if (200) {
+        this.allMovies.splice(0)
+        console.log(moviesList)
+        for (let i = 0; i < moviesList.length; i++) {
+          
+          let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,
+            moviesList[i].Overview,"https://image.tmdb.org/t/p/w500" + moviesList[i].PosterPath, moviesList[i].ReleaseDate,
+            moviesList[i].RuntimeMinutes, moviesList[i].UserScore, moviesList[i].Accuracy,
+            moviesList[i].UserEntries)
+
+          this.allMovies.push(movie)
+        }
+        
+    this.allMovies = [...this.allMovies]
+        //alert("Successful Movie Addition to database");
+        
+      }
+      }, (error) => {
+        if (error.status === 404) {
+          alert('Resource not found.');
+        }
+        else if (error.status === 403) {
+          alert('Forbidden Access to Resource');
+        }
+        else if (error.status === 409) {
+          alert('Movie already exists. Please try another one.');
+        }
+        else if (error.status === 500) {
+          alert('Server down.');
+        }
+        else if (error.status === 502) {
+          alert('Bad gateway.');
+        }
+      }
+      
+    );
+  }
+
+  getAllMovies() {
+    
+    this.http.get('http://localhost:8080/movies/get/all').subscribe((moviesList: any)=> {
+      if (200) {
+        this.allMovies.splice(0)
+        for (let i = 0; i < moviesList.length; i++) {
+          
+          let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,
+            moviesList[i].Overview,"https://image.tmdb.org/t/p/w500" + moviesList[i].PosterPath, moviesList[i].ReleaseDate,
+            moviesList[i].RuntimeMinutes, moviesList[i].UserScore, moviesList[i].Accuracy,
+            moviesList[i].UserEntries)
+
+          if (movie.Title !== '')
+          this.allMovies.push(movie)
+        }
+        this.allMovies = [...this.allMovies]
+        //alert("Successful Movie Addition to database");
+        
+      }
+      }, (error) => {
+        if (error.status === 404) {
+          alert('Resource not found.');
+        }
+        else if (error.status === 403) {
+          alert('Forbidden Access to Resource');
+        }
+        else if (error.status === 409) {
+          alert('Movie already exists. Please try another one.');
+        }
+        else if (error.status === 500) {
+          alert('Server down.');
+        }
+        else if (error.status === 502) {
+          alert('Bad gateway.');
+        }
+      }
+      
+    );
+  }
+
+  
+  public openUserAccount(): void {
+
+    this._modalService.show<User>(LoginAccountComponent, {
+      title: 'Login / Create Account',
+      mode: 'fullScreen',
+      type: 'default',
+    })
+
+  }
+
+  /*
   addMovie(f: NgForm) {
 
     let title = f.value.title
@@ -124,7 +234,7 @@ export class AppComponent {
         }
       }
     );
-        }*/
+        }*//*
           };
           fileReader.readAsText(file);
       }
@@ -134,7 +244,8 @@ export class AppComponent {
 
     
   }
-
+*/
+/*
   async parseMovie(mString: string) {
     let mJSONDetails = mString.split(';')
 
@@ -206,10 +317,10 @@ export class AppComponent {
     console.log("LANGUAGE: " + language)
     console.log("RELEASE DATE: " + releasedate)
     console.log("GENRES: " + JSONgenres)
-    console.log("COMPANIES: " + JSONcompanies)*/
+    console.log("COMPANIES: " + JSONcompanies)
     
-  }
-
+  }*/
+/*
  async addMovieToDB(movie: Movie, GenresList: Genre[], CompaniesList: ProductionCompany[]) {
 
     let newMovie = {
@@ -320,7 +431,7 @@ export class AppComponent {
       );
     }
   }
-
+  */
   getRandomMovie() {
 
     let options = { headers: { 'Content-Type': 'application/json' } };

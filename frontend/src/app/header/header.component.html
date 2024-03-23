@@ -10,3 +10,25 @@
         Search a Movie <img src="../../assets/icons8-search-50.png" style="width:30px;">
     </button> 
 </div>
+
+<!-- new below-->
+  <div class="container mt-4">
+    <h3>Hello there! Today is {{ currentDate }}, Welcome to CinemaFusion. </h3><br><br>
+    <div class="row justify-content-center">
+      <div class="column">
+        <p>Here, you will receive recommendations for three random movies released in the last 10 years.</p><br>
+        <img src="../../assets/dice.jpg" alt="random dice" ><br>
+        <a routerLink="/other_page" class="button">Take a chance</a>
+      </div>
+      <div class="column">
+        <p>Here, answer a few questions tailored to your preferences and explore personalized movie recommendations.</p><br>
+        <img src="../../assets/search.jpg" alt="search icon" ><br>
+        <a (click)="navigateToQuiz()" class="button">Find your fate</a>
+      </div>
+      <div class="column">
+        <p>Here, select your favorite genres and get personalized recommendations for a cinematic journey.</p><br>
+        <img src="../../assets/genre.jpg" alt="genre" ><br>
+        <a routerLink="/genre" class="button">Choose by genre</a>
+      </div>
+    </div>
+</div>

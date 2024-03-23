@@ -1,0 +1,62 @@
+<div class="container mt-4">
+    <label for="weather">How is the weather in your location?</label>
+    <select name="weather" id="weather">
+        <option value="sunny">Sunny</option>
+        <option value="cloudy">Cloudy</option>
+        <option value="rainy">Rainy</option>
+        <option value="snowy">Snowy</option>
+        <option value="windy">Windy</option>
+        <option value="thunderstorms">Thunderstorms</option>
+        <option value="clearskies">Clear skies</option>
+    </select>
+
+    <label for="feelings">How are you feeling today?</label>
+    <select id="feelings">
+        <option value="happy">Happy</option>
+        <option value="sad">Sad</option>
+        <option value="excited">Excited</option>
+        <option value="calm">Calm</option>
+        <option value="angry">Angry</option>
+    </select>
+
+    <label for="gender">What is your gender?</label>
+    <select id="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="nonBinary">Non-binary</option>
+        <option value="notSay">Prefer not to say</option>
+    </select>
+
+    <label for="age">What is your age group?</label>
+    <select id="age">
+        <option value="age1">Under 18</option>
+        <option value="age2">18-24</option>
+        <option value="age3">25-34</option>
+        <option value="age4">35-44</option>
+        <option value="age5">45 and above</option>
+    </select>
+
+    <label for="time">How much time do you have for a movie right now?</label>
+    <select id="time">
+        <option value="short">Short (up to 1 hour)</option>
+        <option value="average">Average (1-2 hours)</option>
+        <option value="long">Long (more than 2 hours)</option>
+    </select>
+
+    <label for="when">Do you prefer recent releases or classic films?</label>
+    <select id="when">
+        <option value="recent">Recent releases</option>
+        <option value="classic">Classic films</option>
+        <option value="both">Both</option>
+    </select>
+
+    <br><br>
+    <button (click)="getRecommendation()">Get Recommendation</button>
+    <div id="result"></div>
+
+    <div>
+        <br>
+        <h3>Here put maybe three recommendations. </h3>
+        <h3>And "get another three recommendations" button.</h3>
+    </div>
+</div>

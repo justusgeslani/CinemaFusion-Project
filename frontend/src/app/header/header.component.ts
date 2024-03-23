@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router'; //new
 import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { LoginAccountComponent } from '../login-account/login-account.component';
+import { QuizComponent } from '../quiz/quiz.component'; //new
 import { Movie } from '../../schema/movie'
 import { HttpClient } from '@angular/common/http';
 
@@ -16,12 +18,16 @@ export interface User{
 export class HeaderComponent {
 
   allMovies: Movie[] = []
-  constructor(private readonly _modalService: ModalService, private http: HttpClient) {
+  // constructor(private readonly _modalService: ModalService, private http: HttpClient) {
 
-  }
+  // }
+  constructor(private readonly _modalService: ModalService, private http: HttpClient, private router: Router) {}
+
 
   ngOnInit() {
     this.getHundredMovies()
+
+    this.setCurrentDate(); //new
   }
 
   public openUserAccount(): void {
@@ -76,5 +82,18 @@ export class HeaderComponent {
     );
   }
 
+  currentDate: string = ''; //new
+
+  //new
+  setCurrentDate(): void {
+    const today = new Date();
+    this.currentDate = today.toDateString();
+  }
+
+  //new
+  navigateToQuiz() {
+    console.log('Navigating to quiz page...');
+    this.router.navigate(['/quiz']); // Assuming 'quiz' is the path of your quiz page
+  }
 
 }

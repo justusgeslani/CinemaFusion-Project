@@ -8,7 +8,7 @@ import { FrontPageComponent } from './front-page/front-page.component';
 const routes: Routes = [
   
   { path: 'header', component: HeaderComponent },
-  { path: 'frontPage', component: FrontPageComponent},
+  { path: '', component: FrontPageComponent},
   { path: 'quiz', component: QuizComponent }, // Define route for QuizComponent
   { path: 'genre-page', component: GenrePageComponent }, // Define route for GenrePageComponent
   //{ path: '', redirectTo: '/header', pathMatch: 'full' }, // Redirect to /header if no matching route found

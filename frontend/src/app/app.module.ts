@@ -17,6 +17,7 @@ import { CreateAccountComponent } from './create-account/create-account.componen
 import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component';
 import { QuizComponent } from './quiz/quiz.component'; // Import QuizComponent
 import { MovieOverviewComponent } from './movie-overview/movie-overview.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MovieOverviewComponent } from './movie-overview/movie-overview.componen
     CreateAccountComponent,
     QuizComponent, 
     UserRecommendationsComponent,
-    MovieOverviewComponent
+    MovieOverviewComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,	  

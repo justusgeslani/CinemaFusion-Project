@@ -9,6 +9,7 @@ import { LoginAccountComponent } from './login-account/login-account.component';
 import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
 import { Router } from '@angular/router';
 import { MovieOverviewComponent } from './movie-overview/movie-overview.component';
+import { ProfileComponent } from './profile/profile.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -159,6 +160,16 @@ export class AppComponent {
     this._modalService.show<Movie>(MovieOverviewComponent, {
       title: 'CinemaFusion Search',
       type: 'default',
+    })
+
+  }
+
+  public openProfile(): void {
+
+    this._modalService.show<User>(ProfileComponent, {
+      title: localStorage.getItem('FirstName') + '\'s Profile',
+      type: 'default',
+      mode: 'disableFullScreen',
     })
 
   }

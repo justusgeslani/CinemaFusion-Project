@@ -2,7 +2,7 @@
   
   <h5 routerLink="/">CINEMA FUSION</h5>
 
-  <a *ngIf="isSignedIn()">Profile</a>
+  <a *ngIf="isSignedIn()" (click)="openProfile()">Profile</a>
   <a *ngIf="isSignedIn()" (click)="openUserFavorites()">Favorites</a>
   <a routerLink="/frontPage">Recommended</a>
   <a id="searchMovieButton" (click)="openSearch()">Search Movie Info</a>

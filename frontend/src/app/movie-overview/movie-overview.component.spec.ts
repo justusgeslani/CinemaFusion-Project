@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MovieOverviewComponent } from './movie-overview.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormsModule } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('MovieOverviewComponent', () => {
   let component: MovieOverviewComponent;
@@ -8,7 +11,12 @@ describe('MovieOverviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MovieOverviewComponent]
+      imports: [HttpClientTestingModule, MovieOverviewComponent, FormsModule],
+      providers: [
+        { provide: MovieOverviewComponent, useValue: {} },
+      ],
+      schemas: [ NO_ERRORS_SCHEMA ],
+      
     })
     .compileComponents();
     

@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
 import { Movie } from '../../schema/movie'
 import { HttpClient } from '@angular/common/http';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-movie-overview',
   templateUrl: './movie-overview.component.html',
-  styleUrl: './movie-overview.component.css'
+  styleUrl: './movie-overview.component.css',
+  standalone: true,
+  imports: [FormsModule, NgSelectModule, CommonModule],
 })
 export class MovieOverviewComponent {
 

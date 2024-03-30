@@ -20,4 +20,18 @@ describe('FrontPageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should check click for "Take a Chance" button', () => {
+    spyOn(component, 'openRandomRecommendations');
+    component.openRandomRecommendations();
+    expect(component.openRandomRecommendations).toHaveBeenCalled();
+
+  });
+
+  it('should check click for "Choose by Genre" button', () => {
+    spyOn(component, 'openGenreRecommendations');
+    component.openGenreRecommendations();
+    expect(component.openGenreRecommendations).toHaveBeenCalled();
+
+  });
 });

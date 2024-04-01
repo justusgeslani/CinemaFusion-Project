@@ -102,3 +102,12 @@ type UserByToken struct {
 type MoviesByGenre struct {
 	UserGenre string
 }
+
+type MoviesByQuiz struct {
+	Weather  string
+	Feelings string
+	Gender   string
+	Age      string
+	Time     string
+	When     string
+}

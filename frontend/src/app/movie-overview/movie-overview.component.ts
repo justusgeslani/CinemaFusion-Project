@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-movie-overview',
   templateUrl: './movie-overview.component.html',
-  styleUrl: './movie-overview.component.css',
+  styleUrl: './movie-overview.component.scss',
   standalone: true,
   imports: [FormsModule, NgSelectModule, CommonModule],
 })

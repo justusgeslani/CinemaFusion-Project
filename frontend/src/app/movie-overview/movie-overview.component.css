@@ -7,32 +7,9 @@
     float:right;
     border-color:black;
 }
-::ng-deep .dp-modal-header {
-    background: linear-gradient(
-        to right, #814DFF,#FF83B6
-      );
-
- }
 .movieOverview {
 
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     width: 80%;
 
-}
-
-::ng-deep .dp-modal-body {
-    width:800px;
-    height: 400px;
-    background-color: azure;
-  }
-.ng-select-focused {
-    .ng-placeholder {
-        display: none;
-    }
-}
-
-.ng-has-value {
-    .ng-placeholder {
-        display: none;
-    }
 }

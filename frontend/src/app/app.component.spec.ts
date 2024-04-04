@@ -6,6 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
+  let h3: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -21,6 +22,7 @@ describe('AppComponent', () => {
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    h3 = fixture.nativeElement.querySelector('h3');
   });
 
   it('should create the app', () => {
@@ -75,5 +77,9 @@ describe('AppComponent', () => {
     component.openUserAccount();
     expect(component.openUserAccount).toHaveBeenCalled();
 
+  });
+
+  it('should display current date', () => {
+    expect(h3.textContent).toContain(component.currentDate);
   });
 });

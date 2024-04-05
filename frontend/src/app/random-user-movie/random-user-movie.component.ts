@@ -118,11 +118,16 @@ export class RandomUserMovieComponent {
   }
 
   sendUserScore(movieId: number, score: number) {
-    const userScoreData = { movieID: movieId, movieScore: score };
-    console.log('userScoreData:', userScoreData);
-
-    this.http.post('http://localhost:8080/user/score', JSON.stringify(userScoreData)).subscribe(
-      (response) => {
+    console.log("MOVIE ID: " + movieId)
+    let userScore = { 
+      "MovieID": movieId, 
+      "MovieScore": score 
+    };
+    console.log('userScoreData:', userScore);
+    
+    const options = { headers: { 'Content-Type': 'application/json' } };
+    this.http.post('http://localhost:8080/user/score', JSON.stringify(userScore), options).subscribe(
+      (response: any) => {
         console.log('User score recorded successfully:', response);
       },
       (error) => {

@@ -46,6 +46,8 @@ func CreateMovieTable() {
 func UserScoresMovie(c *gin.Context) {
 	var userScore UserScore
 	err := c.ShouldBindJSON(&userScore)
+	fmt.Println(&userScore)
+	fmt.Println((c))
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
@@ -55,12 +57,11 @@ func UserScoresMovie(c *gin.Context) {
 	log.Println("Test")
 
 	// Log received data
-    log.Println("Received movieID:", userScore.movieID)
-    log.Println("Received movieScore:", userScore.movieScore)
+	log.Println("Received movieID:", userScore.MovieID)
+	log.Println("Received movieScore:", userScore.MovieScore)
 
-
-	mID := userScore.movieID
-	mScore := userScore.movieScore
+	mID := userScore.MovieID
+	mScore := userScore.MovieScore
 
 	// Updated User Score and Participation Values
 	_, err = connection.Db.Exec(
@@ -589,90 +590,84 @@ func CheckPasswordHash(password, hash string) bool {
 // 	c.JSON(http.StatusAccepted, &userGenreMovies)
 // }
 
-
 func GetMoviesByGenre(c *gin.Context) {
-    var userGenre MoviesByGenre
-    var userGenreMovies []Movie
+	var userGenre MoviesByGenre
+	var userGenreMovies []Movie
 
-    // Parse request body to get selected genres
-    if err := c.ShouldBindJSON(&userGenre); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
-        return
-    }
+	// Parse request body to get selected genres
+	if err := c.ShouldBindJSON(&userGenre); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+		return
+	}
 
-    // Check if userGenre.UserGenre is empty
-    if len(userGenre.UserGenre) == 0 {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "No genres selected"})
-        return
-    }
+	// Check if userGenre.UserGenre is empty
+	if len(userGenre.UserGenre) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No genres selected"})
+		return
+	}
 
-    // Build the SQL query to fetch movies based on selected genres
-    query := `
+	// Build the SQL query to fetch movies based on selected genres
+	query := `
         SELECT M.*
         FROM MOVIEDATA M
         JOIN GENRES G ON M.id = G.movie_id
         WHERE G.genre_name IN (` + getInClause(len(userGenre.UserGenre)) + `)
     `
 
-    // Create a slice to hold genre values as interface{}
-    genreValues := make([]interface{}, len(userGenre.UserGenre))
-    for i, genre := range userGenre.UserGenre {
-        genreValues[i] = genre
-    }
+	// Create a slice to hold genre values as interface{}
+	genreValues := make([]interface{}, len(userGenre.UserGenre))
+	for i, genre := range userGenre.UserGenre {
+		genreValues[i] = genre
+	}
 
-    // Execute the SQL query
-    rows, err := connection.Db.Query(query, genreValues...)
-    if err != nil {
-        fmt.Println(err)
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-        return
-    }
-    defer rows.Close() // Close rows after use
+	// Execute the SQL query
+	rows, err := connection.Db.Query(query, genreValues...)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+	defer rows.Close() // Close rows after use
 
-    // Iterate over query results and populate movie list
-    for rows.Next() {
-        var movie Movie
-        if err := rows.Scan(
-            &movie.ID, &movie.Title,
-            &movie.OriginalLanguage, &movie.Overview, &movie.PosterPath,
-            &movie.ReleaseDate, &movie.RuntimeMinutes,
-            &movie.UserScore, &movie.Accuracy, &movie.UserEntries,
-        ); err != nil {
-            fmt.Println(err)
-            c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-            return
-        }
-        userGenreMovies = append(userGenreMovies, movie)
-    }
+	// Iterate over query results and populate movie list
+	for rows.Next() {
+		var movie Movie
+		if err := rows.Scan(
+			&movie.ID, &movie.Title,
+			&movie.OriginalLanguage, &movie.Overview, &movie.PosterPath,
+			&movie.ReleaseDate, &movie.RuntimeMinutes,
+			&movie.UserScore, &movie.Accuracy, &movie.UserEntries,
+		); err != nil {
+			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+			return
+		}
+		userGenreMovies = append(userGenreMovies, movie)
+	}
 
-    // Check for errors during row iteration
-    if err := rows.Err(); err != nil {
-        fmt.Println(err)
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-        return
-    }
+	// Check for errors during row iteration
+	if err := rows.Err(); err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
 
-    // Return movie list as JSON response
-    c.JSON(http.StatusOK, userGenreMovies)
+	// Return movie list as JSON response
+	c.JSON(http.StatusOK, userGenreMovies)
 }
-
 
 // Function to generate IN clause for SQL query
 func getInClause(n int) string {
-    inClause := "("
-    for i := 0; i < n; i++ {
-        inClause += "?"
-        if i < n-1 {
-            inClause += ","
-        }
-    }
-    inClause += ")"
-    return inClause
+	inClause := "("
+	for i := 0; i < n; i++ {
+		inClause += "?"
+		if i < n-1 {
+			inClause += ","
+		}
+	}
+	inClause += ")"
+	return inClause
 }
-
-
-
-
 
 func AddDBCompany(c *gin.Context) {
 	var companyToAdd ProductionCompany

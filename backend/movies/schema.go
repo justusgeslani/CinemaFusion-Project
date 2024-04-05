@@ -99,6 +99,9 @@ type UserByToken struct {
 	UserName  string
 }
 
+// type MoviesByGenre struct {
+// 	UserGenre string
+// }
 type MoviesByGenre struct {
-	UserGenre string
+	UserGenre []string `json:"userGenre"`
 }

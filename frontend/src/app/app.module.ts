@@ -17,6 +17,8 @@ import { CreateAccountComponent } from './create-account/create-account.componen
 import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component';
 import { QuizComponent } from './quiz/quiz.component'; // Import QuizComponent
 import { MovieOverviewComponent } from './movie-overview/movie-overview.component';
+import { GenrePageComponent } from './genre-page/genre-page.component'; // import genrePage component
+import { RandomUserMovieComponent } from './random-user-movie/random-user-movie.component'; // 4/2 added
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { MovieOverviewComponent } from './movie-overview/movie-overview.componen
     LoginAccountComponent,
     CreateAccountComponent,
     QuizComponent, 
+    GenrePageComponent,
+    RandomUserMovieComponent, // 4/2 added
     UserRecommendationsComponent,
     MovieOverviewComponent
   ],

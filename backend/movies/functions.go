@@ -46,15 +46,11 @@ func CreateMovieTable() {
 func UserScoresMovie(c *gin.Context) {
 	var userScore UserScore
 	err := c.ShouldBindJSON(&userScore)
-	fmt.Println(&userScore)
-	fmt.Println((c))
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		fmt.Println(err)
 		return
 	}
-
-	log.Println("Test")
 
 	// Log received data
 	log.Println("Received movieID:", userScore.MovieID)

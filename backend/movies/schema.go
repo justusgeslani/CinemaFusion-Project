@@ -105,3 +105,12 @@ type UserByToken struct {
 type MoviesByGenre struct {
 	UserGenre []string `json:"userGenre"`
 }
+
+type MoviesByQuiz struct {
+	Weather  string
+	Feelings string
+	Gender   string
+	Age      string
+	Time     string
+	When     string
+}

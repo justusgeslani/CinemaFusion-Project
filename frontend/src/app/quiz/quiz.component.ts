@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ModalService, ModalConfig } from '@developer-partners/ngx-modal-dialog'; // Ensure to import ModalConfig
+import { ModalService, ModalConfig } from '@developer-partners/ngx-modal-dialog'; 
 import { UserRecommendationsComponent } from '../user-recommendations/user-recommendations.component';
 
 @Component({

@@ -53,7 +53,12 @@
     <br><br>
     <button type="submit">Get Recommendation</button>
 </form>
-<!-- Show the user recommendations component if recommendedMovie is defined -->
-<app-user-recommendations *ngIf="recommendedMovie" [movie]="recommendedMovie"></app-user-recommendations>
+<div *ngIf="recommendedMovie">
+    <h2>Recommendation:</h2>
+    <p>Title: {{ recommendedMovie?.title }}</p>
+    <p>Year: {{ recommendedMovie?.year }}</p>
+    <p>Genre: {{ recommendedMovie?.genre }}</p>
+    <p>Plot: {{ recommendedMovie?.plot }}</p>
+  </div>
   
 </div>

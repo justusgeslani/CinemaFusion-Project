@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RandomUserMovieComponent } from './random-user-movie.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('RandomUserMovieComponent', () => {
   let component: RandomUserMovieComponent;
@@ -8,7 +11,8 @@ describe('RandomUserMovieComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RandomUserMovieComponent]
+      imports: [HttpClientTestingModule, FormsModule],
+    
     })
     .compileComponents();
     

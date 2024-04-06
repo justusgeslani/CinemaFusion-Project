@@ -9,6 +9,7 @@ import { LoginAccountComponent } from './login-account/login-account.component';
 import { UserFavoritesComponent } from './user-favorites/user-favorites.component';
 import { Router } from '@angular/router';
 import { MovieOverviewComponent } from './movie-overview/movie-overview.component';
+import { ProfileComponent } from './profile/profile.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -143,6 +144,7 @@ export class AppComponent {
     this._modalService.show<UserFavorites>(UserFavoritesComponent, {
       title: localStorage.getItem('FirstName') + '\'s Favorite Movies',
       type: 'default',
+      mode: 'disableFullScreen',
     })
   }
   public openUserAccount(): void {
@@ -150,6 +152,7 @@ export class AppComponent {
     this._modalService.show<User>(LoginAccountComponent, {
       title: 'Login / Create Account',
       type: 'default',
+      mode: 'disableFullScreen',
     })
 
   }
@@ -159,6 +162,17 @@ export class AppComponent {
     this._modalService.show<Movie>(MovieOverviewComponent, {
       title: 'CinemaFusion Search',
       type: 'default',
+      mode: 'disableFullScreen',
+    })
+
+  }
+
+  public openProfile(): void {
+
+    this._modalService.show<User>(ProfileComponent, {
+      title: localStorage.getItem('FirstName') + '\'s Profile',
+      type: 'default',
+      mode: 'disableFullScreen',
     })
 
   }

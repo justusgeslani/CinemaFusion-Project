@@ -8,7 +8,7 @@ describe('QuizComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [QuizComponent]
+      declarations: [QuizComponent]
     })
     .compileComponents();
     
@@ -19,5 +19,12 @@ describe('QuizComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should check click for "Get Recommendation" button', () => {
+    spyOn(component, 'getRecommendation');
+    component.getRecommendation();
+    expect(component.getRecommendation).toHaveBeenCalled();
+
   });
 });

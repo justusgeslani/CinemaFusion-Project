@@ -10,6 +10,12 @@ import { UserRecommendationsComponent } from '../user-recommendations/user-recom
 })
 export class QuizComponent implements OnInit {
   recommendedMovie: any; // Define a property to hold the recommended movie
+  weather: string | null = null;
+  feeling: string | null = null;
+  gender: string | null = null;
+  age: string | null = null;
+  time: string | null = null;
+  when: string | null = null;
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {

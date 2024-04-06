@@ -1,55 +1,54 @@
 <div class="container mt-4">
     <form #quizForm="ngForm" (ngSubmit)="getRecommendation(quizForm)">
     <label for="weather">How is the weather in your location?</label>
-    <select name="weather" id="weather" ngModel>
-        <option value="sunny">Sunny</option>
-        <option value="cloudy">Cloudy</option>
-        <option value="rainy">Rainy</option>
-        <option value="snowy">Snowy</option>
-        <option value="windy">Windy</option>
-        <option value="thunderstorms">Thunderstorms</option>
-        <option value="clearskies">Clear skies</option>
-    </select>
+    <ng-select [(ngModel)]="weather" placeholder="The weather here is..." name="weather" id="weather" ngModel >
+        <ng-option value="sunny">Sunny</ng-option>
+        <ng-option value="cloudy">Cloudy</ng-option>
+        <ng-option value="rainy">Rainy</ng-option>
+        <ng-option value="snowy">Snowy</ng-option>
+        <ng-option value="windy">Windy</ng-option>
+        <ng-option value="thunderstorms">Thunderstorms</ng-option>
+        <ng-option value="clearskies">Clear skies</ng-option>
+    </ng-select>
 
     <label for="feelings">How are you feeling today?</label>
-    <select name="feelings" id="feelings" ngModel>
-        <option value="happy">Happy</option>
-        <option value="sad">Sad</option>
-        <option value="excited">Excited</option>
-        <option value="calm">Calm</option>
-        <option value="angry">Angry</option>
-    </select>
+    <ng-select [(ngModel)]="feeling" placeholder="I'm feeling..." name="feelings" id="feelings" ngModel>
+        <ng-option value="happy">Happy</ng-option>
+        <ng-option value="sad">Sad</ng-option>
+        <ng-option value="excited">Excited</ng-option>
+        <ng-option value="calm">Calm</ng-option>
+        <ng-option value="angry">Angry</ng-option>
+    </ng-select>
 
     <label for="gender">What is your gender?</label>
-    <select name="gender" id="gender" ngModel>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="nonBinary">Non-binary</option>
-        <option value="notSay">Prefer not to say</option>
-    </select>
+    <ng-select [(ngModel)]="gender" placeholder="I am..." name="gender" id="gender" ngModel>
+        <ng-option value="male">Male</ng-option>
+        <ng-option value="female">Female</ng-option>
+        <ng-option value="notSay">Prefer not to say</ng-option>
+    </ng-select>
 
     <label for="age">What is your age group?</label>
-    <select name="age" id="age" ngModel>
-        <option value="under 18">Under 18</option>
-        <option value="18-24">18-24</option>
-        <option value="25-34">25-34</option>
-        <option value="35-44">35-44</option>
-        <option value="45+">45 and above</option>
-    </select>
+    <ng-select [(ngModel)]="age" placeholder="I am... years old" name="age" id="age" ngModel>
+        <ng-option value="under 18">Under 18</ng-option>
+        <ng-option value="18-24">18-24</ng-option>
+        <ng-option value="25-34">25-34</ng-option>
+        <ng-option value="35-44">35-44</ng-option>
+        <ng-option value="45+">45 and above</ng-option>
+    </ng-select>
 
     <label for="time">How much time do you have for a movie right now?</label>
-    <select name="time" id="time" ngModel>
-        <option value="short">Short (up to 1 hour)</option>
-        <option value="average">Average (1-2 hours)</option>
-        <option value="long">Long (more than 2 hours)</option>
-    </select>
+    <ng-select [(ngModel)]="time" placeholder="I have a... amount of time for a movie" name="time" id="time" ngModel>
+        <ng-option value="short">Short (up to 1 hour)</ng-option>
+        <ng-option value="average">Average (1-2 hours)</ng-option>
+        <ng-option value="long">Long (more than 2 hours)</ng-option>
+    </ng-select>
 
     <label for="when">Do you prefer recent releases or classic films?</label>
-    <select name="when" id="when" ngModel>
-        <option value="recent">Recent releases</option>
-        <option value="classic">Classic films</option>
-        <option value="both">Both</option>
-    </select>
+    <ng-select [(ngModel)]="when" placeholder="I prefer... releases" name="when" id="when" ngModel>
+        <ng-option value="recent">Recent releases</ng-option>
+        <ng-option value="classic">Classic films</ng-option>
+        <ng-option value="both">Both</ng-option>
+    </ng-select>
 
     <br><br>
     <button type="submit">Get Recommendation</button>

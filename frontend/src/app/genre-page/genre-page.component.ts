@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { Genre, Movie } from 'src/schema/movie';
 
 @Component({
@@ -57,10 +58,11 @@ export class GenrePageComponent implements OnInit {
   selectedGenres: string[] = [];
   selectedGenreIndices: number[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private readonly _modalService: ModalService) {}
 
   ngOnInit(): void {}
 
+  // Update hover colors based on selection or deselection
   genreSelected(index: number) {
     if (this.selectedGenreIndices.findIndex(ind => ind === index) != -1) {
       this.selectedGenreIndices = this.selectedGenreIndices.filter(x => x != index);
@@ -69,12 +71,12 @@ export class GenrePageComponent implements OnInit {
       if (ele) {
         ele.style.backgroundColor = 'rgba(255, 255, 255, .5)'
         ele.addEventListener('mouseover', () => {
-          ele.style.backgroundColor = 'rgba(255, 255, 255, .8)'; // Change to desired hover color
+          ele.style.backgroundColor = 'rgba(255, 255, 255, .8)';
       });
 
       
       ele.addEventListener('mouseout', () => {
-        ele.style.backgroundColor = 'rgba(255, 255, 255, .5)'; // Change to desired hover color
+        ele.style.backgroundColor = 'rgba(255, 255, 255, .5)'; 
     });
 
       }
@@ -93,9 +95,7 @@ export class GenrePageComponent implements OnInit {
 
       return this.genresList[m]
     })
-    const request = {
-      "userGenres": this.selectedGenres
-    };
+    
     const options = { headers: { 'Content-Type': 'application/json' } };
 
     this.http.post('http://localhost:8080/movies/bygenre/get', JSON.stringify(this.selectedGenres), options).subscribe(

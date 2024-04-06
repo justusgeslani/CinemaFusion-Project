@@ -1,17 +1,22 @@
-import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ModalService, ModalConfig } from '@developer-partners/ngx-modal-dialog'; 
-import { UserRecommendationsComponent } from '../user-recommendations/user-recommendations.component';
+import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { UserRecommendationsComponent } from '../user-recommendations/user-recommendations.component'
 
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.css']
 })
-export class QuizComponent {
+export class QuizComponent implements OnInit {
+  recommendedMovie: any; // Define a property to hold the recommended movie
   constructor(private http: HttpClient) {}
 
-  getRecommendation(quizForm: any) {
+  ngOnInit(): void {
+    console.log('QuizComponent ngOnInit called');
+  }
+
+  getRecommendation(quizForm: NgForm) {
     const formValues = {
       weather: quizForm.value.weather,
       feelings: quizForm.value.feelings,
@@ -23,22 +28,21 @@ export class QuizComponent {
 
     this.http.post<any>('http://localhost:8080/movies/byquiz/get', JSON.stringify(formValues))
       .subscribe((movie: any) => {
-        this.showRecommendationsModal(movie);
+        console.log('Recommended Movie:', movie);
+        this.recommendedMovie = movie; // Assign the recommended movie to the property
       }, (error) => {
         console.error('Error:', error);
       });
   }
 
-  private showRecommendationsModal(movie: any): void {
-    const modalConfig: ModalConfig<UserRecommendationsComponent> = { 
-      title: 'Movie Recommendation',
-      type: 'default',
-      mode: 'disableFullScreen',
-      data: movie
-    };
-
-    this._modalService.show<UserRecommendationsComponent>(UserRecommendationsComponent, modalConfig); 
-  }
+  // private showRecommendationsModal(movie: any): void {
+  //   this.modalService.show<UserRecommendationsComponent>(UserRecommendationsComponent, {
+  //     title: 'Movie Recommendation',
+  //     type: 'default',
+  //     mode: 'disableFullScreen',
+  //     model: movie // Pass the movie recommendation as model to the popup window
+  //   });
+  // }
 }
 
 
@@ -56,7 +60,6 @@ export class QuizComponent {
   //     mode: 'disableFullScreen',  
   //   })
   // }
-}
 
 // import { HttpClient } from '@angular/common/http';
 // import { Component, OnInit } from '@angular/core';

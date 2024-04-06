@@ -50,6 +50,7 @@ export class UserRecommendationsComponent {
     }
     this.http.post('http://localhost:8080/movies/bygenre/get', JSON.stringify(MoviesByGenre)).subscribe((moviesList: any)=> {
       if (200) {
+        console.log("GENRE MOVIES")
         console.log(moviesList)
         this.genreMovies.splice(0)
         for (let i = 0; i < moviesList.length; i++) {

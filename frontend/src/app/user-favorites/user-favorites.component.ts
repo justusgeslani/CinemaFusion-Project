@@ -33,7 +33,7 @@ export class UserFavoritesComponent {
   }
 
   ngOnInit() {
-    this.getHundredMovies()
+    this.getAllMovies()
     this.getFavorites()
   }
 
@@ -95,7 +95,7 @@ export class UserFavoritesComponent {
   movieSelected() {
     console.log(this.favoriteMovies)
   }
-  getHundredMovies() {
+  getAllMovies() {
     
     this.http.get('http://localhost:8080/movies/get/all').subscribe((moviesList: any)=> {
       if (200) {

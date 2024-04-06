@@ -27,7 +27,7 @@ export class AppComponent {
   }
   ngOnInit() {
     this.setCurrentDate();
-    this.getHundredMovies()
+    this.getAllMovies()
 
   }
   isSignedIn() {

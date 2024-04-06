@@ -1,19 +1,26 @@
-<h5>Select from the checkboxes the genre(s) you are interested in:</h5>
+<h5>Select from below the genre(s) you are interested in:</h5>
 
-<div class="checkbox-list">
-  <div *ngFor="let genre of genresList" class="form-check">
+<button style="position: sticky; top: 10px; float: right;"class="btn btn-primary" (click)="fillGenres()">Get Recommendations</button>
+<div class="container">
+  <div class="row">
+    <div (click)="genreSelected(i)" *ngFor="let item of genresList; let i = index" id="genreDiv-{{i}}"
+      class="col genre">
+      <img src={{genresUrls[i]}} width="150" height="150">
+      <a style="display: block;">{{item}}</a>
+    </div>
+</div>
+<!--<div class="checkbox-list">
+  <div *ngFor="let genre of genresList; let i = index" class="form-check">
     <input
       type="checkbox"
       class="form-check-input"
-      id="{{genre}}"
-      [(ngModel)]="selectedGenres[genre]"
+      (click)=""
       
     />
     <label class="form-check-label" for="{{genre}}">{{genre}}</label>
   </div>
 </div>
-
-<button class="btn btn-primary" (click)="fillGenres()">Get Recommendations</button>
+-->
 
 <!-- <h1>Your Random Movies By Genre</h1> -->
 

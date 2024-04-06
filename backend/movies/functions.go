@@ -619,55 +619,59 @@ func GetMoviesByQuiz(c *gin.Context) {
 }
 
 func GetMoviesByGenre(c *gin.Context) {
-	// func GetMoviesByGenre(c *gin.Context) {
 
-	// 	var userGenre MoviesByGenre
-	// 	var randomMovie Movie
-	// 	var genres []Genre
+	var userGenres []string
+	var randomMovie Movie
+	var genres []Genre
 	// 	var randGenre Genre
-	// 	var userGenreMovies []Movie
-	// 	err := c.ShouldBindJSON(&userGenre)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		return
-	// 	}
+	var userGenreMovies []Movie
+	err := c.ShouldBindJSON(&userGenres)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	// 	fmt.Println(userGenre.UserGenre)
-	// 	genreReturned, err := connection.Db.Query(
-	// 		"SELECT * FROM GENRES WHERE genre_name = ? LIMIT 3", userGenre.UserGenre)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		return
-	// 	}
 
-	// 	for genreReturned.Next() {
-	// 		if err := genreReturned.Scan(&randGenre.GenreID, &randGenre.GenreName, &randGenre.MovieID); err != nil {
-	// 			fmt.Println(err)
-	// 			return
-	// 		}
-	// 		genres = append(genres, randGenre)
-	// 	}
+	for _, value := range userGenres {
+		genreReturned, err := connection.Db.Query(
+			"SELECT * FROM GENRES WHERE genre_name = ? ORDER BY RAND() LIMIT 1", value)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		var randGenre Genre
+		for genreReturned.Next() {
+			if err := genreReturned.Scan(&randGenre.GenreID, &randGenre.GenreName, &randGenre.MovieID); err != nil {
+				fmt.Println(err)
+				return
+			}
+			genres = append(genres, randGenre)
 
-	// 	for _, value := range genres {
-	// 		movieReturned, err := connection.Db.Query(
-	// 			"SELECT * FROM MOVIEDATA WHERE ID = ?", value.MovieID)
-	// 		if err != nil {
-	// 			fmt.Println(err)
-	// 			return
-	// 		}
-	// 		for movieReturned.Next() {
-	// 			if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
-	// 				&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
-	// 				&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
-	// 				&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
-	// 				fmt.Println(err)
-	// 				return
-	// 			}
-	// 			userGenreMovies = append(userGenreMovies, randomMovie)
-	// 		}
+		}
 
-	// 	}
+	}
 
-	// 	c.JSON(http.StatusAccepted, &userGenreMovies)
+	for _, value := range genres {
+		movieReturned, err := connection.Db.Query(
+			"SELECT * FROM MOVIEDATA WHERE ID = ?", value.MovieID)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		for movieReturned.Next() {
+			if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+				&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+				&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+				&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+				fmt.Println(err)
+				return
+			}
+			userGenreMovies = append(userGenreMovies, randomMovie)
+		}
+
+	}
+
+	c.JSON(http.StatusAccepted, &userGenreMovies)
 }
 
 /*

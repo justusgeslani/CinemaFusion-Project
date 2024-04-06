@@ -1,11 +1,26 @@
 <div class="container">
     <div class="row">
-        <div class="col" *ngFor="let movie of genres; let i = index">
-            <h2>Movie Title #{{i+1}}:<br> {{movie.Title}}</h2>
-            <h3>Description:<br> {{movie.Overview}}</h3>
-            <h3>Language:<br> {{movie.OriginalLanguage}}</h3>
-            <h3>Release Date:<br> {{movie.ReleaseDate}}</h3>
-            <h3>Runtime Minutes:<br> {{movie.RuntimeMinutes}}</h3>
+        <div class="col movie" *ngFor="let movie of genres; let i = index">
+        <h1 class="title-header">Title </h1>
+        <div style="display: inline-flex; float: right;">
+            <button (click)="likeMovie(movie)"class="btn btn-success">
+                <img src="../../assets/like_button_2.png" width="40" height="40" style="background-color: transparent;">
+                Like</button>
+            <button (click)="dislikeMovie(movie)"  class="btn btn-danger">
+                <img src="../../assets/dislike_button.png" width="40" height="40" style="background-color: transparent;">
+
+                Dislike</button><br>
+        </div>
+            <h1 class="title">{{movie.Title}}</h1>
+            <h2>Description:<br></h2>
+            <h3 class="desc"> {{movie.Overview}}</h3>
+            <h2>Language:<br> </h2>
+            <h3 class="lang">{{movie.OriginalLanguage}}</h3>
+            <h2>Release Date:<br></h2>
+            <h3 class="release"> {{movie.ReleaseDate}}</h3>
+            <h2>Runtime Minutes:<br> </h2>
+            <h3 class="runtime">{{movie.RuntimeMinutes}}</h3>
+            
         </div>
 
     </div>

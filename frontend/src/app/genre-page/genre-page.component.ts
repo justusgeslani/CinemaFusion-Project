@@ -87,7 +87,7 @@ export class GenrePageComponent implements OnInit {
     else {
       this.selectedGenreIndices.push(index);
       let ele = document.getElementById("genreDiv-" + index) as HTMLDivElement
-      ele.style.backgroundColor = 'rgba(255, 255, 255, .8)'
+      ele.style.backgroundColor = 'rgba(255, 255, 255, 1)'
 
     }
   }
@@ -149,7 +149,7 @@ export class GenrePageComponent implements OnInit {
     this._modalService.show<Movie[]>(GenresPopupComponent, {
       title: 'Recommended movies based on user\'s favorite genres',
       type: 'default',
-      mode: 'disableFullScreen',
+      mode: 'fullScreen',
       model: this.genreMovies
     })
   }

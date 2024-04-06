@@ -32,6 +32,7 @@ func PrepareRouter(test bool) *gin.Engine {
 	Router.GET("/random/movie/get", movies.GetRandomMovie)
 	Router.GET("/random/movies/get", movies.GetRandomMovies)
 	Router.POST("/movies/bygenre/get", movies.GetMoviesByGenre)
+	Router.POST("/movies/byquiz/get", movies.GetMoviesByQuiz)
 
 	Router.POST("/user/score", movies.UserScoresMovie)
 	Router.GET("/movies/get/all", movies.GetAllMovies)

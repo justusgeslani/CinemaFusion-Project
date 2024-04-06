@@ -591,13 +591,13 @@ func GetMoviesByGenre(c *gin.Context) {
 	var userGenreMovies []Movie
 
 	// Parse request body to get selected genres
-	if err := c.ShouldBindJSON(&userGenre); err != nil {
+	if err := c.ShouldBindJSON(&userGenreMovies); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
 		return
 	}
 
 	// Check if userGenre.UserGenre is empty
-	if len(userGenre.UserGenre) == 0 {
+	if len(userGenreMovies) == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "No genres selected"})
 		return
 	}

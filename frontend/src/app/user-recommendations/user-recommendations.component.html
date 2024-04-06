@@ -1,4 +1,18 @@
-<h5>
+<div class="modal">
+    <div class="modal-content">
+      <h2>Movie Recommendation</h2>
+      <p>Title: {{ movie.title }}</p>
+      <p>Year: {{ movie.year }}</p>
+      <p>Genre: {{ movie.genre.join(', ') }}</p>
+      <p>Plot: {{ movie.plot }}</p>
+      <button (click)="closeModal()">Close</button>
+    </div>
+  </div>
+  
+
+  
+  
+<!-- <h5>
     Select (or search) from the dropdown the genre you are interested in
 </h5>
             <ng-select 
@@ -22,22 +36,25 @@
                     </h2>
                     <h3>
                     Description:<br> {{movie.Overview}}
-            
                     </h3>
                     <h3>
                         Language:<br> {{movie.OriginalLanguage}}
-            
                     </h3>
                     <h3>
                     Release Date:<br> {{movie.ReleaseDate}}
-            
                     </h3>
                     <h3>
                     Runtime Minutes:<br> {{movie.RuntimeMinutes}}
-            
-                    </h3>
-            
-                </div>
-            
-            </div>
+                    </h3>         
+                </div>           
+            </div> -->
 
+
+<!-- <div class="modal-body">
+    <h3>Movie Recommendations</h3>
+    <ul>
+      <li *ngFor="let movie of data">{{ movie }}</li>
+    </ul>
+  </div>  -->
+
+  

@@ -52,13 +52,16 @@
     </select>
 
     <br><br>
-    <button type="submit">Get Recommendation</button>
+    <!-- <button type="submit">Get Recommendation</button> -->
 </form>
-    <div id="result"></div>
+<app-user-recommendations *ngIf="showModal" [movie]="recommendedMovie"></app-user-recommendations>
+
+
+    <!-- <div id="result"></div>
 
     <div>
         <br>
         <h3>Here put maybe three recommendations. </h3>
         <h3>And "get another three recommendations" button.</h3>
-    </div>
+    </div> -->
 </div>

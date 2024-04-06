@@ -44,7 +44,7 @@ export class GenrePageComponent implements OnInit {
     "../../assets/fantasy_genre.jpg",
     "../../assets/foreign_genre.jpg",
     "../../assets/history_genre.jpg",
-    "../../assets/horror_genre.jpg",
+    "../../assets/horror_genre_2.jpg",
     "../../assets/musical_genre.jpg",
     "../../assets/mystery_genre.jpg",
     "../../assets/romance_genre.jpg",
@@ -65,7 +65,19 @@ export class GenrePageComponent implements OnInit {
     if (this.selectedGenreIndices.findIndex(ind => ind === index) != -1) {
       this.selectedGenreIndices = this.selectedGenreIndices.filter(x => x != index);
       let ele = document.getElementById("genreDiv-" + index) as HTMLDivElement
-      ele.style.backgroundColor = 'rgba(255, 255, 255, .5)'
+
+      if (ele) {
+        ele.style.backgroundColor = 'rgba(255, 255, 255, .5)'
+        ele.addEventListener('mouseover', () => {
+          ele.style.backgroundColor = 'rgba(255, 255, 255, .8)'; // Change to desired hover color
+      });
+
+      
+      ele.addEventListener('mouseout', () => {
+        ele.style.backgroundColor = 'rgba(255, 255, 255, .5)'; // Change to desired hover color
+    });
+
+      }
     }
 
     else {

@@ -19,6 +19,8 @@
     border-radius: 4px;
 }
 .genre a {
+    padding-top: 7px;
+    padding-bottom: 7px;
     text-align: center;
 }
 .row {

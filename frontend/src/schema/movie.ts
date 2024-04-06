@@ -70,6 +70,7 @@ export class Genre {
     }
 }
 
+export var allMovies: Movie[] = [];
 export class ProductionCompany {
 
     CompanyID: number;

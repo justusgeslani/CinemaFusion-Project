@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Movie } from '../../schema/movie'
+import { Movie, allMovies } from '../../schema/movie'
 import { HttpClient } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class MovieOverviewComponent {
 
-  @Input() allMovies: Movie[] = []
+  allMovies: Movie[] = allMovies;
 
   constructor(private http: HttpClient){
 
@@ -27,7 +27,9 @@ export class MovieOverviewComponent {
   }
 
   getAllMovies() {
-    
+
+    console.log("ALL MOVIES LENGTH: " + allMovies.length)
+    /*
     this.http.get('http://localhost:8080/movies/get/all').subscribe((moviesList: any)=> {
       if (200) {
         for (let i = 0; i < moviesList.length; i++) {
@@ -61,7 +63,7 @@ export class MovieOverviewComponent {
       }
       
     );
-
+    */
   }
 
 }

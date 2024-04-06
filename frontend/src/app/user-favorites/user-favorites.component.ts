@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { ModalReference } from '@developer-partners/ngx-modal-dialog';
 import { ModalService } from '@developer-partners/ngx-modal-dialog';
-import { Movie, UserFavorites } from 'src/schema/movie';
+import { Movie, UserFavorites, allMovies } from 'src/schema/movie';
 import { NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { NgForm, ReactiveFormsModule , FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';import { NgModule } from '@angular/core';
@@ -18,7 +18,7 @@ import { BrowserModule } from '@angular/platform-browser';
   styleUrl: './user-favorites.component.scss'
 })
 export class UserFavoritesComponent {
-  @Input() allMovies: Movie[] = []
+  @Input() allMovies: Movie[] = allMovies;
   @Input() favorites: Movie[] = []
   @Input() column1Movies: Movie[] = []
   @Input() column2Movies: Movie[] = []
@@ -33,7 +33,6 @@ export class UserFavoritesComponent {
   }
 
   ngOnInit() {
-    this.getHundredMovies()
     this.getFavorites()
   }
 
@@ -94,46 +93,6 @@ export class UserFavoritesComponent {
 
   movieSelected() {
     console.log(this.favoriteMovies)
-  }
-  getHundredMovies() {
-    
-    this.http.get('http://localhost:8080/movies/get/all').subscribe((moviesList: any)=> {
-      if (200) {
-        this.allMovies.splice(0)
-        for (let i = 0; i < 300; i++) {
-          
-          let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,
-            moviesList[i].Overview,"https://image.tmdb.org/t/p/w500" + moviesList[i].PosterPath, moviesList[i].ReleaseDate,
-            moviesList[i].RuntimeMinutes, moviesList[i].UserScore, moviesList[i].Accuracy,
-            moviesList[i].UserEntries)
-
-          this.allMovies.push(movie)
-
-        }
-        
-    this.allMovies = [...this.allMovies]
-        //alert("Successful Movie Addition to database");
-        
-      }
-      }, (error) => {
-        if (error.status === 404) {
-          alert('Resource not found.');
-        }
-        else if (error.status === 403) {
-          alert('Forbidden Access to Resource');
-        }
-        else if (error.status === 409) {
-          alert('Movie already exists. Please try another one.');
-        }
-        else if (error.status === 500) {
-          alert('Server down.');
-        }
-        else if (error.status === 502) {
-          alert('Bad gateway.');
-        }
-      }
-      
-    );
   }
 
   saveFavorites() {

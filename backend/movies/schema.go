@@ -31,8 +31,8 @@ type EditMoviesTest struct {
 }
 
 type UserScore struct {
-	movieID    uint64
-	movieScore uint64
+	MovieID    uint64
+	MovieScore uint64
 }
 
 type Movie struct {
@@ -61,11 +61,11 @@ type ProductionCompany struct {
 }
 
 type UserGenres struct {
-	genre1 string
-	genre2 string
-	genre3 string
-	genre4 string
-	genre5 string
+	Genre1 string
+	Genre2 string
+	Genre3 string
+	Genre4 string
+	Genre5 string
 }
 
 type SignUp struct {
@@ -99,8 +99,11 @@ type UserByToken struct {
 	UserName  string
 }
 
+// type MoviesByGenre struct {
+// 	UserGenre string
+// }
 type MoviesByGenre struct {
-	UserGenre string
+	UserGenre []string `json:"userGenre"`
 }
 
 type MoviesByQuiz struct {

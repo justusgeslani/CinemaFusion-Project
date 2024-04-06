@@ -59,8 +59,13 @@ func UserScoresMovie(c *gin.Context) {
 		fmt.Println(err)
 		return
 	}
-	mID := userScore.movieID
-	mScore := userScore.movieScore
+
+	// Log received data
+	log.Println("Received movieID:", userScore.MovieID)
+	log.Println("Received movieScore:", userScore.MovieScore)
+
+	mID := userScore.MovieID
+	mScore := userScore.MovieScore
 
 	// Updated User Score and Participation Values
 	_, err = connection.Db.Exec(
@@ -614,15 +619,64 @@ func GetMoviesByQuiz(c *gin.Context) {
 }
 
 func GetMoviesByGenre(c *gin.Context) {
+// func GetMoviesByGenre(c *gin.Context) {
 
+// 	var userGenre MoviesByGenre
+// 	var randomMovie Movie
+// 	var genres []Genre
+// 	var randGenre Genre
+// 	var userGenreMovies []Movie
+// 	err := c.ShouldBindJSON(&userGenre)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 		return
+// 	}
+// 	fmt.Println(userGenre.UserGenre)
+// 	genreReturned, err := connection.Db.Query(
+// 		"SELECT * FROM GENRES WHERE genre_name = ? LIMIT 3", userGenre.UserGenre)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 		return
+// 	}
+
+// 	for genreReturned.Next() {
+// 		if err := genreReturned.Scan(&randGenre.GenreID, &randGenre.GenreName, &randGenre.MovieID); err != nil {
+// 			fmt.Println(err)
+// 			return
+// 		}
+// 		genres = append(genres, randGenre)
+// 	}
+
+// 	for _, value := range genres {
+// 		movieReturned, err := connection.Db.Query(
+// 			"SELECT * FROM MOVIEDATA WHERE ID = ?", value.MovieID)
+// 		if err != nil {
+// 			fmt.Println(err)
+// 			return
+// 		}
+// 		for movieReturned.Next() {
+// 			if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+// 				&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+// 				&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+// 				&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+// 				fmt.Println(err)
+// 				return
+// 			}
+// 			userGenreMovies = append(userGenreMovies, randomMovie)
+// 		}
+
+// 	}
+
+// 	c.JSON(http.StatusAccepted, &userGenreMovies)
+// }
+
+func GetMoviesByGenre(c *gin.Context) {
 	var userGenre MoviesByGenre
-	var randomMovie Movie
-	var genres []Genre
-	var randGenre Genre
 	var userGenreMovies []Movie
-	err := c.ShouldBindJSON(&userGenre)
-	if err != nil {
-		fmt.Println(err)
+
+	// Parse request body to get selected genres
+	if err := c.ShouldBindJSON(&userGenreMovies); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
 		return
 	}
 	fmt.Println(userGenre.UserGenre)
@@ -630,66 +684,75 @@ func GetMoviesByGenre(c *gin.Context) {
 		"SELECT * FROM GENRES WHERE genre_name = ? ORDER BY RAND() LIMIT 3", userGenre.UserGenre)
 	if err != nil {
 		fmt.Println(err)
+=======
+
+	// Check if userGenre.UserGenre is empty
+	if len(userGenreMovies) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No genres selected"})
 		return
 	}
 
-	for genreReturned.Next() {
-		if err := genreReturned.Scan(&randGenre.GenreID, &randGenre.GenreName, &randGenre.MovieID); err != nil {
-			fmt.Println(err)
-			return
-		}
-		genres = append(genres, randGenre)
+	// Build the SQL query to fetch movies based on selected genres
+	query := `
+        SELECT M.*
+        FROM MOVIEDATA M
+        JOIN GENRES G ON M.id = G.movie_id
+        WHERE G.genre_name IN (` + getInClause(len(userGenre.UserGenre)) + `)
+    `
+
+	// Create a slice to hold genre values as interface{}
+	genreValues := make([]interface{}, len(userGenre.UserGenre))
+	for i, genre := range userGenre.UserGenre {
+		genreValues[i] = genre
 	}
 
-	for _, value := range genres {
-		movieReturned, err := connection.Db.Query(
-			"SELECT * FROM MOVIEDATA WHERE ID = ?", value.MovieID)
-		if err != nil {
+	// Execute the SQL query
+	rows, err := connection.Db.Query(query, genreValues...)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+	defer rows.Close() // Close rows after use
+
+	// Iterate over query results and populate movie list
+	for rows.Next() {
+		var movie Movie
+		if err := rows.Scan(
+			&movie.ID, &movie.Title,
+			&movie.OriginalLanguage, &movie.Overview, &movie.PosterPath,
+			&movie.ReleaseDate, &movie.RuntimeMinutes,
+			&movie.UserScore, &movie.Accuracy, &movie.UserEntries,
+		); err != nil {
 			fmt.Println(err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 			return
 		}
-		for movieReturned.Next() {
-			if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
-				&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
-				&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
-				&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
-				fmt.Println(err)
-				return
-			}
-			userGenreMovies = append(userGenreMovies, randomMovie)
-		}
-
+		userGenreMovies = append(userGenreMovies, movie)
 	}
 
-	c.JSON(http.StatusAccepted, &userGenreMovies)
+	// Check for errors during row iteration
+	if err := rows.Err(); err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	// Return movie list as JSON response
+	c.JSON(http.StatusOK, userGenreMovies)
 }
 
-func AddDBGenre(c *gin.Context) {
-	var genreToAdd Genre
-	err := c.ShouldBindJSON(&genreToAdd)
-	//fmt.Println(genreToAdd)
-	// If passed in variable doesn't bind, server or frontend  schema has issues
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		//fmt.Println(err)
-		//return
+// Function to generate IN clause for SQL query
+func getInClause(n int) string {
+	inClause := "("
+	for i := 0; i < n; i++ {
+		inClause += "?"
+		if i < n-1 {
+			inClause += ","
+		}
 	}
-	gID := genreToAdd.GenreID
-	gName := genreToAdd.GenreName
-	mID := genreToAdd.MovieID // Insert Movie into Database
-	_, err = connection.Db.Exec(
-		"INSERT INTO GENRES VALUES (?, ?, ?)", gID, gName, mID)
-	// Return if unable to add movie to database
-	if err != nil {
-		////fmt.Println(err)
-		//return
-	}
-
-	// This line is just for testing query output, remove lator
-	//fmt.Println(query)
-
-	// Return Http Status Code to frontEnd
-	c.JSON(http.StatusCreated, &genreToAdd)
+	inClause += ")"
+	return inClause
 }
 
 func AddDBCompany(c *gin.Context) {

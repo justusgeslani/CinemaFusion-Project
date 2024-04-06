@@ -1,7 +1,7 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { HttpClient, HttpHandler, HttpRequest } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { Genre, Movie, User, UserFavorites } from '../schema/movie'
+import { Genre, Movie, User, UserFavorites, allMovies } from '../schema/movie'
 import { ProductionCompany } from '../schema/movie'
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { ModalService } from '@developer-partners/ngx-modal-dialog';
@@ -21,13 +21,13 @@ export class AppComponent {
   currentDate: string = '';
   //allMovies: MovieTest[] = []
   selectedMovie: Movie | null = null;
-  @Input() allMovies: Movie[] = []
+  //@Input() allMovies: Movie[] = []
   constructor(private readonly _modalService: ModalService, private http: HttpClient, private router: Router) {
     
   }
   ngOnInit() {
     this.setCurrentDate();
-    this.getHundredMovies()
+    this.getAllMovies()
 
   }
   isSignedIn() {
@@ -49,13 +49,13 @@ export class AppComponent {
     this.router.navigateByUrl("/")
   }
   ngOnChanges(simpleChange: SimpleChanges) {
-    if (simpleChange['allMovies']) {
+    /*if (simpleChange['allMovies']) {
       this.allMovies = simpleChange['allMovies'].currentValue
-    }
+    }*/
   }
   movieSelected() {
     //this.selectedMovie = movie
-    this.allMovies = [...this.allMovies]
+    //this.allMovies = [...this.allMovies]
     console.log("Selected")
     console.log(this.selectedMovie?.Title)
   }
@@ -63,7 +63,7 @@ export class AppComponent {
     
     this.http.get('http://localhost:8080/movies/get/hundred').subscribe((moviesList: any)=> {
       if (200) {
-        this.allMovies.splice(0);
+        allMovies.splice(0);
         for (let i = 0; i < moviesList.length; i++) {
           
           let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,
@@ -71,10 +71,9 @@ export class AppComponent {
             moviesList[i].RuntimeMinutes, moviesList[i].UserScore, moviesList[i].Accuracy,
             moviesList[i].UserEntries)
 
-          this.allMovies.push(movie)
+          allMovies.push(movie)
         }
         
-    this.allMovies = [...this.allMovies]
         //alert("Successful Movie Addition to database");
         
       }
@@ -103,7 +102,7 @@ export class AppComponent {
     
     this.http.get('http://localhost:8080/movies/get/all').subscribe((moviesList: any)=> {
       if (200) {
-        this.allMovies.splice(0)
+        allMovies.splice(0)
         for (let i = 0; i < moviesList.length; i++) {
           
           let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,
@@ -112,9 +111,9 @@ export class AppComponent {
             moviesList[i].UserEntries)
 
           if (movie.Title !== '')
-          this.allMovies.push(movie)
+          allMovies.push(movie)
         }
-        this.allMovies = [...this.allMovies]
+        console.log("ALL MOVIES LENGTH: " + allMovies.length)
         //alert("Successful Movie Addition to database");
         
       }

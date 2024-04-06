@@ -62,16 +62,7 @@ export class UserRecommendationsComponent {
 //   ngOnInit() {
 //   }
 
-//   fillGenres() {
-//     console.log(this.currentGenre)
-//     let MoviesByGenre = {
-//       "UserGenre": this.currentGenre
-//     }
-//     this.http.post('http://localhost:8080/movies/bygenre/get', JSON.stringify(MoviesByGenre)).subscribe((moviesList: any)=> {
-//       if (200) {
-//         console.log(moviesList)
-//         this.genreMovies.splice(0)
-//         for (let i = 0; i < moviesList.length; i++) {
+  
           
 //           let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,
 //             moviesList[i].Overview,"https://image.tmdb.org/t/p/w500" + moviesList[i].PosterPath, moviesList[i].ReleaseDate,

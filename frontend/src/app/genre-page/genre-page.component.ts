@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Movie } from 'src/schema/movie';
+import { ModalService } from '@developer-partners/ngx-modal-dialog';
+import { Genre, Movie } from 'src/schema/movie';
+import { GenresPopupComponent } from '../genres-popup/genres-popup.component';
 
 @Component({
   selector: 'app-genre-page',
@@ -9,28 +11,103 @@ import { Movie } from 'src/schema/movie';
 })
 export class GenrePageComponent implements OnInit {
   genreMovies: Movie[] = [];
+  showPopup: boolean = false;
   genresList: string[] = [
-    'Animation', 'Comedy', 'Family', 'Adventure', 'Fantasy', 'Romance', 'Drama', 'Action', 'Crime', 'Thriller', 'Horror',  'History', 'Science Fiction', 'Mystery', 'Music', 'Documentary', 'Western', 'War', 'Foreign', 'TV Movie'
+   'Action',  
+   'Adventure', 
+   'Animation',
+   'Comedy', 
+   'Crime', 
+   'Documentary', 
+   'Drama',  
+   'Family',  
+   'Fantasy', 
+   'Foreign',  
+   'History', 
+   'Horror',
+   'Music', 
+   'Mystery', 
+   'Romance',  
+   'Science Fiction',
+   'Thriller', 
+   'TV Movie',
+   'War', 
+   'Western', 
   ];
-  selectedGenres: { [key: string]: boolean } = {};
+  genresUrls: string[] = [
 
-  constructor(private http: HttpClient) {}
+    "../../assets/action_genre.jpg",
+    "../../assets/adventure_genre.jpg",
+    "../../assets/animated_genre.jpg",
+    "../../assets/comedy_genre.jpg",
+    "../../assets/crime_genre.jpg",
+    "../../assets/documentary_genre.jpg",
+    "../../assets/drama_genre.jpg",
+    "../../assets/family_genre.jpg",
+    "../../assets/fantasy_genre.jpg",
+    "../../assets/foreign_genre.jpg",
+    "../../assets/history_genre.jpg",
+    "../../assets/horror_genre_2.jpg",
+    "../../assets/musical_genre.jpg",
+    "../../assets/mystery_genre.jpg",
+    "../../assets/romance_genre.jpg",
+    "../../assets/science_fiction_genre.jpeg",
+    "../../assets/thriller_genre.jpg",
+    "../../assets/tv_movie_genre.jpg",
+    "../../assets/war_genre.jpg",
+    "../../assets/western_genre.jpg",
+  ]
+  selectedGenres: string[] = [];
+  selectedGenreIndices: number[] = [];
+
+  constructor(private http: HttpClient, private readonly _modalService: ModalService) {}
 
   ngOnInit(): void {}
 
-  fillGenres(): void {
-    const selectedGenres = Object.keys(this.selectedGenres).filter(genre => this.selectedGenres[genre] === true);
-    console.log(selectedGenres);
-    const request = {
-      genres: selectedGenres
-    };
+  // Update hover colors based on selection or deselection
+  genreSelected(index: number) {
+    if (this.selectedGenreIndices.findIndex(ind => ind === index) != -1) {
+      this.selectedGenreIndices = this.selectedGenreIndices.filter(x => x != index);
+      let ele = document.getElementById("genreDiv-" + index) as HTMLDivElement
 
-    this.http.post('http://localhost:8080/movies/bygenre/get', request).subscribe(
+      if (ele) {
+        ele.style.backgroundColor = 'rgba(255, 255, 255, .5)'
+        ele.addEventListener('mouseover', () => {
+          ele.style.backgroundColor = 'rgba(255, 255, 255, .8)';
+      });
+
+      
+      ele.addEventListener('mouseout', () => {
+        ele.style.backgroundColor = 'rgba(255, 255, 255, .5)'; 
+    });
+
+      }
+    }
+
+    else {
+      this.selectedGenreIndices.push(index);
+      let ele = document.getElementById("genreDiv-" + index) as HTMLDivElement
+      ele.style.backgroundColor = 'rgba(255, 255, 255, 1)'
+
+    }
+  }
+  fillGenres(): void {
+    console.log(this.selectedGenres);
+    this.selectedGenres = this.selectedGenreIndices.map((m) => {
+
+      return this.genresList[m]
+    })
+    
+    const options = { headers: { 'Content-Type': 'application/json' } };
+
+    this.http.post('http://localhost:8080/movies/bygenre/get', JSON.stringify(this.selectedGenres), options).subscribe(
       (moviesList: any) => {
         // Check if moviesList is not null or undefined
-    if (moviesList && moviesList.length) {
-        this.genreMovies = [];
-        for (let i = 0; i < moviesList.length; i++) {
+        console.log("Returned:")
+        console.log(moviesList)
+        if (moviesList && moviesList.length) {
+          this.genreMovies = [];
+          for (let i = 0; i < moviesList.length; i++) {
           const movie: Movie = new Movie(
             moviesList[i].ID,
             moviesList[i].Title,
@@ -45,8 +122,9 @@ export class GenrePageComponent implements OnInit {
           );
 
           this.genreMovies.push(movie);
-        }
-      }else {
+          } 
+          this.openUserGenres()
+        } else {
           console.error('Received null or empty moviesList:', moviesList);
         }
       },
@@ -65,6 +143,15 @@ export class GenrePageComponent implements OnInit {
         }
       }
     );
+  }
+  
+  public openUserGenres(): void {
+    this._modalService.show<Movie[]>(GenresPopupComponent, {
+      title: 'Recommended movies based on user\'s favorite genres',
+      type: 'default',
+      mode: 'fullScreen',
+      model: this.genreMovies
+    })
   }
 }
 

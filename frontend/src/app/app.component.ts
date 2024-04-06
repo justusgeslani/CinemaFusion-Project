@@ -500,17 +500,3 @@ export class AppComponent {
       );
   }
 }
-
-class MovieTest {
-  Title: string;
-  Year: number;
-  Genre: string;
-  Producer: string;
-
-  constructor(title: string, year: number, genre: string, producer: string) {
-    this.Title = title
-    this.Year = year
-    this.Genre = genre
-    this.Producer = producer
-  }
-}

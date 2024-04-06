@@ -63,8 +63,7 @@ export class AppComponent {
     
     this.http.get('http://localhost:8080/movies/get/hundred').subscribe((moviesList: any)=> {
       if (200) {
-        this.allMovies.splice(0)
-        console.log(moviesList)
+        this.allMovies.splice(0);
         for (let i = 0; i < moviesList.length; i++) {
           
           let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,
@@ -163,7 +162,9 @@ export class AppComponent {
       title: 'CinemaFusion Search',
       type: 'default',
       mode: 'disableFullScreen',
+      
     })
+    
 
   }
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Movie } from '../../schema/movie'
 import { HttpClient } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class MovieOverviewComponent {
 
-  allMovies: Movie[] = []
+  @Input() allMovies: Movie[] = []
 
   constructor(private http: HttpClient){
 
@@ -23,14 +23,13 @@ export class MovieOverviewComponent {
   selectedMovies: Movie[] = []
 
   ngOnInit() {
-    this.getHundredMovies()
+    this.getAllMovies()
   }
 
-  getHundredMovies() {
+  getAllMovies() {
     
-    this.http.get('http://localhost:8080/movies/get/hundred').subscribe((moviesList: any)=> {
+    this.http.get('http://localhost:8080/movies/get/all').subscribe((moviesList: any)=> {
       if (200) {
-        console.log(moviesList)
         for (let i = 0; i < moviesList.length; i++) {
           
           let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,

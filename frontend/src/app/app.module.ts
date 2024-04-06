@@ -35,7 +35,8 @@ import { RandomUserMovieComponent } from './random-user-movie/random-user-movie.
     ProfileComponent,
   ],
   imports: [
-    BrowserModule,	  
+    BrowserModule,	
+    MovieOverviewComponent,  
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,

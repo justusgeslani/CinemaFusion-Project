@@ -3,12 +3,14 @@
 <button style="position: sticky; top: 10px; float: right;"class="btn btn-primary" (click)="fillGenres()">Get Recommendations</button>
 <div class="container">
   <div class="row">
-    <div contenteditable="true" tabindex="0" (click)="genreSelected(i)" *ngFor="let item of genresList; let i = index" id="genreDiv-{{i}}"
+    <div (click)="genreSelected(i)" *ngFor="let item of genresList; let i = index" id="genreDiv-{{i}}"
       class="col genre">
       <img src={{genresUrls[i]}} width="150" height="150">
       <a style="display: block;">{{item}}</a>
     </div>
 </div>
+
+<app-modal-container [userGenreMovies]="genreMovies"></app-modal-container>
 <!--<div class="checkbox-list">
   <div *ngFor="let genre of genresList; let i = index" class="form-check">
     <input

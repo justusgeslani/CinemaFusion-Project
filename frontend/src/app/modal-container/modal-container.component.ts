@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Movie } from 'src/schema/movie';
 
 @Component({
   selector: 'app-modal-container',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class ModalContainerComponent {
 
+  @Input() allMovies: Movie[] = [];
+  @Input() userGenreMovies: Movie[] = [];
+  constructor() {
+
+  }
 }

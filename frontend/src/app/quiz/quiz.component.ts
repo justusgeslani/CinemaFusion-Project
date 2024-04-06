@@ -10,6 +10,7 @@ import { UserRecommendationsComponent } from '../user-recommendations/user-recom
 })
 export class QuizComponent implements OnInit {
   recommendedMovie: any; // Define a property to hold the recommended movie
+
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -17,7 +18,7 @@ export class QuizComponent implements OnInit {
   }
 
   getRecommendation(quizForm: NgForm) {
-    const formValues = {
+    const FormValues = {
       weather: quizForm.value.weather,
       feelings: quizForm.value.feelings,
       gender: quizForm.value.gender,
@@ -26,10 +27,15 @@ export class QuizComponent implements OnInit {
       when: quizForm.value.when,
     };
 
-    this.http.post<any>('http://localhost:8080/movies/byquiz/get', JSON.stringify(formValues))
-      .subscribe((movie: any) => {
-        console.log('Recommended Movie:', movie);
-        this.recommendedMovie = movie; // Assign the recommended movie to the property
+    this.http.post<any>('http://localhost:8080/movies/byquiz/get', JSON.stringify(FormValues))
+      .subscribe((moviesList: any) => {
+        console.log('Recommended Movie:', moviesList);
+        console.log('API Response:', moviesList);
+        const cleanResponse = moviesList.replace(/\n/g, "").replace(/\\/g, "");
+    // Parse the cleaned response string into object
+    this.recommendedMovie = JSON.parse(cleanResponse);
+
+       // this.recommendedMovie = moviesList; // Assign the recommended movie to the property
       }, (error) => {
         console.error('Error:', error);
       });

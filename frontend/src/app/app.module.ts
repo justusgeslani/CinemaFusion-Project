@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router'; //new
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -21,6 +20,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { GenrePageComponent } from './genre-page/genre-page.component'; // import genrePage component
 import { RandomUserMovieComponent } from './random-user-movie/random-user-movie.component';
 import { ModalContainerComponent } from './modal-container/modal-container.component'; // 4/2 added
+import { GenresPopupComponent } from './genres-popup/genres-popup.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +35,7 @@ import { ModalContainerComponent } from './modal-container/modal-container.compo
     UserRecommendationsComponent,
     ProfileComponent,
     ModalContainerComponent,
+    GenresPopupComponent
   ],
   imports: [
     BrowserModule,	
@@ -45,7 +46,6 @@ import { ModalContainerComponent } from './modal-container/modal-container.compo
     NgSelectModule,
     FormsModule,
     ModalModule,
-    //ModalReference,
     RouterModule.forRoot([
       // Define routes here
       { path: 'quiz', component: QuizComponent }, // Example route for QuizComponent

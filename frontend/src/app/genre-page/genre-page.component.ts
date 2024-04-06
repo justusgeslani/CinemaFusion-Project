@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { Genre, Movie } from 'src/schema/movie';
+import { GenresPopupComponent } from '../genres-popup/genres-popup.component';
 
 @Component({
   selector: 'app-genre-page',
@@ -10,6 +11,7 @@ import { Genre, Movie } from 'src/schema/movie';
 })
 export class GenrePageComponent implements OnInit {
   genreMovies: Movie[] = [];
+  showPopup: boolean = false;
   genresList: string[] = [
    'Action',  
    'Adventure', 
@@ -103,9 +105,9 @@ export class GenrePageComponent implements OnInit {
         // Check if moviesList is not null or undefined
         console.log("Returned:")
         console.log(moviesList)
-    if (moviesList && moviesList.length) {
-        this.genreMovies = [];
-        for (let i = 0; i < moviesList.length; i++) {
+        if (moviesList && moviesList.length) {
+          this.genreMovies = [];
+          for (let i = 0; i < moviesList.length; i++) {
           const movie: Movie = new Movie(
             moviesList[i].ID,
             moviesList[i].Title,
@@ -120,8 +122,9 @@ export class GenrePageComponent implements OnInit {
           );
 
           this.genreMovies.push(movie);
-        }
-      }else {
+          } 
+          this.openUserGenres()
+        } else {
           console.error('Received null or empty moviesList:', moviesList);
         }
       },
@@ -140,6 +143,15 @@ export class GenrePageComponent implements OnInit {
         }
       }
     );
+  }
+  
+  public openUserGenres(): void {
+    this._modalService.show<Movie[]>(GenresPopupComponent, {
+      title: 'Recommended movies based on user\'s favorite genres',
+      type: 'default',
+      mode: 'disableFullScreen',
+      model: this.genreMovies
+    })
   }
 }
 

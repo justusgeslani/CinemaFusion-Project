@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="row">
+        <div class="col" *ngFor="let movie of genres; let i = index">
+            <h2>Movie Title #{{i+1}}:<br> {{movie.Title}}</h2>
+            <h3>Description:<br> {{movie.Overview}}</h3>
+            <h3>Language:<br> {{movie.OriginalLanguage}}</h3>
+            <h3>Release Date:<br> {{movie.ReleaseDate}}</h3>
+            <h3>Runtime Minutes:<br> {{movie.RuntimeMinutes}}</h3>
+        </div>
+
+    </div>
+
+</div>

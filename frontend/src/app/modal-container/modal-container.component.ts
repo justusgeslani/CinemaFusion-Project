@@ -10,6 +10,7 @@ export class ModalContainerComponent {
 
   @Input() allMovies: Movie[] = [];
   @Input() userGenreMovies: Movie[] = [];
+  @Input() showPopup: boolean = false;
   constructor() {
 
   }

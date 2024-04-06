@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ModalService } from "@developer-partners/ngx-modal-dialog";
 import { UserRecommendationsComponent } from '../user-recommendations/user-recommendations.component'
 
 @Component({
@@ -11,7 +12,8 @@ import { UserRecommendationsComponent } from '../user-recommendations/user-recom
 export class QuizComponent implements OnInit {
   recommendedMovie: any; // Define a property to hold the recommended movie
 
-  constructor(private http: HttpClient) {}
+  // constructor(private http: HttpClient) {}
+  constructor(private modalService: ModalService, private http: HttpClient) {}
 
   ngOnInit(): void {
     console.log('QuizComponent ngOnInit called');
@@ -32,24 +34,25 @@ export class QuizComponent implements OnInit {
         console.log('Recommended Movie:', moviesList);
         console.log('API Response:', moviesList);
         const cleanResponse = moviesList.replace(/\n/g, "").replace(/\\/g, "");
-    // Parse the cleaned response string into object
-    this.recommendedMovie = JSON.parse(cleanResponse);
+        // Parse the cleaned response string into object
+        this.recommendedMovie = JSON.parse(cleanResponse);
 
-       // this.recommendedMovie = moviesList; // Assign the recommended movie to the property
+        // Display the movie recommendation in a modal window
+        this.openModal(this.recommendedMovie);
       }, (error) => {
         console.error('Error:', error);
       });
-  }
+    }
 
-  // private showRecommendationsModal(movie: any): void {
-  //   this.modalService.show<UserRecommendationsComponent>(UserRecommendationsComponent, {
-  //     title: 'Movie Recommendation',
-  //     type: 'default',
-  //     mode: 'disableFullScreen',
-  //     model: movie // Pass the movie recommendation as model to the popup window
-  //   });
-  // }
+    openModal(recommendedMovie: any): void {
+      console.log('Recommended Movie in openModal:', recommendedMovie); // Log the movie info
+      this.modalService.show(UserRecommendationsComponent, {
+        title: 'Movie Recommendation',
+        model: recommendedMovie // Pass the movie recommendation as model to the popup window
+      });
+  }
 }
+
 
 
 

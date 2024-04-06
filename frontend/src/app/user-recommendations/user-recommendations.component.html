@@ -1,13 +1,12 @@
-<div class="modal">
-    <div class="modal-content">
-      <h2>Movie Recommendation</h2>
-      <p>Title: {{ movie.title }}</p>
-      <p>Year: {{ movie.year }}</p>
-      <p>Genre: {{ movie.genre.join(', ') }}</p>
-      <p>Plot: {{ movie.plot }}</p>
-      <button (click)="closeModal()">Close</button>
-    </div>
+<!-- user-recommendations.component.html -->
+<div *ngIf="movie">
+    <p>Title: {{ movie.title }}</p>
+    <p>Year: {{ movie.year }}</p>
+    <p>Genre: {{ movie.genre }}</p>
+    <p>Plot: {{ movie.plot }}</p>
   </div>
+  
+
   
 
   

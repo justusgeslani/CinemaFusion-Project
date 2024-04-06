@@ -1,19 +1,26 @@
+// user-recommendations.component.ts
 import { Component, Input } from '@angular/core';
-
 
 @Component({
   selector: 'app-user-recommendations',
   templateUrl: './user-recommendations.component.html',
   styleUrls: ['./user-recommendations.component.css']
 })
-
 export class UserRecommendationsComponent {
   @Input() movie: any;
+  //showModal = false;
 
-  closeModal(): void {
-    // Implement logic to close the modal
-  }
+  constructor() {}
+
+  // openModal() {
+  //   this.showModal = true;
+  // }
+
+  // closeModal() {
+  //   this.showModal = false;
+  // }
 }
+
 
 
 

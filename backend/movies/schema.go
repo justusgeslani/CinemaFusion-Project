@@ -116,6 +116,7 @@ type MoviesByQuiz struct {
 }
 
 type MovieFromAI struct {
+	UserName         string
 	Title            string
 	OriginalLanguage string
 	Plot             string

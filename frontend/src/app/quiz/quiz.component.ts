@@ -63,12 +63,11 @@ export class QuizComponent implements OnInit {
   }
   
   showFeedbackMessage: boolean = false;
-  //liked: boolean = false;
+
   likeMovie() {
     console.log('Liked:', this.recommendedMovie.title);
     this.sendUserScore(this.recommendedMovie.id, 1);
     this.showFeedbackMessage = true; // Show the feedback message
-    //this.liked = true; // Set liked to true after the user clicks the like button
   }
 
   dislikeMovie(): void {

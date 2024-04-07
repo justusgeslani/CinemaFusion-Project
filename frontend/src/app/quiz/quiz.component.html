@@ -55,25 +55,6 @@
 </form>
 <br>
 
-<!-- <div *ngIf="recommendedMovie">
-    <h3>Recommendation:</h3>
-    <div class="movie-details">
-      <p><strong>Movie Title:</strong> {{ recommendedMovie?.title }}</p>
-      <p><strong>Release Date:</strong> {{ recommendedMovie?.year }}</p>
-      <p><strong>Genre:</strong> {{ recommendedMovie?.genre }}</p>
-      <p><strong>Description:</strong> {{ recommendedMovie?.plot }}</p>
-    </div>
-    <div class="button-group">
-      <button (click)="likeMovie()" class="btn btn-success custom-button">
-        <img src="../../assets/like_button_2.png" width="30" height=auto alt="Like"> Like
-      </button>
-      <button (click)="dislikeMovie()" class="btn btn-danger custom-button">
-        <img src="../../assets/dislike_button.png" width="30" height=auto alt="Dislike"> Dislike
-      </button>
-      <button type="button" (click)="resetForm()" class="btn btn-primary">Reset</button>
-    </div>
-</div> -->
-
 <div *ngIf="recommendedMovie" class="recommendation-box">
     <!-- <h3>Recommendation:</h3> -->
     <div class="movie-details">

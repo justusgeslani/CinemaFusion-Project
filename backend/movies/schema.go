@@ -114,3 +114,11 @@ type MoviesByQuiz struct {
 	Time     string
 	When     string
 }
+
+type MovieFromAI struct {
+	Title   string
+	Year    uint64
+	Genre   []string
+	Runtime uint64
+	Plot    string
+}

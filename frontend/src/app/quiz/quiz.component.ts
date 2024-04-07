@@ -21,15 +21,24 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ModalService } from '@developer-partners/ngx-modal-dialog';
+import { Movie } from 'src/schema/movie';
+import { UserRecommendationsComponent } from '../user-recommendations/user-recommendations.component';
 
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.css']
+  styleUrls: ['./quiz.component.scss']
 })
 export class QuizComponent implements OnInit {
-  
-  constructor(private http: HttpClient) {
+  weather: string | null = null;
+  feelings: string | null = null;
+  gender: string | null = null;
+  age: string | null = null;
+  time: string | null = null;
+  when: string | null = null;
+  loading: boolean = false;
+  constructor(private http: HttpClient, private _modalService: ModalService) {
 
   }
     
@@ -39,6 +48,7 @@ export class QuizComponent implements OnInit {
   }
 
   getRecommendation(quizForm: NgForm) {
+    this.loading = true;
     // Logic to get recommendation
     // Get form values
     
@@ -55,10 +65,20 @@ export class QuizComponent implements OnInit {
     // console.log(FormValues)
     this.http.post('http://localhost:8080/movies/byquiz/get', JSON.stringify(FormValues)).subscribe((moviesList: any)=> {
         if (200) {
-          var movie = JSON.parse(moviesList)
-          console.log(movie)  //parse 'movie' to print on UI
+
+          this.loading = false;
+
+          if (moviesList.ID === 0) {
+            alert("NO RECOMMENDATION available, try filling out more attributes")
+            return;
+          }
+          let movie: Movie = moviesList
+          console.log(movie)
+          this.openRecommendationModal(movie)
+            //parse 'movie' to print on UI
         }
       }, (error) => {
+        this.loading = false;
         if (error.status === 404) {
           alert('Resource not found.');
         }
@@ -75,6 +95,16 @@ export class QuizComponent implements OnInit {
       
     );
 
+  }
+
+  openRecommendationModal(movie: Movie) {
+    
+    this._modalService.show<Movie>(UserRecommendationsComponent, {
+      title: 'Personalized User Recommendations',
+      type: 'default',
+      mode: 'disableFullScreen',
+      model: movie
+    })
   }
 }
 

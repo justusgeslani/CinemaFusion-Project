@@ -2,78 +2,63 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
 ::ng-deep .dp-modal-header {
     background: linear-gradient(
-        to right, #814DFF,#FF83B6
+        to left, #814DFF,#FF83B6
       );
 
  }
 
  ::ng-deep .dp-modal-body {
-    width: 800px;
     
-    background-color: azure;
-    height: 400px;
+    background-image: radial-gradient( rgba(255, 144, 34, .7),rgba(255, 131, 182));
+    
   }
 
-.UserFavoritesDiv button {
-    margin-top: 200px;
-    border: none;
-    border-radius: 4px;
-    padding: 10px;
-
-    background-image: radial-gradient( rgba(255, 144, 34, .7),rgba(255, 131, 182));
-}
-
-.UserFavoritesDiv button:hover {
-    background-image: linear-gradient( rgb(36, 63, 255),rgb(129, 77, 255));
-    color: white;
-}
-.UserFavoritesDiv {
-    text-align: center;
-}
-@import "~bootstrap/dist/css/bootstrap.css";
-@import "~@ng-select/ng-select/themes/default.theme.css";
-::ng-deep .dp-modal-header {
-    background: linear-gradient(
-        to right, #814DFF,#FF83B6
-      );
-
- }
-
- ::ng-deep .dp-modal-body {
-    width: 800px;
-    background-color: azure;
-    height: 400px;
+  .movie {
+    background-color: rgba(255, 255, 255, .5);
+    width: fit-content;
+    padding: 7px;
   }
-
-.UserFavoritesDiv button {
-    margin-top: 200px;
-    border: none;
-    border-radius: 4px;
-    padding: 10px;
-
-    background-image: radial-gradient( rgba(255, 144, 34, .7),rgba(255, 131, 182));
-}
-
-.UserFavoritesDiv button:hover {
-    background-image: linear-gradient( rgb(36, 63, 255),rgb(129, 77, 255));
-    color: white;
-}
-.UserFavoritesDiv {
-    text-align: center;
-}
-h2, h3 {
-    border-radius: 4px;
+  .movie:hover {
+    background-color: rgba(255, 255, 255, .8);;
+    cursor: pointer;
+  }
+  .title-header {
     
-    margin-bottom: 25px;
-}
-h2 {
+    font-family: Impact;
+  }
+  .movie h3 {
+    display: inline-block;
+    background-color: aliceblue;
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 4px;
+
+
+  }
+  
+  .movie h2 {
+    font-size: 24px;
+    font-weight: 600;
+  }
+  .title {
+    display: inline-block;
+    border-radius: 4px;
+    background-color: aliceblue;
+    font-size: 26px;
     font-weight: 500;
-}
-.infoHolder {    background-image: radial-gradient( rgba(255, 144, 34, .7),rgba(255, 131, 182));
-    border-radius: 4px;
-    padding: 15px;
-    margin-bottom: 25px;
-}
-h3 {
+    padding: 5px;
+    
+  }
 
-}
+  .desc {
+    border-radius: 4px;
+
+  }
+  .gold {
+    background-color: white;
+    color: black;
+  }
+  .gold:hover {
+    background-color: #814DFF;
+    color: white;
+  }

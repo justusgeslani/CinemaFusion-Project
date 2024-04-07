@@ -25,8 +25,8 @@ export class GenresPopupComponent {
   dislikeMovie(movie: Movie) {
     // Implement logic to handle disliking the movie
     console.log('Disliked:', movie.Title);
-    // Sending movie ID and score -1 for dislike
-    this.sendUserScore(movie.ID, -1);
+    // Sending movie ID and score 0 for dislike
+    this.sendUserScore(movie.ID, 0);
   }
 
   

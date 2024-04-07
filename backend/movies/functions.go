@@ -596,12 +596,14 @@ func GetMoviesByQuiz(c *gin.Context) {
 		result = result[7 : len(result)-3]
 	}
 
+	fmt.Println("FIRST RESULT: " + result)
 	var retMovie MovieFromAI
 	err = json.Unmarshal([]byte(result), &retMovie)
 
 	var randomMovie Movie
 	found := false
-	for !found {
+	var i uint64 = 0
+	for !found && i < 10 {
 
 		query, err := connection.Db.Query(
 			"SELECT * FROM MOVIEDATA WHERE title = ? LIMIT 1", retMovie.Title)
@@ -645,9 +647,10 @@ func GetMoviesByQuiz(c *gin.Context) {
 		}
 		fmt.Println("RESULT: " + result)
 		err = json.Unmarshal([]byte(result), &retMovie)
+		i = i + 1
 	}
 
-	//c.JSON(http.StatusAccepted, &randomMovie)
+	c.JSON(http.StatusAccepted, &randomMovie)
 
 }
 

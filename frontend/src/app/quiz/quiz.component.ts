@@ -69,7 +69,7 @@ export class QuizComponent implements OnInit {
           this.loading = false;
 
           if (moviesList.ID === 0) {
-            console.log("NO RECOMMENDATION")
+            alert("NO RECOMMENDATION available, try filling out more attributes")
             return;
           }
           let movie: Movie = moviesList

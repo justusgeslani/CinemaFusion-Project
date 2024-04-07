@@ -157,6 +157,7 @@ export class AppComponent {
 
   public openSearch(): void {
 
+    this.getAllMovies()
     this._modalService.show<Movie>(MovieOverviewComponent, {
       title: 'CinemaFusion Search',
       type: 'default',

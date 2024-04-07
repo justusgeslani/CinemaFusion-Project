@@ -28,10 +28,10 @@ export class MovieOverviewComponent {
 
   getAllMovies() {
 
-    console.log("ALL MOVIES LENGTH: " + allMovies.length)
-    /*
+    //console.log("ALL MOVIES LENGTH: " + allMovies.length)
     this.http.get('http://localhost:8080/movies/get/all').subscribe((moviesList: any)=> {
       if (200) {
+    this.allMovies.splice(0)
         for (let i = 0; i < moviesList.length; i++) {
           
           let movie: Movie = new Movie(moviesList[i].ID, moviesList[i].Title, moviesList[i].OriginalLanguage,
@@ -63,7 +63,7 @@ export class MovieOverviewComponent {
       }
       
     );
-    */
+    
   }
 
 }

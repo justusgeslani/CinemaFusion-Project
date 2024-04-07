@@ -53,6 +53,7 @@ export class QuizComponent implements OnInit {
     // Get form values
     
     const FormValues = {
+      UserName: localStorage.getItem('UserName'),
       weather: quizForm.value.weather,
       feelings: quizForm.value.feelings,
       gender: quizForm.value.gender,

@@ -556,6 +556,7 @@ type ContentResponse struct {
 
 func GetMoviesByQuiz(c *gin.Context) {
 	var vmq MoviesByQuiz
+	var randomMovie Movie
 	err := c.ShouldBindJSON(&vmq)
 	if err != nil {
 		fmt.Println(err)
@@ -565,23 +566,26 @@ func GetMoviesByQuiz(c *gin.Context) {
 	// Access your API key as an environment variable (see "Set up your API key" above)
 	client, err := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("CINEMA_FUSION_GOOGLE_API_KEY")))
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
 	defer client.Close()
 	model := client.GenerativeModel("gemini-pro")
 	fmt.Println(vmq)
-	prompt := "Recommend a movie based on the following, and respond in a json format containing only title, year, genre, runtime, and plot\nMy weather: " + vmq.Weather + "\nMy mood: " + vmq.Feelings + "\nMy age: " + vmq.Age + "\nMy gender: " + vmq.Gender + "\nMy release preference: " + vmq.When + "\nDuration of movie: " + vmq.Time
+	prompt := "Recommend a movie based on the following, and respond in a json format containing only Title, OriginalLanguage, Plot, ReleaseDate in year-month-day format, Genres, and Runtime: \nMy weather: " + vmq.Weather + "\nMy mood: " + vmq.Feelings + "\nMy age: " + vmq.Age + "\nMy gender: " + vmq.Gender + "\nMy release preference: " + vmq.When + "\nDuration of movie: " + vmq.Time
 	fmt.Println(prompt)
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
 
 	marshalResponse, _ := json.MarshalIndent(resp, "", "  ")
 	// fmt.Println(marshalResponse)
 	var generateResponse ContentResponse
 	if err := json.Unmarshal(marshalResponse, &generateResponse); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return
 	}
 	var result string
 	for _, cad := range *generateResponse.Candidates {
@@ -591,69 +595,163 @@ func GetMoviesByQuiz(c *gin.Context) {
 			}
 		}
 	}
-
 	if result[0] == '`' {
 		result = result[7 : len(result)-3]
 	}
+	fmt.Println("RESULT: " + result)
 
-	fmt.Println("FIRST RESULT: " + result)
 	var retMovie MovieFromAI
 	err = json.Unmarshal([]byte(result), &retMovie)
 
-	var randomMovie Movie
-	found := false
-	var i uint64 = 0
-	for !found && i < 10 {
+	var found = false
+	query, err := connection.Db.Query(
+		"SELECT * FROM MOVIEDATA WHERE title = ? AND release_date = ? LIMIT 1", retMovie.Title, retMovie.ReleaseDate)
+	for query.Next() {
+		fmt.Println("AT LEAST ONE FOUND")
 
-		query, err := connection.Db.Query(
-			"SELECT * FROM MOVIEDATA WHERE title = ? LIMIT 1", retMovie.Title)
-		for query.Next() {
-			found = true
-			fmt.Println("AT LEAST ONE FOUND")
-			err := query.Scan(&randomMovie.ID, &randomMovie.Title,
-				&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
-				&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
-				&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries)
-			if err != nil {
+		err := query.Scan(&randomMovie.ID, &randomMovie.Title,
+			&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+			&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+			&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries)
+
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		found = true
+		c.JSON(http.StatusAccepted, &randomMovie)
+		return
+
+	}
+
+	if found == false {
+		fmt.Println("RESULTING OBJECT")
+		fmt.Println("TITLE: " + retMovie.Title)
+		fmt.Println("LANGUAGE: " + retMovie.OriginalLanguage)
+		fmt.Println("PLOT: " + retMovie.Plot)
+		fmt.Println("RELEASED: " + retMovie.ReleaseDate)
+		fmt.Println("Runtime: ")
+		fmt.Println(retMovie.Runtime)
+		fmt.Println("GENRES")
+		fmt.Println(retMovie.Genres)
+	}
+
+	// Assigns values from AI to random movie
+	randomMovie.ID = 0
+	randomMovie.OriginalLanguage = retMovie.OriginalLanguage
+	randomMovie.Overview = retMovie.Plot
+	randomMovie.PosterPath = ""
+	randomMovie.ReleaseDate = retMovie.ReleaseDate
+	randomMovie.RuntimeMinutes = retMovie.Runtime
+	randomMovie.Title = retMovie.Title
+	randomMovie.Accuracy = 0
+	randomMovie.UserEntries = 0
+	randomMovie.UserScore = 0
+	CreateNewMovie(randomMovie)
+
+	movieReturned, err := connection.Db.Query(
+		"SELECT * FROM MOVIEDATA WHERE ID = ? LIMIT 1", GetMaxMovieID())
+
+	for movieReturned.Next() {
+		if err := movieReturned.Scan(&randomMovie.ID, &randomMovie.Title,
+			&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+			&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+			&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries); err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+	for _, value := range retMovie.Genres {
+		var userGenre Genre
+		userGenre.GenreID = 0
+		genreReturned, err := connection.Db.Query(
+			"SELECT * FROM GENRES WHERE genre_name = ? LIMIT 1", value)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		for genreReturned.Next() {
+			if err := genreReturned.Scan(&userGenre.GenreID, &userGenre.GenreName, &userGenre.MovieID); err != nil {
 				fmt.Println(err)
 				return
 			}
-			c.JSON(http.StatusAccepted, &randomMovie)
-			return
 
 		}
+		userGenre.MovieID = randomMovie.ID
+		CreateNewGenre(userGenre)
 
-		resp, err = model.GenerateContent(ctx, genai.Text(prompt))
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		marshalResponse, _ = json.MarshalIndent(resp, "", "  ")
-
-		if err := json.Unmarshal(marshalResponse, &generateResponse); err != nil {
-			log.Fatal(err)
-		}
-
-		for _, cad := range *generateResponse.Candidates {
-			if cad.Content != nil {
-				for _, part := range cad.Content.Parts {
-					result = part
-				}
-			}
-		}
-
-		if result[0] == '`' {
-			result = result[7 : len(result)-3]
-		}
-		fmt.Println("RESULT: " + result)
-		err = json.Unmarshal([]byte(result), &retMovie)
-		i = i + 1
 	}
-
 	c.JSON(http.StatusAccepted, &randomMovie)
 
 }
 
+// adds new movie from prompt to db
+func CreateNewMovie(movie Movie) {
+
+	_, err := connection.Db.Exec(
+		"INSERT INTO MOVIEDATA VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", GetMaxMovieID()+1, movie.Title, movie.OriginalLanguage, movie.Overview, movie.PosterPath, movie.ReleaseDate, movie.RuntimeMinutes, 0, 0, 0)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+// adds new movie from prompt to db
+func CreateNewGenre(genre Genre) {
+
+	if genre.GenreID == 0 {
+		_, err := connection.Db.Exec(
+			"INSERT INTO GENRES VALUES (?, ?, ?)", GetMaxGenresID()+1, genre.GenreName, genre.MovieID)
+
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	} else {
+		_, err := connection.Db.Exec(
+			"INSERT INTO GENRES VALUES (?, ?, ?)", genre.GenreID, genre.GenreName, genre.MovieID)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+	}
+}
+
+// gets next available movie id from db
+func GetMaxMovieID() uint64 {
+
+	var maxId uint64
+	query, err := connection.Db.Query(
+		"SELECT MAX(ID) FROM cinema_fusion_movie_db.MOVIEDATA")
+
+	for query.Next() {
+		query.Scan(&maxId)
+		if err != nil {
+			fmt.Println(err)
+			return 0
+		}
+	}
+	return maxId
+}
+
+// gets next available genre id from db
+func GetMaxGenresID() uint64 {
+
+	var maxId uint64
+	query, err := connection.Db.Query(
+		"SELECT MAX(genre_id) FROM cinema_fusion_movie_db.GENRES")
+
+	for query.Next() {
+		query.Scan(&maxId)
+		if err != nil {
+			fmt.Println(err)
+			return 0
+		}
+	}
+	return maxId
+}
 func GetMoviesByGenre(c *gin.Context) {
 
 	var userGenres []string

@@ -116,9 +116,10 @@ type MoviesByQuiz struct {
 }
 
 type MovieFromAI struct {
-	Title   string
-	Year    uint64
-	Genre   []string
-	Runtime uint64
-	Plot    string
+	Title            string
+	OriginalLanguage string
+	Plot             string
+	ReleaseDate      string
+	Genres           []string
+	Runtime          uint64
 }

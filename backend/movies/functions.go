@@ -572,7 +572,7 @@ func GetMoviesByQuiz(c *gin.Context) {
 	defer client.Close()
 	model := client.GenerativeModel("gemini-pro")
 	fmt.Println(vmq)
-	prompt := "Recommend a movie based on the following, and respond in a json format containing only Title, OriginalLanguage, Plot, ReleaseDate in year-month-day format, Genres, and Runtime: \nMy weather: " + vmq.Weather + "\nMy mood: " + vmq.Feelings + "\nMy age: " + vmq.Age + "\nMy gender: " + vmq.Gender + "\nMy release preference: " + vmq.When + "\nDuration of movie: " + vmq.Time
+	prompt := "Recommend a movie based on the following, and respond in a json format containing only Title, OriginalLanguage, Plot, ReleaseDate in year-month-day format, Genres, and Runtime as an int: \nMy weather: " + vmq.Weather + "\nMy mood: " + vmq.Feelings + "\nMy age: " + vmq.Age + "\nMy gender: " + vmq.Gender + "\nMy release preference: " + vmq.When + "\nDuration of movie: " + vmq.Time
 	fmt.Println(prompt)
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {

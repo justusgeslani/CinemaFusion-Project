@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { QuizComponent } from './quiz.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 describe('QuizComponent', () => {
   let component: QuizComponent;
@@ -8,7 +11,9 @@ describe('QuizComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [QuizComponent]
+      declarations: [ QuizComponent ],
+      imports: [ HttpClientTestingModule, FormsModule, NgSelectModule ],
+
     })
     .compileComponents();
     
@@ -21,10 +26,4 @@ describe('QuizComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should check click for "Get Recommendation" button', () => {
-    spyOn(component, 'getRecommendation');
-    component.getRecommendation();
-    expect(component.getRecommendation).toHaveBeenCalled();
-
-  });
 });

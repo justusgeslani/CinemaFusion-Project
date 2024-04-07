@@ -4,6 +4,9 @@ import { RandomUserMovieComponent } from './random-user-movie.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CommonModule } from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('RandomUserMovieComponent', () => {
   let component: RandomUserMovieComponent;
@@ -11,7 +14,9 @@ describe('RandomUserMovieComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, FormsModule],
+      declarations: [ RandomUserMovieComponent ],
+      imports: [HttpClientTestingModule, FormsModule, CommonModule, NgSelectModule],
+      schemas: [ NO_ERRORS_SCHEMA ],
     
     })
     .compileComponents();

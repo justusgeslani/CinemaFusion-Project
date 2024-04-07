@@ -1,5 +1,6 @@
-// user-recommendations.component.ts
 import { Component, Input } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-recommendations',
@@ -8,17 +9,10 @@ import { Component, Input } from '@angular/core';
 })
 export class UserRecommendationsComponent {
   @Input() movie: any;
-  //showModal = false;
 
-  constructor() {}
-
-  // openModal() {
-  //   this.showModal = true;
-  // }
-
-  // closeModal() {
-  //   this.showModal = false;
-  // }
+  constructor() {
+    console.log('Movie received in UserRecommendationsComponent:', this.movie);
+  }
 }
 
 

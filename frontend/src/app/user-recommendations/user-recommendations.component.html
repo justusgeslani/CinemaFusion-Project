@@ -1,10 +1,12 @@
-<!-- user-recommendations.component.html -->
-<div *ngIf="movie">
+<div *ngIf="movie"><br>
+    <h2>Movie Recommendation</h2>
     <p>Title: {{ movie.title }}</p>
     <p>Year: {{ movie.year }}</p>
     <p>Genre: {{ movie.genre }}</p>
     <p>Plot: {{ movie.plot }}</p>
-  </div>
+    <!-- <button (click)="like()">Like</button>
+    <button (click)="dislike()">Dislike</button> -->
+</div>
   
 
   
@@ -48,12 +50,5 @@
                 </div>           
             </div> -->
 
-
-<!-- <div class="modal-body">
-    <h3>Movie Recommendations</h3>
-    <ul>
-      <li *ngFor="let movie of data">{{ movie }}</li>
-    </ul>
-  </div>  -->
 
   

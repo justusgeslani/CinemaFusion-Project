@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UserRecommendationsComponent } from '../user-recommendations/user-recommendations.component'
+import { ModalService } from '@developer-partners/ngx-modal-dialog';
+import { UserRecommendationsComponent } from '../user-recommendations/user-recommendations.component';
 
 @Component({
   selector: 'app-quiz',
@@ -10,67 +11,96 @@ import { UserRecommendationsComponent } from '../user-recommendations/user-recom
 })
 export class QuizComponent implements OnInit {
   recommendedMovie: any; // Define a property to hold the recommended movie
+
   weather: string | null = null;
   feeling: string | null = null;
   gender: string | null = null;
   age: string | null = null;
   time: string | null = null;
   when: string | null = null;
-  constructor(private http: HttpClient) {}
+
+  constructor(private modalService: ModalService, private http: HttpClient) {}
 
   ngOnInit(): void {
     console.log('QuizComponent ngOnInit called');
   }
 
-  getRecommendation(quizForm: NgForm) {
-    const FormValues = {
+  getRecommendation(quizForm?: NgForm): void {
+    const FormValues = quizForm ? {
       weather: quizForm.value.weather,
       feelings: quizForm.value.feelings,
       gender: quizForm.value.gender,
       age: quizForm.value.age,
       time: quizForm.value.time,
       when: quizForm.value.when,
-    };
+    }: {};
 
     this.http.post<any>('http://localhost:8080/movies/byquiz/get', JSON.stringify(FormValues))
       .subscribe((moviesList: any) => {
         console.log('Recommended Movie:', moviesList);
         console.log('API Response:', moviesList);
         const cleanResponse = moviesList.replace(/\n/g, "").replace(/\\/g, "");
-    // Parse the cleaned response string into object
-    this.recommendedMovie = JSON.parse(cleanResponse);
+        // Parse the cleaned response string into object
+        this.recommendedMovie = JSON.parse(cleanResponse);
 
-       // this.recommendedMovie = moviesList; // Assign the recommended movie to the property
+        // Display the movie recommendation in a modal window
+       // this.openModal(this.recommendedMovie);
       }, (error) => {
         console.error('Error:', error);
       });
+      
+  }
+  
+  liked: boolean = false;
+  likeMovie() {
+    console.log('Liked:', this.recommendedMovie.title);
+    this.sendUserScore(this.recommendedMovie.id, 1);
+    this.liked = true; // Set liked to true after the user clicks the like button
   }
 
-  // private showRecommendationsModal(movie: any): void {
-  //   this.modalService.show<UserRecommendationsComponent>(UserRecommendationsComponent, {
-  //     title: 'Movie Recommendation',
-  //     type: 'default',
-  //     mode: 'disableFullScreen',
-  //     model: movie // Pass the movie recommendation as model to the popup window
-  //   });
-  // }
+  dislikeMovie(): void {
+    console.log('Disliked:', this.recommendedMovie.title);
+    this.sendUserScore(this.recommendedMovie.id, -1);
+    this.getRecommendation(); // Get another recommendation when the user dislikes
+  }
+
+  sendUserScore(movieId: number, score: number) {
+    console.log("MOVIE ID: " + movieId)
+    let userScore = { 
+      "MovieID": movieId, 
+      "MovieScore": score 
+    };
+    console.log('userScoreData:', userScore);
+    
+    const options = { headers: { 'Content-Type': 'application/json' } };
+    this.http.post('http://localhost:8080/user/score', JSON.stringify(userScore), options).subscribe(
+      (response: any) => {
+        console.log('User score recorded successfully:', response);
+      },
+      (error) => {
+        console.error('Error recording user response:', error);
+      }
+    );
+  }
+
+
+
+
+  openModal(recommendedMovie: any): void {
+    console.log('Recommended Movie in modal function:', recommendedMovie); // Log the movie info
+    this.modalService.show(UserRecommendationsComponent, {
+      title: 'Movie Recommendation',
+      type: 'default',
+      mode: 'disableFullScreen',
+      model: recommendedMovie // Pass the recommended movie as model to the popup window
+    });
+  }
 }
 
 
 
 
 
-
-  
-  
-  
-  // private showRecommendationsModal(movie: any): void {
-  //   this._modalService.show<Movie>(UserRecommendationsComponent, {
-  //     title: 'Movie Recommendation',
-  //     type: 'default',
-  //     mode: 'disableFullScreen',  
-  //   })
-  // }
 
 // import { HttpClient } from '@angular/common/http';
 // import { Component, OnInit } from '@angular/core';

@@ -51,19 +51,55 @@
     </ng-select>
 
     <br><br>
-    <button type="submit">Get Recommendation</button>
+    <button type="submit">Get Recommendation</button><br>
 </form>
-<div *ngIf="recommendedMovie">
-    <h2>Recommendation:</h2>
-    <p>Title: {{ recommendedMovie?.title }}</p>
-    <p>Year: {{ recommendedMovie?.year }}</p>
-    <p>Genre: {{ recommendedMovie?.genre }}</p>
-    <p>Plot: {{ recommendedMovie?.plot }}</p>
-    <button (click)="likeMovie()">Like</button>
-    <button (click)="dislikeMovie()">Dislike</button>
-  </div>
+<br>
 
-  <div *ngIf="liked">Thank you for your feedback!</div>
+<!-- <div *ngIf="recommendedMovie">
+    <h3>Recommendation:</h3>
+    <div class="movie-details">
+      <p><strong>Movie Title:</strong> {{ recommendedMovie?.title }}</p>
+      <p><strong>Release Date:</strong> {{ recommendedMovie?.year }}</p>
+      <p><strong>Genre:</strong> {{ recommendedMovie?.genre }}</p>
+      <p><strong>Description:</strong> {{ recommendedMovie?.plot }}</p>
+    </div>
+    <div class="button-group">
+      <button (click)="likeMovie()" class="btn btn-success custom-button">
+        <img src="../../assets/like_button_2.png" width="30" height=auto alt="Like"> Like
+      </button>
+      <button (click)="dislikeMovie()" class="btn btn-danger custom-button">
+        <img src="../../assets/dislike_button.png" width="30" height=auto alt="Dislike"> Dislike
+      </button>
+      <button type="button" (click)="resetForm()" class="btn btn-primary">Reset</button>
+    </div>
+</div> -->
+
+<div *ngIf="recommendedMovie" class="recommendation-box">
+    <!-- <h3>Recommendation:</h3> -->
+    <div class="movie-details">
+      <p><strong>Movie Title:</strong> {{ recommendedMovie?.title }}</p>
+      <p><strong>Release Date:</strong> {{ recommendedMovie?.year }}</p>
+      <p><strong>Genre:</strong> {{ recommendedMovie?.genre }}</p>
+      <p><strong>Description:</strong> {{ recommendedMovie?.plot }}</p>
+    </div>
+    <div class="button-group">
+      <button (click)="likeMovie()" class="btn btn-success custom-button">
+        <img src="../../assets/like_button_2.png" width="30" height=auto alt="Like">Like</button>
+      <button (click)="dislikeMovie()" class="btn btn-danger custom-button">
+        <img src="../../assets/dislike_button.png" width="30" height=auto alt="Dislike">Dislike</button>
+      <button type="button" (click)="resetForm()" class="btn btn-primary custom-button">
+        <img src="../../assets/reset.png" width="35" height="35" alt="Dislike">Reset</button>
+    </div>
+</div>
+
+  
+
+<div *ngIf="!recommendedMovie">
+    <button type="button" (click)="resetForm()">Reset</button> 
+</div>
+  <br>
+<div *ngIf="showFeedbackMessage">Thank you for your feedback!</div>
+  
   <!-- Display recommendation -->
   <!-- <app-user-recommendations *ngIf="recommendedMovie" [movie]="recommendedMovie"></app-user-recommendations> -->
   

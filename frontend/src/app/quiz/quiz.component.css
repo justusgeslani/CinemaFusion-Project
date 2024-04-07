@@ -34,3 +34,29 @@ button {
     padding: 10px 20px;
     cursor: pointer;
 }
+
+.recommendation-box {
+    font-family: 'Comic Sans MS', sans-serif;
+    font-size: 20px;
+    background-color: rgba(255, 255, 255, .8); /* Set background color of the box */
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  .movie-details {
+    margin-bottom: 10px; /* Add margin between movie details and buttons */
+  }
+  
+  .button-group {
+    display: flex; /* Use flexbox to align buttons horizontally */
+    justify-content: center; /* Center the buttons horizontally */
+    align-items: center; /* Center the buttons vertically */
+  }
+  
+  .custom-button {
+    margin: 0 5px; /* Add margin around each button */
+    padding: 5px 5px; /* Adjust padding to change button size */
+  }
+  
+  

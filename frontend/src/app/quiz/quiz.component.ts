@@ -50,18 +50,32 @@ export class QuizComponent implements OnInit {
       });
       
   }
+
+  resetForm(): void {
+    this.weather = null;
+    this.feeling = null;
+    this.gender = null;
+    this.age = null;
+    this.time = null;
+    this.when = null;
+    this.recommendedMovie = null;
+    this.showFeedbackMessage = false; // Hide the feedback message
+  }
   
-  liked: boolean = false;
+  showFeedbackMessage: boolean = false;
+  //liked: boolean = false;
   likeMovie() {
     console.log('Liked:', this.recommendedMovie.title);
     this.sendUserScore(this.recommendedMovie.id, 1);
-    this.liked = true; // Set liked to true after the user clicks the like button
+    this.showFeedbackMessage = true; // Show the feedback message
+    //this.liked = true; // Set liked to true after the user clicks the like button
   }
 
   dislikeMovie(): void {
     console.log('Disliked:', this.recommendedMovie.title);
     this.sendUserScore(this.recommendedMovie.id, -1);
     this.getRecommendation(); // Get another recommendation when the user dislikes
+    this.showFeedbackMessage = false; // Hide the feedback message
   }
 
   sendUserScore(movieId: number, score: number) {

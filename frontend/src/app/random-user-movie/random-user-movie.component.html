@@ -21,8 +21,10 @@
 
         <!-- Like and Dislike buttons -->
         <div>
-            <button (click)="likeMovie(movie)" class="btn btn-success">Like</button>
-            <button (click)="dislikeMovie(movie)" class="btn btn-danger">Dislike</button>
+            <button (click)="likeMovie(movie)" class="btn btn-success">
+            <img src="../../assets/like_button_2.png" width="30" height=auto alt="Like">Like</button>
+            <button (click)="dislikeMovie(movie)" class="btn btn-danger">
+            <img src="../../assets/dislike_button.png" width="30" height=auto alt="Dislike">Dislike</button>
         </div>
     </div>
     <div *ngIf="i === 2 && randomMovies.length >= 3">

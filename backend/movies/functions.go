@@ -664,6 +664,7 @@ func GetMoviesByQuiz(c *gin.Context) {
 	for _, value := range retMovie.Genres {
 		var userGenre Genre
 		userGenre.GenreID = 0
+		userGenre.GenreName = value
 		genreReturned, err := connection.Db.Query(
 			"SELECT * FROM GENRES WHERE genre_name = ? LIMIT 1", value)
 		if err != nil {

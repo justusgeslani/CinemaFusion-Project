@@ -7,11 +7,12 @@ import { GenresPopupComponent } from '../genres-popup/genres-popup.component';
 @Component({
   selector: 'app-genre-page',
   templateUrl: './genre-page.component.html',
-  styleUrls: ['./genre-page.component.css']
+  styleUrls: ['./genre-page.component.scss']
 })
 export class GenrePageComponent implements OnInit {
   genreMovies: Movie[] = [];
   showPopup: boolean = false;
+  loading: boolean = false;
   genresList: string[] = [
    'Action',  
    'Adventure', 
@@ -92,6 +93,7 @@ export class GenrePageComponent implements OnInit {
     }
   }
   fillGenres(): void {
+    this.loading = true;
     console.log(this.selectedGenres);
     this.selectedGenres = this.selectedGenreIndices.map((m) => {
 
@@ -127,8 +129,10 @@ export class GenrePageComponent implements OnInit {
         } else {
           console.error('Received null or empty moviesList:', moviesList);
         }
+        this.loading = false;
       },
       error => {
+        this.loading = false;
         console.error('Error retrieving movies by genre:', error);
         if (error.status === 404) {
           alert('Resource not found.');

@@ -29,6 +29,7 @@ import { NgForm } from '@angular/forms';
 })
 export class QuizComponent implements OnInit {
   
+  loading: boolean = false;
   constructor(private http: HttpClient) {
 
   }
@@ -39,6 +40,7 @@ export class QuizComponent implements OnInit {
   }
 
   getRecommendation(quizForm: NgForm) {
+    this.loading = true;
     // Logic to get recommendation
     // Get form values
     
@@ -55,6 +57,7 @@ export class QuizComponent implements OnInit {
     // console.log(FormValues)
     this.http.post('http://localhost:8080/movies/byquiz/get', JSON.stringify(FormValues)).subscribe((moviesList: any)=> {
         if (200) {
+          this.loading = false;
           console.log("MOVIE")
           console.log(moviesList)
             //parse 'movie' to print on UI

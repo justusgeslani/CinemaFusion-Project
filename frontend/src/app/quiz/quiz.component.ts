@@ -55,8 +55,9 @@ export class QuizComponent implements OnInit {
     // console.log(FormValues)
     this.http.post('http://localhost:8080/movies/byquiz/get', JSON.stringify(FormValues)).subscribe((moviesList: any)=> {
         if (200) {
-          var movie = JSON.parse(moviesList)
-          console.log(movie)  //parse 'movie' to print on UI
+          console.log("MOVIE")
+          console.log(moviesList)
+            //parse 'movie' to print on UI
         }
       }, (error) => {
         if (error.status === 404) {

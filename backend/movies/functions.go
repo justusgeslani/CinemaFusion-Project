@@ -570,7 +570,7 @@ func GetMoviesByQuiz(c *gin.Context) {
 	defer client.Close()
 	model := client.GenerativeModel("gemini-pro")
 	fmt.Println(vmq)
-	prompt := "Recommend a movie based on the following, and respond in a json format containing only title, year, genre, and plot\nMy weather: " + vmq.Weather + "\nMy mood: " + vmq.Feelings + "\nMy age: " + vmq.Age + "\nMy gender: " + vmq.Gender + "\nMy release preference: " + vmq.When + "\nDuration of movie: " + vmq.Time
+	prompt := "Recommend a movie based on the following, and respond in a json format containing only title, year, genre, runtime, and plot\nMy weather: " + vmq.Weather + "\nMy mood: " + vmq.Feelings + "\nMy age: " + vmq.Age + "\nMy gender: " + vmq.Gender + "\nMy release preference: " + vmq.When + "\nDuration of movie: " + vmq.Time
 	fmt.Println(prompt)
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {
@@ -595,27 +595,60 @@ func GetMoviesByQuiz(c *gin.Context) {
 	if result[0] == '`' {
 		result = result[7 : len(result)-3]
 	}
-	c.JSON(http.StatusAccepted, result)
 
-	// client := openai.NewClient(os.Getenv("CINEMA_FUSION_OPENAI_API_KEY"))
-	// resp, err := client.CreateChatCompletion(
-	// 	context.Background(),
-	// 	openai.ChatCompletionRequest{
-	// 		Model: openai.GPT3Ada,
-	// 		Messages: []openai.ChatCompletionMessage{
-	// 			{
-	// 				Role:    openai.ChatMessageRoleUser,
-	// 				Content: "Hello!",
-	// 			},
-	// 		},
-	// 	},
-	// )
-	// if err != nil {
-	// 	fmt.Printf("ChatCompletion error: %v\n", err)
-	// 	return
-	// }
+	var retMovie MovieFromAI
+	err = json.Unmarshal([]byte(result), &retMovie)
 
-	// fmt.Println(resp.Choices[0].Message.Content)
+	var randomMovie Movie
+	found := false
+	for !found {
+
+		query, err := connection.Db.Query(
+			"SELECT * FROM MOVIEDATA WHERE title = ? LIMIT 1", retMovie.Title)
+		for query.Next() {
+			found = true
+			fmt.Println("AT LEAST ONE FOUND")
+			err := query.Scan(&randomMovie.ID, &randomMovie.Title,
+				&randomMovie.OriginalLanguage, &randomMovie.Overview, &randomMovie.PosterPath,
+				&randomMovie.ReleaseDate, &randomMovie.RuntimeMinutes,
+				&randomMovie.UserScore, &randomMovie.Accuracy, &randomMovie.UserEntries)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			c.JSON(http.StatusAccepted, &randomMovie)
+			return
+
+		}
+
+		resp, err = model.GenerateContent(ctx, genai.Text(prompt))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		marshalResponse, _ = json.MarshalIndent(resp, "", "  ")
+
+		if err := json.Unmarshal(marshalResponse, &generateResponse); err != nil {
+			log.Fatal(err)
+		}
+
+		for _, cad := range *generateResponse.Candidates {
+			if cad.Content != nil {
+				for _, part := range cad.Content.Parts {
+					result = part
+				}
+			}
+		}
+
+		if result[0] == '`' {
+			result = result[7 : len(result)-3]
+		}
+		fmt.Println("RESULT: " + result)
+		err = json.Unmarshal([]byte(result), &retMovie)
+	}
+
+	//c.JSON(http.StatusAccepted, &randomMovie)
+
 }
 
 func GetMoviesByGenre(c *gin.Context) {

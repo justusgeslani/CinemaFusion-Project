@@ -554,6 +554,20 @@ type ContentResponse struct {
 	Candidates *[]Candidates `json:Candidates`
 }
 
+func joinStrings(strs []string, sep string) string {
+	if len(strs) == 0 {
+		return ""
+	}
+	if len(strs) == 1 {
+		return strs[0]
+	}
+	result := strs[0]
+	for _, s := range strs[1:] {
+		result += sep + s
+	}
+	return result
+}
+
 func GetMoviesByQuiz(c *gin.Context) {
 	var vmq MoviesByQuiz
 	var randomMovie Movie
@@ -562,6 +576,7 @@ func GetMoviesByQuiz(c *gin.Context) {
 		fmt.Println(err)
 		return
 	}
+	// fmt.Println(vmq.UserName)
 	ctx := context.Background()
 	// Access your API key as an environment variable (see "Set up your API key" above)
 	client, err := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("CINEMA_FUSION_GOOGLE_API_KEY")))
@@ -571,8 +586,44 @@ func GetMoviesByQuiz(c *gin.Context) {
 	}
 	defer client.Close()
 	model := client.GenerativeModel("gemini-pro")
-	fmt.Println(vmq)
-	prompt := "Recommend a movie based on the following, and respond in a json format containing only Title, OriginalLanguage, Plot, ReleaseDate in year-month-day format, Genres, and Runtime as an int: \nMy weather: " + vmq.Weather + "\nMy mood: " + vmq.Feelings + "\nMy age: " + vmq.Age + "\nMy gender: " + vmq.Gender + "\nMy release preference: " + vmq.When + "\nDuration of movie: " + vmq.Time
+
+	likedMovies, err3 := connection.Db.Query(
+		"SELECT md.title FROM RECOMMENDATION r, MOVIEDATA md WHERE r.movieid = md.id and r.username = ? and r.userrating = 1 LIMIT 5;", vmq.UserName)
+	if err3 != nil {
+		fmt.Println(err3)
+		return
+	}
+	var likedMoviesList []string
+	for likedMovies.Next() {
+		var title string
+		if err := likedMovies.Scan(&title); err != nil {
+			fmt.Println("Error scanning row")
+			return
+		}
+		likedMoviesList = append(likedMoviesList, title)
+	}
+
+	likedMoviesStr := joinStrings(likedMoviesList, ", ")
+
+	dislikedMovies, err4 := connection.Db.Query(
+		"SELECT md.title FROM RECOMMENDATION r, MOVIEDATA md WHERE r.movieid = md.id and r.username = ? and r.userrating = -1 LIMIT 5;", vmq.UserName)
+	if err4 != nil {
+		fmt.Println(err4)
+		return
+	}
+	var dislikedMoviesList []string
+	for dislikedMovies.Next() {
+		var title string
+		if err := dislikedMovies.Scan(&title); err != nil {
+			fmt.Println("Error scanning row")
+			return
+		}
+		dislikedMoviesList = append(dislikedMoviesList, title)
+	}
+
+	dislikedMoviesStr := joinStrings(dislikedMoviesList, ", ")
+
+	prompt := "Recommend a movie based on the following, and respond in a json format containing only Title, OriginalLanguage, Plot, ReleaseDate in year-month-day format, Genres, and Runtime as an int: \nMy weather: " + vmq.Weather + "\nMy mood: " + vmq.Feelings + "\nMy age: " + vmq.Age + "\nMy gender: " + vmq.Gender + "\nMy release preference: " + vmq.When + "\nDuration of movie: " + vmq.Time + "\n Previously Liked Movies: " + likedMoviesStr + "\n Previously disliked Movies: " + dislikedMoviesStr + ". Do not recommend the previously liked and disliked movies."
 	fmt.Println(prompt)
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {
@@ -619,6 +670,7 @@ func GetMoviesByQuiz(c *gin.Context) {
 			return
 		}
 		found = true
+		InsertToRecTable(retMovie, vmq.UserName)
 		c.JSON(http.StatusAccepted, &randomMovie)
 		return
 
@@ -682,8 +734,44 @@ func GetMoviesByQuiz(c *gin.Context) {
 		CreateNewGenre(userGenre)
 
 	}
+	// Creating entry for recommendation table
+	InsertToRecTable(retMovie, vmq.UserName)
 	c.JSON(http.StatusAccepted, &randomMovie)
 
+}
+
+func InsertToRecTable(movieRec MovieFromAI, userName string) {
+	var recMovieId int64
+	err2 := connection.Db.QueryRow("SELECT id FROM MOVIEDATA WHERE title = ? LIMIT 1", movieRec.Title).Scan(&recMovieId)
+	if err2 != nil {
+		fmt.Println(err2)
+		return
+	}
+
+	_, err := connection.Db.Exec(
+		"INSERT INTO RECOMMENDATION VALUES (?, ?, ?)", recMovieId, userName, 0)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+func UserFeedback(c *gin.Context) {
+	// like dislike logic
+	var mr MovieRating
+	err := c.ShouldBindJSON(&mr)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	_, err2 := connection.Db.Exec(
+		"UPDATE RECOMMENDATION SET userrating = ? WHERE movieid = ? AND username = ?;", mr.Rating, mr.MovieID, mr.UserName)
+	if err2 != nil {
+		fmt.Println("DB operation unsuccessful")
+		fmt.Println(err)
+		return
+	}
 }
 
 // adds new movie from prompt to db

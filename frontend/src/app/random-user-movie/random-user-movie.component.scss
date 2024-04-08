@@ -2,15 +2,15 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
 ::ng-deep .dp-modal-header {
     background: linear-gradient(
-        to right, #814DFF,#FF83B6
+        to left, #814DFF,#FF83B6
       );
 
  }
 
  ::ng-deep .dp-modal-body {
-    width: 800px;
+    width: 100%;
     background-color: azure;
-    height: 400px;
+    height: 100%;
   }
 
 .UserFavoritesDiv button {

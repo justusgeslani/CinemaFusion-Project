@@ -36,7 +36,7 @@ export class FrontPageComponent implements OnInit {
     this._modalService.show<Movie>(RandomUserMovieComponent, {
       title: 'Random Movie Recommendations',
       type: 'default',
-      mode: 'disableFullScreen',
+      mode: 'fullScreen',
     })
   }
 

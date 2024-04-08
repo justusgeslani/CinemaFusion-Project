@@ -56,9 +56,12 @@
         </ng-select>
 </div></div>
     <br><br>
-    <button type="submit">Get Personalized Recommendation</button>
+    <!-- RESET button -->
+    <button type="button" style="margin-right: 10px;" (click)="resetForm()">Reset</button>
+    <button type="submit">Get Personalized Recommendation</button><br><br>
+    <!-- BACK TO MAIN PAGE button -->
+    <button type="button" (click)="backToMainPage()">Back to Main Page</button>
 </form>
     <div id="result"></div>
     <div class="ring" *ngIf="loading">Loading</div>
-
 </div>

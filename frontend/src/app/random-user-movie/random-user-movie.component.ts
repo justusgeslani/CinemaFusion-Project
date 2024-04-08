@@ -21,6 +21,9 @@ export class RandomUserMovieComponent {
   constructor(private http: HttpClient) {
 
   }
+  isSignedIn() {
+    return localStorage.getItem('UserName') != null;
+  }
   ngOnInit() {
     this.fillRandoms()
   }

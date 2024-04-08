@@ -41,6 +41,9 @@ export class UserRecommendationsComponent {
       this.isLoggedIn = true;
   }
   
+  isSignedIn() {
+    return localStorage.getItem('UserName') != null;
+  }
 
   ngOnInit() {
   }

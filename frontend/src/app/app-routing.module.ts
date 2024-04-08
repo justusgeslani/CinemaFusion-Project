@@ -15,7 +15,6 @@ const routes: Routes = [
   { path: 'genre-page', component: GenrePageComponent },
   { path: 'random-user-movie', component: RandomUserMovieComponent },
   { path: 'recommendations', component: UserRecommendationsComponent}
-  // 4/2 added
   //{ path: '', redirectTo: '/header', pathMatch: 'full' }, // Redirect to /header if no matching route found
 ];
 

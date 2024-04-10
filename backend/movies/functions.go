@@ -749,7 +749,7 @@ func InsertToRecTable(movieRec MovieFromAI, userName string) {
 	}
 
 	_, err := connection.Db.Exec(
-		"INSERT INTO RECOMMENDATION VALUES (?, ?, ?)", recMovieId, userName, 0)
+		"INSERT IGNORE INTO RECOMMENDATION VALUES (?, ?, ?)", recMovieId, userName, 0)
 	if err != nil {
 		fmt.Println(err)
 		return

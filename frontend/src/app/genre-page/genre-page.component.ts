@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { Genre, Movie } from 'src/schema/movie';
 import { GenresPopupComponent } from '../genres-popup/genres-popup.component';
+import { Router } from '@angular/router'; // Import Router
 
 @Component({
   selector: 'app-genre-page',
@@ -61,7 +62,7 @@ export class GenrePageComponent implements OnInit {
   selectedGenres: string[] = [];
   selectedGenreIndices: number[] = [];
 
-  constructor(private http: HttpClient, private readonly _modalService: ModalService) {}
+  constructor(private http: HttpClient, private readonly _modalService: ModalService, private router: Router) {}
 
   ngOnInit(): void {}
 
@@ -156,6 +157,10 @@ export class GenrePageComponent implements OnInit {
       mode: 'fullScreen',
       model: this.genreMovies
     })
+  }
+
+  backToMainPage() {
+    this.router.navigate(['/']);
   }
 }
 

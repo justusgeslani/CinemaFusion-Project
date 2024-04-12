@@ -109,3 +109,17 @@ span:before
     transform:rotate(405deg);
   }
 }
+.backBtn {
+    margin-top: 0;
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+
+    //background-image: radial-gradient( rgba(255, 144, 34, .7),rgba(255, 131, 182));
+    background-color: rgba(255, 255, 255, .85);
+}
+
+.backBtn:hover {
+    background-image: linear-gradient( rgb(36, 63, 255),rgb(129, 77, 255));
+    color: white;
+}

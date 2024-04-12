@@ -5,10 +5,10 @@
             <!--<button *ngIf="isLoggedIn" (click)="addToFavorites(movie)"class="btn btn-success gold">
                 <img src="../../assets/favorite_img.png" width="40" height="40" style="background-color: transparent;">
                 Add to Favorites</button>-->
-            <button (click)="likeMovie(movie)"class="btn btn-success">
+            <button *ngIf="isSignedIn()" (click)="likeMovie(movie)"class="btn btn-success">
                 <img src="../../assets/like_button_2.png" width="40" height="40" style="background-color: transparent;">
                 Like</button>
-            <button (click)="dislikeMovie(movie)"  class="btn btn-danger">
+            <button *ngIf="isSignedIn()" (click)="dislikeMovie(movie)"  class="btn btn-danger">
                 <img src="../../assets/dislike_button.png" width="40" height="40" style="background-color: transparent;">
 
                 Dislike</button><br>

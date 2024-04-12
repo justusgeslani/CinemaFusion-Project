@@ -1,6 +1,10 @@
+<button type="button" style="display: inline-flex; float: left; margin-left: 50px" (click)="backToMainPage()">Back</button>
 <div class="container">
-    <form #quizForm="ngForm" (ngSubmit)="getRecommendation(quizForm)">
-        <h3 style="margin-bottom: 20px; background-color: rgba(255, 255, 255, .8); border-radius: 4px; padding: 7px;">Answer questions for your personalized recommendation</h3>
+    <!-- BACK TO MAIN PAGE button -->    
+
+    <form #quizForm="ngForm" (ngSubmit)="getRecommendation(quizForm)"> 
+        <h3 style=" font-size: 24px;   margin-bottom: 20px; background-color: rgba(255, 255, 255, .8); border-radius: 4px; padding: 7px;; display: inline-flex">   
+Answer questions for your personalized recommendation</h3>
         <div class="row">
     <div class="col">
     <label for="weather">What's the weather like now?</label>
@@ -56,9 +60,10 @@
         </ng-select>
 </div></div>
     <br><br>
-    <button type="submit">Get Personalized Recommendation</button>
+    <!-- RESET button -->
+    <button type="button" style="margin-right: 10px;" (click)="resetForm()">Reset</button>
+    <button type="submit">Get Personalized Recommendation</button><br><br>
 </form>
     <div id="result"></div>
     <div class="ring" *ngIf="loading">Loading</div>
-
 </div>

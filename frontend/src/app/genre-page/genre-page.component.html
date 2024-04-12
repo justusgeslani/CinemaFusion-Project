@@ -1,6 +1,8 @@
 <h5>Select from below the genre(s) you are interested in press get recommendations to get one movie per genre:</h5>
 
 <button style="position: sticky; top: 10px; float: right;"class="btn btn-primary" (click)="fillGenres()">Get Recommendations</button>
+<button class="backBtn" type="button" (click)="backToMainPage()">Back to Main Page</button>
+
 <div style="margin-left: 70px;" class="container">
   <div class="row">
     <div (click)="genreSelected(i)" *ngFor="let item of genresList; let i = index" id="genreDiv-{{i}}"

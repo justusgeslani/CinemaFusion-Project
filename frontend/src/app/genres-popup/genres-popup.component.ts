@@ -14,6 +14,10 @@ export class GenresPopupComponent {
   constructor(private http: HttpClient, private readonly _modalReference: ModalReference<Movie[], string[]>) {
     this.genres = this._modalReference.config.model!;
   }
+
+  isSignedIn() {
+    return localStorage.getItem('UserName') != null;
+  }
   
   likeMovie(movie: Movie) {
     // Implement logic to handle liking the movie

@@ -1,29 +1,10 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-quiz',
-//   //standalone: true,
-//   //imports: [],
-//   templateUrl: './quiz.component.html',
-//   styleUrls: ['./quiz.component.css']
-// })
-// export class QuizComponent {
-
-//   constructor() { }
-
-//   getRecommendation() {
-//     // Implement logic to get recommendation
-//     // and display the result in the 'result' div
-//   }
-
-// }
-
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ModalService } from '@developer-partners/ngx-modal-dialog';
 import { Movie } from 'src/schema/movie';
 import { UserRecommendationsComponent } from '../user-recommendations/user-recommendations.component';
+import { Router } from '@angular/router'; // Import Router
 
 @Component({
   selector: 'app-quiz',
@@ -38,13 +19,22 @@ export class QuizComponent implements OnInit {
   time: string | null = null;
   when: string | null = null;
   loading: boolean = false;
-  constructor(private http: HttpClient, private _modalService: ModalService) {
+  constructor(private http: HttpClient, private _modalService: ModalService, private router: Router) {
 
   }
     
   ngOnInit(): void {
     // Logic to be executed on component initialization
     console.log('QuizComponent ngOnInit called');
+  }
+
+  resetForm() {
+    this.weather = null;
+    this.feelings = null;
+    this.gender = null;
+    this.age = null;
+    this.time = null;
+    this.when = null;
   }
 
   getRecommendation(quizForm: NgForm) {
@@ -106,6 +96,10 @@ export class QuizComponent implements OnInit {
       mode: 'disableFullScreen',
       model: movie
     })
+  }
+
+  backToMainPage() {
+    this.router.navigate(['/']);
   }
 }
 

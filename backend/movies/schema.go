@@ -107,6 +107,7 @@ type MoviesByGenre struct {
 }
 
 type MoviesByQuiz struct {
+	UserName string
 	Weather  string
 	Feelings string
 	Gender   string
@@ -123,4 +124,10 @@ type MovieFromAI struct {
 	ReleaseDate      string
 	Genres           []string
 	Runtime          uint64
+}
+
+type MovieRating struct {
+	MovieID  uint64
+	UserName string
+	Rating   int64
 }

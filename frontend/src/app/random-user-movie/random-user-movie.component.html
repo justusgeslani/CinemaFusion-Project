@@ -4,7 +4,7 @@
 <div *ngFor="let movie of randomMovies; let i = index">
     <div class="infoHolder">
         <h2>
-            Movie Title #{{i+1}}:<br> {{movie.Title}}
+            Movie Title #{{i+1}}:<br> <h1 class="title-header" style="font-family:Impact;">{{movie.Title}}</h1>
         </h2>
         <h3>
         Description:<br> {{movie.Overview}}
@@ -26,6 +26,6 @@
         </div>
     </div>
     <div *ngIf="i === 2 && randomMovies.length >= 3">
-        <button (click)="getAnotherThreeRecommendations()" class="btn btn-primary">Give me another three recommendations</button>
+        <button (click)="getAnotherThreeRecommendations()" class="btn btn-primary" style="background-image: linear-gradient( rgb(36, 63, 255),rgb(129, 77, 255));">Give Me Another Three Recommendations</button>
     </div>
 </div>

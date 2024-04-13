@@ -152,7 +152,7 @@ export class GenrePageComponent implements OnInit {
   
   public openUserGenres(): void {
     this._modalService.show<Movie[]>(GenresPopupComponent, {
-      title: 'Recommended movies based on user\'s favorite genres',
+      title: 'Recommended Movies Based on User\'s Favorite Genres',
       type: 'default',
       mode: 'fullScreen',
       model: this.genreMovies

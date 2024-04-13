@@ -17,7 +17,7 @@ Answer questions for your personalized recommendation</h3>
             <ng-option value="thunderstorms">Thunderstorms</ng-option>
             <ng-option value="clearskies">Clear skies</ng-option>
         </ng-select>
-
+        <br>
         <label for="feelings">How are you feeling today?</label>
         <ng-select [(ngModel)]="feelings" placeholder="I'm feeling..." name="feelings" id="feelings" ngModel>
             <ng-option value="happy">Happy</ng-option>
@@ -26,7 +26,7 @@ Answer questions for your personalized recommendation</h3>
             <ng-option value="calm">Calm</ng-option>
             <ng-option value="angry">Angry</ng-option>
         </ng-select>
-
+        <br>
         <label for="gender">What is your gender?</label>
         <ng-select [(ngModel)]="gender" placeholder="I am a..."  name="gender" id="gender" ngModel>
             <ng-option value="male">Male</ng-option>
@@ -35,6 +35,7 @@ Answer questions for your personalized recommendation</h3>
             <ng-option value="notSay">Prefer not to say</ng-option>
         </ng-select>
     </div>
+    <br>
     <div class="col">
         <label for="age">What is your age group?</label>
         <ng-select [(ngModel)]="age" placeholder="I am... years old"  name="age" id="age" ngModel>
@@ -44,14 +45,14 @@ Answer questions for your personalized recommendation</h3>
             <ng-option value="35-44">35-44</ng-option>
             <ng-option value="45+">45 and above</ng-option>
         </ng-select>
-
+        <br>
         <label for="time">What is your ideal movie runtime?</label>
         <ng-select [(ngModel)]="time" placeholder="I like... movies" name="time" id="time" ngModel>
             <ng-option value="up to one hour">Short (up to 1 hour)</ng-option>
             <ng-option value="1 to 2 hours">Average (1-2 hours)</ng-option>
             <ng-option value="more than 2 hours">Long (more than 2 hours)</ng-option>
         </ng-select>
-
+        <br>
         <label for="when">Recent releases or classic films?</label>
         <ng-select [(ngModel)]="when" placeholder="I prefer..." name="when" id="when" ngModel>
             <ng-option value="recent releases">Recent releases</ng-option>

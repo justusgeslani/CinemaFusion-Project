@@ -1,4 +1,4 @@
-<br><h3 style="margin-left:260px; width: 70%;margin-bottom: 20px; text-align:center; background-color: rgba(255, 255, 255, .8); border-radius: 4px; padding: 7px;">Select The Genre(s) You Are Interested In Below & Press Get Recommendations</h3>
+<br><h3 style="margin-left: 60px;width: 92%;margin-bottom: 20px; text-align:center; background-color: rgba(255, 255, 255, .8); border-radius: 4px; padding: 7px;">Select The Genre(s) You Are Interested In Below & Press Get Recommendations</h3>
 
 <button style="position: sticky; top: 10px; float: right;"class="btn btn-primary" (click)="fillGenres()">Get Recommendations</button>
 <button class="backBtn" type="button" (click)="backToMainPage()">Back to Main Page</button>
@@ -11,7 +11,6 @@
       <a style="display: block;">{{item}}</a>
     </div>
 </div>
-<br><button style="margin-left: 520px; margin-bottom: 20px;"class="btn btn-primary" (click)="fillGenres()">Get Recommendations</button>
 <div class="ring" *ngIf="loading">Loading</div>
 
 <!-- (change)="fillGenres()" at line 10-->

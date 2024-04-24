@@ -142,7 +142,7 @@ export class AppComponent {
     this._modalService.show<UserFavorites>(UserFavoritesComponent, {
       title: localStorage.getItem('FirstName') + '\'s Favorite Movies',
       type: 'default',
-      mode: 'disableFullScreen',
+      mode: 'default',
     })
   }
   public openUserAccount(): void {
@@ -150,7 +150,7 @@ export class AppComponent {
     this._modalService.show<User>(LoginAccountComponent, {
       title: 'Login / Create Account',
       type: 'default',
-      mode: 'disableFullScreen',
+      mode: 'default',
     })
 
   }
@@ -161,7 +161,7 @@ export class AppComponent {
     this._modalService.show<Movie>(MovieOverviewComponent, {
       title: 'CinemaFusion Search',
       type: 'default',
-      mode: 'disableFullScreen',
+      mode: 'default',
       
     })
     
@@ -173,7 +173,7 @@ export class AppComponent {
     this._modalService.show<User>(ProfileComponent, {
       title: localStorage.getItem('FirstName') + '\'s Profile',
       type: 'default',
-      mode: 'disableFullScreen',
+      mode: 'default',
     })
 
   }

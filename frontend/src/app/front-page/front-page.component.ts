@@ -36,7 +36,7 @@ export class FrontPageComponent implements OnInit {
     this._modalService.show<Movie>(RandomUserMovieComponent, {
       title: 'Random Movie Recommendations',
       type: 'default',
-      mode: 'fullScreen',
+      mode: 'default',
     })
   }
 
@@ -45,6 +45,7 @@ export class FrontPageComponent implements OnInit {
     this._modalService.show<Genre, Movie>(UserRecommendationsComponent, {
       title: 'Movie Recommendations by Genre',
       type: 'default',
+      mode: 'default',
 
     })
   }

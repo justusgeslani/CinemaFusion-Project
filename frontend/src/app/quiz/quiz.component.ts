@@ -93,7 +93,7 @@ export class QuizComponent implements OnInit {
     this._modalService.show<Movie>(UserRecommendationsComponent, {
       title: 'Personalized User Recommendations',
       type: 'default',
-      mode: 'disableFullScreen',
+      mode: 'default',
       model: movie
     })
   }
